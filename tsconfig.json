@@ -1,17 +1,23 @@
 {
-    "compilerOptions": {
-      "target": "es2017",
-      "module": "commonjs",
-      "allowJs": true,
-      "moduleResolution": "node",
-      "lib": ["esnext", "es2016.array.include", "esnext.asynciterable"],
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "outDir": "./build",
-      "sourceMap": true,
-      "strictNullChecks": true,
-      "noUnusedLocals": true,
-      "skipLibCheck": true
-    },
-    "include": ["src/"]
-  }
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "es2016.array.include",
+      "esnext.asynciterable"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "outDir": "./build",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/"
+  ]
+}
