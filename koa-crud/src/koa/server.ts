@@ -2,6 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-body';
 import R from 'ramda';
+import serializer from './serializer';
 
 class KoaApp {
   private app: Koa;
@@ -24,7 +25,7 @@ class KoaApp {
 
   private initializeRoutes(routes: any[]) {
     R.map((route: any) => {
-      const endPoints = route(this.router);
+      const endPoints = route(this.router, serializer);
       this.app.use(endPoints.routes());
       return this.app;
     })(routes);
