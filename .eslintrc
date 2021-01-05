@@ -1,6 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
@@ -18,14 +21,34 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "import/extensions": ["error", "never", { "packages": "always" }],
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        "packages": "always"
+      }
+    ],
     "no-underscore-dangle": "off",
     "func-names": "off",
     "max-classes-per-file": "off",
-    "max-len": ["error", 140],
-    "linebreak-style": ["error"],
+    "max-len": [
+      "error",
+      140
+    ],
+    "linebreak-style": [
+      "error"
+    ],
     "import/prefer-default-export": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.test.ts",
+          "**/*.spec.ts"
+        ]
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

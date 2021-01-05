@@ -1,10 +1,11 @@
+/*eslint-disable */
 import { expect } from 'chai';
 import {
   IsLastInStock,
   averageDollarValue,
   fastestCar,
   getEachAccountsTotalPayout,
-} from './index';
+} from '../src/index';
 
 describe('is last in stock', () => {
   const cars = [
@@ -37,11 +38,11 @@ describe('is last in stock', () => {
   ];
 
   it('should return true', () => {
-    expect(IsLastInStock(cars)).to.equal(true);
+    expect(IsLastInStock(cars)).to.be.true;
   });
 
   it('should return false', () => {
-    expect(IsLastInStock(cars2)).to.equal(false);
+    expect(IsLastInStock(cars2)).to.be.false;
   });
 });
 
@@ -91,7 +92,7 @@ describe('fastest car', () => {
   const data = [{ acc_1: 1 }, { acc_1: 2 }, { acc_2: 3 }];
 
   it('should run the test', () => {
-    expect(getEachAccountsTotalPayout(data)).to.deep.equal({
+    expect(getEachAccountsTotalPayout(data)).to.eqls({
       acc_1: 3,
       acc_2: 3,
     });
