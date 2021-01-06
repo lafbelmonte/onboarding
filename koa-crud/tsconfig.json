@@ -4,7 +4,11 @@
     "module": "commonjs",
     "allowJs": true,
     "moduleResolution": "node",
-    "lib": ["esnext", "es2016.array.include", "esnext.asynciterable"],
+    "lib": [
+      "esnext",
+      "es2016.array.include",
+      "esnext.asynciterable"
+    ],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "outDir": "./build",
@@ -13,5 +17,8 @@
     "noUnusedLocals": true,
     "skipLibCheck": true
   },
-  "include": ["src/", "test"]
+  "include": [
+    "src/",
+    "test"
+  ]
 }

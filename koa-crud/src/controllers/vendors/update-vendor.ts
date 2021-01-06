@@ -22,17 +22,6 @@ const updateVendor = ({ uUpdateVendor }: any) => {
         body: { putted },
       };
     } catch (e) {
-      if (e.name === 'RangeError') {
-        return {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          statusCode: 404,
-          body: {
-            error: e.message,
-          },
-        };
-      }
       return {
         headers: {
           'Content-Type': 'application/json',
