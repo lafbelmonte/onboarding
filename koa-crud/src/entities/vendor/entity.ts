@@ -1,6 +1,6 @@
 enum VendorType {
   Seamless = 'SEAMLESS',
-  Transfer = 'TRANSFER',
+  Transfer = 'TRANSFER'
 }
 
 type Vendor = {
@@ -40,7 +40,7 @@ const entity = () => {
       type,
       _id,
       dateTimeCreated,
-      dateTimeUpdated,
+      dateTimeUpdated: new Date(),
     };
 
     return finalVendor;

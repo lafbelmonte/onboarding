@@ -125,7 +125,6 @@ describe('POST /vendors', () => {
 });
 
 describe('GET /vendors', () => {
-
   afterEach(() => {
     return Vendor.deleteMany({});
   });
@@ -142,22 +141,22 @@ describe('GET /vendors', () => {
         _id: '154151546',
         name: 'Luis Angelo Belmonte',
         type: 'SEAMLESS',
-      }).then(() => {
+      })
+      .then(() => {
         chai
           .request(server.callback())
           .get('/vendors')
           .end((err, res) => {
             should.not.exist(err);
-            res.status.should.eql(200)
+            res.status.should.eql(200);
             res.body.view.length.should.eql(1);
             done();
           });
-      })
+      });
   });
 });
 
 describe('GET /vendors/:id', () => {
-
   afterEach(() => {
     return Vendor.deleteMany({});
   });
@@ -174,16 +173,17 @@ describe('GET /vendors/:id', () => {
         _id: '154151546',
         name: 'Luis Angelo Belmonte',
         type: 'SEAMLESS',
-      }).then(() => {
+      })
+      .then(() => {
         chai
           .request(server.callback())
           .get('/vendors/154151546')
           .end((err, res) => {
             should.not.exist(err);
-            res.status.should.eql(200)
+            res.status.should.eql(200);
             done();
           });
-      })
+      });
   });
 
   it(`should throw an error if ID of the Vendor doesn't exist`, (done) => {
@@ -194,28 +194,153 @@ describe('GET /vendors/:id', () => {
         _id: '154151546',
         name: 'Luis Angelo Belmonte',
         type: 'SEAMLESS',
-      }).then(() => {
+      })
+      .then(() => {
         chai
           .request(server.callback())
           .get('/vendors/154151547')
           .end((err, res) => {
             should.not.exist(err);
-            res.status.should.eql(400)
+            res.status.should.eql(400);
             done();
           });
-      })
+      });
   });
 });
 
 describe('PUT /vendors/:id', () => {
-  it('should test', (done) => {
+
+  afterEach(() => {
+    return Vendor.deleteMany({});
+  });
+
+  beforeEach(() => {
+    return Vendor.deleteMany({});
+  });
+
+  it('should successfully update a vendor', (done) => {
     chai
       .request(server.callback())
-      .put('/vendors/1')
-      .end((err, res) => {
-        should.not.exist(err);
-        res.status.should.eql(204);
-        done();
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .put('/vendors/154151546')
+          .send({
+            "name": "Luis Angelo Belmonte",
+            "type": "TRANSFER"
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(204);
+            done();
+          });
       });
   });
+
+
+  it(`should throw an error if ID does'nt exist`, (done) => {
+    chai
+      .request(server.callback())
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .put('/vendors/154151547')
+          .send({
+            "name": "Luis Angelo Belmonte",
+            "type": "TRANSFER"
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(400);
+            done();
+          });
+      });
+  });
+
+  it(`should throw an error if no name is provided`, (done) => {
+    chai
+      .request(server.callback())
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .put('/vendors/154151546')
+          .send({
+            "name": null,
+            "type": "TRANSFER"
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(400);
+            done();
+          });
+      });
+  });
+
+  it(`should throw an error if no type is provided`, (done) => {
+    chai
+      .request(server.callback())
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .put('/vendors/154151546')
+          .send({
+            "name": "Luis Angelo Belmonte",
+            "type": null
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(400);
+            done();
+          });
+      });
+  });
+
+  it(`should throw an error if invalid type is provided`, (done) => {
+    chai
+      .request(server.callback())
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .put('/vendors/154151546')
+          .send({
+            "name": "Luis Angelo Belmonte",
+            "type": "qwe"
+          })
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(400);
+            done();
+          });
+      });
+  });
+
+
+
 });
+
+

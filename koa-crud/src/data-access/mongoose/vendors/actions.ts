@@ -13,16 +13,31 @@ const actions = ({ Vendor }: any) => {
   }
 
   async function selectAllVendors() {
-    const vendor = await Vendor.find()
-    return vendor
+    const vendor = await Vendor.find();
+    return vendor;
   }
 
   async function selectOneVendorByFilters(filters: any) {
-    const vendor = await Vendor.find({ ...filters })
-    return vendor
+    const vendor = await Vendor.find({ ...filters });
+    return vendor;
   }
 
-  return { insertOneVendor, vendorExistsByFilter, selectAllVendors, selectOneVendorByFilters };
+  async function updateVendorByFilters(filters: any, info: any) {
+    const user = await Vendor.findOneAndUpdate(
+      { ...filters },
+      { ...info },
+      { new: true },
+    );
+    return user;
+  }
+
+  return {
+    insertOneVendor,
+    vendorExistsByFilter,
+    selectAllVendors,
+    selectOneVendorByFilters,
+    updateVendorByFilters,
+  };
 };
 
 export default actions;
