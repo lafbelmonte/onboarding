@@ -3,6 +3,7 @@ import Router from 'koa-router';
 import bodyParser from 'koa-body';
 import R from 'ramda';
 import serializer from './serializer';
+import { initializeDatabase } from '../mongoose';
 
 class KoaApp {
   private app: Koa;
@@ -21,20 +22,6 @@ class KoaApp {
 
   private initializeMiddlewares(): void {
     this.app.use(bodyParser());
-
-    this.app.use(async (ctx, next) => {
-      const start = Date.now();
-      await next();
-      const ms = Date.now() - start;
-      ctx.set('X-Response-Time', `${ms}ms`);
-    });
-
-    this.app.use(async (ctx, next) => {
-      const start = Date.now();
-      await next();
-      const ms = Date.now() - start;
-      console.log(`${ctx.method} ${ctx.url} - ${ms}`);
-    });
   }
 
   private initializeRoutes(routes: any[]) {
@@ -49,7 +36,8 @@ class KoaApp {
     return this.app;
   }
 
-  public start(): void {
+  public async start(): Promise<void> {
+    await initializeDatabase();
     this.app.listen(this.port);
   }
 }
