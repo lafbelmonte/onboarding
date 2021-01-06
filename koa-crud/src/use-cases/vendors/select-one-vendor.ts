@@ -1,6 +1,16 @@
-const selectOneVendor = () => {
+const selectOneVendor = ({ dVendors }) => {
   return async function useCase({ id }: any) {
-    return 'not implemented';
+
+    const vendorExists = await dVendors.vendorExistsByFilter({
+      _id: id,
+    });
+
+    if(!vendorExists){
+      throw new Error(`Vendor doesn't exist`)
+    }
+
+    const vendor = await dVendors.selectOneVendorByFilters({ _id: id })
+    return vendor;
   };
 };
 

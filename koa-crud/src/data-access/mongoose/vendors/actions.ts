@@ -15,10 +15,14 @@ const actions = ({ Vendor }: any) => {
   async function selectAllVendors() {
     const vendor = await Vendor.find()
     return vendor
-
   }
 
-  return { insertOneVendor, vendorExistsByFilter, selectAllVendors };
+  async function selectOneVendorByFilters(filters: any) {
+    const vendor = await Vendor.find({ ...filters })
+    return vendor
+  }
+
+  return { insertOneVendor, vendorExistsByFilter, selectAllVendors, selectOneVendorByFilters };
 };
 
 export default actions;

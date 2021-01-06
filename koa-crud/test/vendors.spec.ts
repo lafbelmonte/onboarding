@@ -13,6 +13,10 @@ describe('POST /vendors', () => {
     return Vendor.deleteMany({});
   });
 
+  beforeEach(() => {
+    return Vendor.deleteMany({});
+  });
+
   it('should successfully insert a vendor', (done) => {
     chai
       .request(server.callback())
@@ -126,6 +130,10 @@ describe('GET /vendors', () => {
     return Vendor.deleteMany({});
   });
 
+  beforeEach(() => {
+    return Vendor.deleteMany({});
+  });
+
   it('should return list of vendors', (done) => {
     chai
       .request(server.callback())
@@ -141,7 +149,6 @@ describe('GET /vendors', () => {
           .end((err, res) => {
             should.not.exist(err);
             res.status.should.eql(200)
-            console.log(res.body.data)
             res.body.view.length.should.eql(1);
             done();
           });
@@ -150,15 +157,53 @@ describe('GET /vendors', () => {
 });
 
 describe('GET /vendors/:id', () => {
-  it('should test', (done) => {
+
+  afterEach(() => {
+    return Vendor.deleteMany({});
+  });
+
+  beforeEach(() => {
+    return Vendor.deleteMany({});
+  });
+
+  it('should return vendor by ID', (done) => {
     chai
       .request(server.callback())
-      .get('/vendors/1')
-      .end((err, res) => {
-        should.not.exist(err);
-        res.status.should.eql(200);
-        done();
-      });
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .get('/vendors/154151546')
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(200)
+            done();
+          });
+      })
+  });
+
+  it(`should throw an error if ID of the Vendor doesn't exist`, (done) => {
+    chai
+      .request(server.callback())
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .get('/vendors/154151547')
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(400)
+            done();
+          });
+      })
   });
 });
 
