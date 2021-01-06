@@ -121,15 +121,31 @@ describe('POST /vendors', () => {
 });
 
 describe('GET /vendors', () => {
-  it('should test', (done) => {
+
+  afterEach(() => {
+    return Vendor.deleteMany({});
+  });
+
+  it('should return list of vendors', (done) => {
     chai
       .request(server.callback())
-      .get('/vendors')
-      .end((err, res) => {
-        should.not.exist(err);
-        res.status.should.eql(200);
-        done();
-      });
+      .post('/vendors')
+      .send({
+        _id: '154151546',
+        name: 'Luis Angelo Belmonte',
+        type: 'SEAMLESS',
+      }).then(() => {
+        chai
+          .request(server.callback())
+          .get('/vendors')
+          .end((err, res) => {
+            should.not.exist(err);
+            res.status.should.eql(200)
+            console.log(res.body.data)
+            res.body.view.length.should.eql(1);
+            done();
+          });
+      })
   });
 });
 

@@ -1,15 +1,15 @@
 enum VendorType {
   Seamless = 'SEAMLESS',
-  Transfer = 'TRANSFER'
-};
+  Transfer = 'TRANSFER',
+}
 
 type Vendor = {
   _id: string;
   name: string;
   type: VendorType;
   dateTimeCreated: Date;
-  dateTimeUpdated: Date; 
-}
+  dateTimeUpdated: Date;
+};
 
 const entity = () => {
   return async function vendor({
@@ -41,9 +41,9 @@ const entity = () => {
       _id,
       dateTimeCreated,
       dateTimeUpdated,
-    }
+    };
 
-    return finalVendor
+    return finalVendor;
   };
 };
 

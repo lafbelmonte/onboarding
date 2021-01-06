@@ -7,7 +7,7 @@ import selectOneVendor from './select-one-vendor';
 import insertVendor from './insert-vendor';
 import updateVendor from './update-vendor';
 
-const uSelectAllVendors = selectAllVendors();
+const uSelectAllVendors = selectAllVendors({ dVendors });
 const uSelectOneVendor = selectOneVendor();
 const uInsertVendor = insertVendor({ dVendors, eVendor });
 const uUpdateVendor = updateVendor();

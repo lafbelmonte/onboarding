@@ -1,6 +1,8 @@
-const selectAllVendors = () => {
+const selectAllVendors = ({ dVendors }) => {
   return async function useCase() {
-    return 'not implemented';
+
+    const view = dVendors.selectAllVendors()
+    return view;
   };
 };
 

@@ -12,7 +12,13 @@ const actions = ({ Vendor }: any) => {
     return exists;
   }
 
-  return { insertOneVendor, vendorExistsByFilter };
+  async function selectAllVendors() {
+    const vendor = await Vendor.find()
+    return vendor
+
+  }
+
+  return { insertOneVendor, vendorExistsByFilter, selectAllVendors };
 };
 
 export default actions;
