@@ -339,8 +339,57 @@ describe('PUT /vendors/:id', () => {
       });
   });
 
+  describe('DELETE /vendors/:id', () => {
+    afterEach(() => {
+      return Vendor.deleteMany({});
+    });
 
+    beforeEach(() => {
+      return Vendor.deleteMany({});
+    });
 
+    it('should delete vendor by id', (done) => {
+      chai
+        .request(server.callback())
+        .post('/vendors')
+        .send({
+          _id: '154151546',
+          name: 'Luis Angelo Belmonte',
+          type: 'SEAMLESS',
+        })
+        .then(() => {
+          chai
+            .request(server.callback())
+            .delete('/vendors/154151546')
+            .end((err, res) => {
+              should.not.exist(err);
+              res.status.should.eql(200);
+              done();
+            });
+        });
+    });
+
+    it(`should throw an error if id doensn't exist`, (done) => {
+      chai
+        .request(server.callback())
+        .post('/vendors')
+        .send({
+          _id: '154151546',
+          name: 'Luis Angelo Belmonte',
+          type: 'SEAMLESS',
+        })
+        .then(() => {
+          chai
+            .request(server.callback())
+            .delete('/vendors/154151547')
+            .end((err, res) => {
+              should.not.exist(err);
+              res.status.should.eql(400);
+              done();
+            });
+        });
+    });
+  });
 });
 
 

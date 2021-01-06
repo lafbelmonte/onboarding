@@ -31,12 +31,19 @@ const actions = ({ Vendor }: any) => {
     return user;
   }
 
+  async function deleteOneVendor(filters: any) {
+    const vendor = await Vendor.deleteOne({ ...filters });
+    return vendor;
+  }
+
+
   return {
     insertOneVendor,
     vendorExistsByFilter,
     selectAllVendors,
     selectOneVendorByFilters,
     updateVendorByFilters,
+    deleteOneVendor
   };
 };
 
