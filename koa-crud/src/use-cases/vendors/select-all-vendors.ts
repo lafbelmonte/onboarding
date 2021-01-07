@@ -1,6 +1,8 @@
-const selectAllVendors = ({ vendorsStore }) => {
-  return async function useCase(): Promise<any> {
-    const view = vendorsStore.selectAllVendors();
+import { UseCase } from '../../types';
+
+const selectAllVendors = ({ vendorsStore }): UseCase => {
+  return async function useCase() {
+    const view = await vendorsStore.selectAllVendors();
     return view;
   };
 };

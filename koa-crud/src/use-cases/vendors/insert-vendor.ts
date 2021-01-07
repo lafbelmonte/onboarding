@@ -1,5 +1,7 @@
-const insertVendor = ({ vendorsStore, vendorEntity }) => {
-  return async function (info: any): Promise<any> {
+import { UseCase } from '../../types';
+
+const insertVendor = ({ vendorsStore, vendorEntity }): UseCase => {
+  return async function ({ info }) {
     const vendor = await vendorEntity(info);
 
     const vendorExists = await vendorsStore.vendorExistsByFilter({

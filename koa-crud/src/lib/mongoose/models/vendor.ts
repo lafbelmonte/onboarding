@@ -1,5 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
-import { Vendor, VendorType } from '../../../types/index';
+import { Schema, model } from 'mongoose';
+import { Vendor, VendorType, VendorDocument } from '../../../types/index';
 
 const schema = new Schema({
   name: String,
@@ -11,6 +11,6 @@ const schema = new Schema({
   dateTimeUpdated: { type: Date, default: Date.now },
 });
 
-const Vendor = model<Vendor & Document>('Vendor', schema);
+const Vendor = model<VendorDocument>('Vendor', schema);
 
 export { Vendor };

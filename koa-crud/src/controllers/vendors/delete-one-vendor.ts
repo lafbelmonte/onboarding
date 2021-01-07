@@ -1,9 +1,11 @@
-import { HttpRequest, HttpResponse } from '../../types';
+import { UseCase, Controller } from '../../types';
 
-const deleteOneVendor = ({ deleteOneVendorUseCase }: any) => {
-  return async function controller(
-    httpRequest: HttpRequest,
-  ): Promise<HttpResponse> {
+const deleteOneVendor = ({
+  deleteOneVendorUseCase,
+}: {
+  deleteOneVendorUseCase: UseCase;
+}): Controller => {
+  return async function controller(httpRequest) {
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -11,6 +13,8 @@ const deleteOneVendor = ({ deleteOneVendorUseCase }: any) => {
     try {
       const deleted = await deleteOneVendorUseCase({
         id: httpRequest.params.id,
+        info: null,
+        source: null,
       });
 
       return {

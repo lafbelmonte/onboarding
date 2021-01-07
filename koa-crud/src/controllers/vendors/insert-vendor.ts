@@ -1,9 +1,11 @@
-import { HttpRequest, HttpResponse } from '../../types';
+import { UseCase, Controller } from '../../types';
 
-const insertVendor = ({ insertVendorUseCase }: any) => {
-  return async function controller(
-    httpRequest: HttpRequest,
-  ): Promise<HttpResponse> {
+const insertVendor = ({
+  insertVendorUseCase,
+}: {
+  insertVendorUseCase: UseCase;
+}): Controller => {
+  return async function controller(httpRequest) {
     try {
       const { source = {}, ...info } = httpRequest.body;
       source.ip = httpRequest.ip;
@@ -12,7 +14,8 @@ const insertVendor = ({ insertVendorUseCase }: any) => {
         source.referrer = httpRequest.headers.Referer;
       }
       const posted = await insertVendorUseCase({
-        ...info,
+        id: null,
+        info,
         source,
       });
       return {

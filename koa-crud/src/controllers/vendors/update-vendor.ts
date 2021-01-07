@@ -1,9 +1,11 @@
-import { HttpRequest, HttpResponse } from '../../types';
+import { UseCase, Controller } from '../../types';
 
-const updateVendor = ({ updateVendorUseCase }: any) => {
-  return async function controller(
-    httpRequest: HttpRequest,
-  ): Promise<HttpResponse> {
+const updateVendor = ({
+  updateVendorUseCase,
+}: {
+  updateVendorUseCase: UseCase;
+}): Controller => {
+  return async function controller(httpRequest) {
     try {
       const { source = {}, ...info } = httpRequest.body;
       source.ip = httpRequest.ip;
@@ -12,7 +14,7 @@ const updateVendor = ({ updateVendorUseCase }: any) => {
         source.referrer = httpRequest.headers.Referer;
       }
       const toEdit = {
-        ...info,
+        info,
         source,
         id: httpRequest.params.id,
       };

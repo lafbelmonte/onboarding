@@ -1,5 +1,7 @@
 import Router from 'koa-router';
 
+import { Serializer } from '../types';
+
 import {
   selectAllVendorsController,
   selectOneVendorController,
@@ -10,7 +12,7 @@ import {
 
 const prefix = '/vendors';
 
-const endPoints = (router: any, serializer: any): Router => {
+const endPoints = (router: Router, serializer: Serializer): Router => {
   router.get(`${prefix}`, serializer(selectAllVendorsController));
 
   router.get(`${prefix}/:id`, serializer(selectOneVendorController));

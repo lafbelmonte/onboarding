@@ -1,5 +1,7 @@
-const selectOneVendor = ({ vendorsStore }) => {
-  return async function useCase({ id }: any): Promise<any> {
+import { UseCase } from '../../types';
+
+const selectOneVendor = ({ vendorsStore }): UseCase => {
+  return async function useCase({ id }) {
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       throw new Error(`Invalid ID`);
     }

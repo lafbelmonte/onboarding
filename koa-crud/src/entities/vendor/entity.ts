@@ -4,6 +4,11 @@ const entity = () => {
     type,
     dateTimeCreated,
     dateTimeUpdated,
+  }: {
+    name: string;
+    type: string;
+    dateTimeCreated: Date;
+    dateTimeUpdated: Date;
   }) {
     if (!name) {
       throw new Error(`Please input name`);

@@ -1,3 +1,6 @@
+import { Context } from 'koa';
+import { Document } from 'mongoose';
+
 type HttpRequest = {
   body;
   query;
@@ -27,4 +30,27 @@ type Vendor = {
   dateTimeUpdated: Date;
 };
 
-export { HttpRequest, HttpResponse, Vendor, VendorType };
+type VendorDocument = Vendor & Document;
+
+type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
+
+type Serializer = (controller: Controller) => (ctx: Context) => Promise<void>;
+
+type UseCase = ({ id, info, source }) => Promise<Record<string, any>>;
+
+type Store = Record<string, any>;
+
+type Entity = Record<string, any>;
+
+export {
+  HttpRequest,
+  HttpResponse,
+  Vendor,
+  VendorType,
+  Serializer,
+  Controller,
+  UseCase,
+  VendorDocument,
+  Store,
+  Entity,
+};

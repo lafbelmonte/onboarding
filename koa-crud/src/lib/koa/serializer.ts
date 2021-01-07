@@ -1,8 +1,8 @@
-import { HttpRequest, HttpResponse } from '../../types';
+import { Serializer } from '../../types';
 
-function serialize(controller) {
-  return async (ctx: any) => {
-    const httpRequest: HttpRequest = {
+const serialize: Serializer = (controller) => {
+  return async (ctx) => {
+    const httpRequest = {
       body: ctx.request.body,
       query: ctx.query,
       params: ctx.params,
@@ -17,7 +17,7 @@ function serialize(controller) {
     };
 
     try {
-      const httpResponse: HttpResponse = await controller(httpRequest);
+      const httpResponse = await controller(httpRequest);
       if (httpResponse.headers) {
         ctx.set(httpResponse.headers);
       }
@@ -31,6 +31,6 @@ function serialize(controller) {
       };
     }
   };
-}
+};
 
 export default serialize;
