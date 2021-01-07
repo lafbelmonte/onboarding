@@ -32,7 +32,7 @@ class KoaApp {
     })(routes);
   }
 
-  public getApp(): Koa {
+  get instance(): Koa {
     return this.app;
   }
 

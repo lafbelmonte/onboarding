@@ -1,8 +1,8 @@
-const insertVendor = ({ dVendors, eVendor }) => {
-  return async function (info: any) {
-    const vendor = await eVendor(info);
+const insertVendor = ({ vendorsStore, vendorEntity }) => {
+  return async function (info: any): Promise<any> {
+    const vendor = await vendorEntity(info);
 
-    const vendorExists = await dVendors.vendorExistsByFilter({
+    const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: vendor._id,
     });
 
@@ -10,7 +10,7 @@ const insertVendor = ({ dVendors, eVendor }) => {
       throw new Error(`ID already exists`);
     }
 
-    const inserted = await dVendors.insertOneVendor(vendor);
+    const inserted = await vendorsStore.insertOneVendor(vendor);
 
     return inserted;
   };

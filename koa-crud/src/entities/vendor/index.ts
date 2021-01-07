@@ -1,5 +1,5 @@
 import entity from './entity';
 
-const eVendor = entity();
+const vendorEntity = entity();
 
-export { eVendor };
+export { vendorEntity };

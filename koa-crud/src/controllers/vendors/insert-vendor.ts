@@ -1,5 +1,9 @@
-const insertVendor = ({ uInsertVendor }: any) => {
-  return async function controller(httpRequest: any) {
+import { HttpRequest, HttpResponse } from '../../types';
+
+const insertVendor = ({ insertVendorUseCase }: any) => {
+  return async function controller(
+    httpRequest: HttpRequest,
+  ): Promise<HttpResponse> {
     try {
       const { source = {}, ...info } = httpRequest.body;
       source.ip = httpRequest.ip;
@@ -7,7 +11,7 @@ const insertVendor = ({ uInsertVendor }: any) => {
       if (httpRequest.headers.Referer) {
         source.referrer = httpRequest.headers.Referer;
       }
-      const posted = await uInsertVendor({
+      const posted = await insertVendorUseCase({
         ...info,
         source,
       });

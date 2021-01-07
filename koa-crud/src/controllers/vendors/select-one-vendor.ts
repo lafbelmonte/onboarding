@@ -1,11 +1,15 @@
-const selectOneVendor = ({ uSelectOneVendor }: any) => {
-  return async function controller(httpRequest: any) {
+import { HttpRequest, HttpResponse } from '../../types';
+
+const selectOneVendor = ({ selectOneVendorUseCase }: any) => {
+  return async function controller(
+    httpRequest: HttpRequest,
+  ): Promise<HttpResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };
 
     try {
-      const view = await uSelectOneVendor({ id: httpRequest.params.id });
+      const view = await selectOneVendorUseCase({ id: httpRequest.params.id });
 
       return {
         headers,

@@ -1,6 +1,6 @@
-const updateVendor = ({ dVendors, eVendor }) => {
-  return async function ({ id, ...info }: any) {
-    const vendorExists = await dVendors.vendorExistsByFilter({
+const updateVendor = ({ vendorsStore, vendorEntity }) => {
+  return async function ({ id, ...info }: any): Promise<any> {
+    const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
     });
 
@@ -8,7 +8,7 @@ const updateVendor = ({ dVendors, eVendor }) => {
       throw new Error(`Vendor doesn't exist`);
     }
 
-    const vendor = await eVendor({ _id: id, ...info });
+    const vendor = await vendorEntity({ _id: id, ...info });
 
     delete vendor.dateTimeCreated;
 
@@ -16,7 +16,7 @@ const updateVendor = ({ dVendors, eVendor }) => {
 
     delete vendor._id;
 
-    const updated = dVendors.updateVendorByFilters({ _id }, { ...vendor });
+    const updated = vendorsStore.updateVendorByFilters({ _id }, { ...vendor });
 
     return updated;
   };

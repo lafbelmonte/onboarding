@@ -1,5 +1,9 @@
-const updateVendor = ({ uUpdateVendor }: any) => {
-  return async function controller(httpRequest: any) {
+import { HttpRequest, HttpResponse } from '../../types';
+
+const updateVendor = ({ updateVendorUseCase }: any) => {
+  return async function controller(
+    httpRequest: HttpRequest,
+  ): Promise<HttpResponse> {
     try {
       const { source = {}, ...info } = httpRequest.body;
       source.ip = httpRequest.ip;
@@ -12,7 +16,7 @@ const updateVendor = ({ uUpdateVendor }: any) => {
         source,
         id: httpRequest.params.id,
       };
-      const putted = await uUpdateVendor(toEdit);
+      const putted = await updateVendorUseCase(toEdit);
       return {
         headers: {
           'Content-Type': 'application/json',

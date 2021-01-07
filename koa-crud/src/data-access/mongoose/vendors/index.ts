@@ -1,7 +1,7 @@
-import { Vendor } from '../../../mongoose/models/vendor';
+import { Vendor } from '../../../lib/mongoose/models/vendor';
 
 import actions from './actions';
 
-const dVendors = actions({ Vendor });
+const vendorsStore = actions({ Vendor });
 
-export { dVendors };
+export { vendorsStore };

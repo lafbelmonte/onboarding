@@ -33,9 +33,11 @@ const actions = ({ Vendor }: any) => {
 
   async function deleteOneVendor(filters: any) {
     const vendor = await Vendor.deleteOne({ ...filters });
-    return vendor;
-  }
 
+    const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
+
+    return isDeleted;
+  }
 
   return {
     insertOneVendor,
@@ -43,7 +45,7 @@ const actions = ({ Vendor }: any) => {
     selectAllVendors,
     selectOneVendorByFilters,
     updateVendorByFilters,
-    deleteOneVendor
+    deleteOneVendor,
   };
 };
 

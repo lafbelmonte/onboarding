@@ -1,11 +1,15 @@
-const selectAllVendors = ({ uSelectAllVendors }: any) => {
-  return async function controller(httpRequest: any) {
+import { HttpRequest, HttpResponse } from '../../types';
+
+const selectAllVendors = ({ selectAllVendorsUseCase }: any) => {
+  return async function controller(
+    httpRequest: HttpRequest,
+  ): Promise<HttpResponse> {
     const headers = {
       'Content-Type': 'application/json',
     };
 
     try {
-      const view = await uSelectAllVendors();
+      const view = await selectAllVendorsUseCase();
 
       return {
         headers,

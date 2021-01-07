@@ -1,7 +1,6 @@
-const deleteOneVendor = ({ dVendors }) => {
-  return async function useCase({ id }: any) {
-
-    const vendorExists = await dVendors.vendorExistsByFilter({
+const deleteOneVendor = ({ vendorsStore }) => {
+  return async function useCase({ id }: any): Promise<any> {
+    const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
     });
 
@@ -9,7 +8,7 @@ const deleteOneVendor = ({ dVendors }) => {
       throw new Error(`Vendor doesn't exist`);
     }
 
-    const deleted = dVendors.deleteOneVendor({ _id: id })
+    const deleted = vendorsStore.deleteOneVendor({ _id: id });
 
     return deleted;
   };
