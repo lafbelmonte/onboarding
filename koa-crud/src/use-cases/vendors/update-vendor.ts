@@ -1,22 +1,23 @@
-const updateVendor = ({ vendorsStore, vendorEntity }) => {
+const updateVendor = ({ vendorsStore, vendorEntity, R }) => {
   return async function ({ id, ...info }: any): Promise<any> {
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      throw new Error(`Invalid ID`);
+    }
+
     const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
     });
 
     if (!vendorExists) {
-      throw new Error(`Vendor doesn't exist`);
+      throw new Error(`Vendor ID doesn't exist`);
     }
 
-    const vendor = await vendorEntity({ _id: id, ...info });
+    const vendor = await vendorEntity({ ...info });
 
-    delete vendor.dateTimeCreated;
-
-    const { _id } = vendor;
-
-    delete vendor._id;
-
-    const updated = vendorsStore.updateVendorByFilters({ _id }, { ...vendor });
+    const updated = vendorsStore.updateVendorByFilters(
+      { _id: id },
+      R.omit(['dateTimeCreated'], vendor),
+    );
 
     return updated;
   };

@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 import { vendorEntity } from '../../entities/vendor';
 
 import { vendorsStore } from '../../data-access/mongoose/vendors';
@@ -11,7 +13,7 @@ import deleteOneVendor from './delete-one-vendor';
 const selectAllVendorsUseCase = selectAllVendors({ vendorsStore });
 const selectOneVendorUseCase = selectOneVendor({ vendorsStore });
 const insertVendorUseCase = insertVendor({ vendorsStore, vendorEntity });
-const updateVendorUseCase = updateVendor({ vendorsStore, vendorEntity });
+const updateVendorUseCase = updateVendor({ vendorsStore, vendorEntity, R });
 const deleteOneVendorUseCase = deleteOneVendor({ vendorsStore });
 
 export {

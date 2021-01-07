@@ -16,14 +16,14 @@ const updateVendor = ({ updateVendorUseCase }: any) => {
         source,
         id: httpRequest.params.id,
       };
-      const putted = await updateVendorUseCase(toEdit);
+      const put = await updateVendorUseCase(toEdit);
       return {
         headers: {
           'Content-Type': 'application/json',
           'Last-Modified': new Date().toUTCString(),
         },
         statusCode: 204,
-        body: { putted },
+        body: { put },
       };
     } catch (e) {
       return {

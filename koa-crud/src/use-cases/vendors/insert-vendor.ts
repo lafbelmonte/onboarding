@@ -3,11 +3,11 @@ const insertVendor = ({ vendorsStore, vendorEntity }) => {
     const vendor = await vendorEntity(info);
 
     const vendorExists = await vendorsStore.vendorExistsByFilter({
-      _id: vendor._id,
+      name: vendor.name,
     });
 
     if (vendorExists) {
-      throw new Error(`ID already exists`);
+      throw new Error(`Vendor already exists`);
     }
 
     const inserted = await vendorsStore.insertOneVendor(vendor);

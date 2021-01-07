@@ -21,7 +21,6 @@ describe('POST /vendors', () => {
 
   it('should successfully insert a SEAMLESS type vendor', async () => {
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -31,7 +30,6 @@ describe('POST /vendors', () => {
 
   it('should successfully insert a TRANSFER type vendor', async () => {
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'TRANSFER',
     });
@@ -39,19 +37,8 @@ describe('POST /vendors', () => {
     expect(main.status).to.eqls(201);
   });
 
-  it('should throw an error if no id is given', async () => {
-    const main = await request().post('/vendors').send({
-      _id: null,
-      name: 'Luis Angelo Belmonte',
-      type: 'SEAMLESS',
-    });
-
-    expect(main.status).to.eqls(400);
-  });
-
   it('should throw an error if no name is given', async () => {
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: null,
       type: 'SEAMLESS',
     });
@@ -61,7 +48,6 @@ describe('POST /vendors', () => {
 
   it('should throw an error if no type is given', async () => {
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: null,
     });
@@ -71,7 +57,6 @@ describe('POST /vendors', () => {
 
   it('should throw an error if invalid type is given', async () => {
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'qwe',
     });
@@ -79,9 +64,9 @@ describe('POST /vendors', () => {
     expect(main.status).to.eqls(400);
   });
 
-  it('should throw an error if id already exists', async () => {
+  it('should throw an error if vendor name already exists', async () => {
+
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -89,7 +74,6 @@ describe('POST /vendors', () => {
     expect(mock.status).to.eqls(201);
 
     const main = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -109,7 +93,6 @@ describe('GET /vendors', () => {
 
   it('should return list of vendors', async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -134,21 +117,19 @@ describe('GET /vendors/:id', () => {
 
   it('should return vendor by ID', async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().get('/vendors/154151546');
+    const main = await request().get(`/vendors/${mock.body.posted._id}`);
 
     expect(main.status).to.eqls(200);
   });
 
   it(`should throw an error if ID of the Vendor doesn't exist`, async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -172,14 +153,13 @@ describe('PUT /vendors/:id', () => {
 
   it('should successfully update to a TRANSFER vendor', async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put('/vendors/154151546').send({
+    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'TRANSFER',
     });
@@ -189,14 +169,13 @@ describe('PUT /vendors/:id', () => {
 
   it('should successfully update to a SEAMLESS vendor', async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'TRANSFER',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put('/vendors/154151546').send({
+    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -206,7 +185,6 @@ describe('PUT /vendors/:id', () => {
 
   it(`should throw an error if ID does'nt exist`, async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -223,14 +201,13 @@ describe('PUT /vendors/:id', () => {
 
   it(`should throw an error if no name is provided`, async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put('/vendors/154151546').send({
+    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
       name: null,
       type: 'TRANSFER',
     });
@@ -240,14 +217,13 @@ describe('PUT /vendors/:id', () => {
 
   it(`should throw an error if no type is provided`, async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put('/vendors/154151546').send({
+    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: null,
     });
@@ -257,14 +233,13 @@ describe('PUT /vendors/:id', () => {
 
   it(`should throw an error if invalid type is provided`, async () => {
     const mock = await request().post('/vendors').send({
-      _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put('/vendors/154151546').send({
+    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'qwe',
     });
@@ -283,14 +258,13 @@ describe('PUT /vendors/:id', () => {
 
     it('should delete vendor by id', async () => {
       const mock = await request().post('/vendors').send({
-        _id: '154151546',
         name: 'Luis Angelo Belmonte',
         type: 'SEAMLESS',
       });
 
       expect(mock.status).to.eqls(201);
 
-      const main = await request().delete('/vendors/154151546');
+      const main = await request().delete(`/vendors/${mock.body.posted._id}`);
 
       expect(main.status).to.eqls(200);
       expect(main.body.deleted).to.be.true;
@@ -298,18 +272,13 @@ describe('PUT /vendors/:id', () => {
 
     it(`should throw an error if id doensn't exist`, async () => {
       const mock = await request().post('/vendors').send({
-        _id: '154151546',
         name: 'Luis Angelo Belmonte',
         type: 'SEAMLESS',
       });
 
       expect(mock.status).to.eqls(201);
 
-      const main = await request().post('/vendors').send({
-        _id: '154151546',
-        name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
-      });
+      const main = await request().delete('/vendors/154151546')
 
       expect(main.status).to.eqls(400);
     });
