@@ -1,10 +1,13 @@
 import { Schema, model, Document } from 'mongoose';
-import { Vendor } from '../../../types/index';
+import { Vendor, VendorType } from '../../../types/index';
 
 const schema = new Schema({
   _id: String,
   name: String,
-  type: String,
+  type: {
+    type: String,
+    enum: [VendorType.Seamless, VendorType.Transfer]
+  },
   dateTimeCreated: { type: Date, default: Date.now },
   dateTimeUpdated: { type: Date, default: Date.now },
 });

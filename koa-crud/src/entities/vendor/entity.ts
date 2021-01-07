@@ -1,3 +1,4 @@
+
 const entity = () => {
   return async function vendor({
     _id,
@@ -16,10 +17,6 @@ const entity = () => {
 
     if (!type) {
       throw new Error(`Please input type`);
-    }
-
-    if (type !== 'SEAMLESS' && type !== 'TRANSFER') {
-      throw new Error(`Invalid type`);
     }
 
     return {

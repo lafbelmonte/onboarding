@@ -9,7 +9,7 @@ const selectOneVendor = ({ vendorsStore }) => {
     }
 
     const vendor = await vendorsStore.selectOneVendorByFilters({ _id: id });
-    return vendor[0];
+    return vendor;
   };
 };
 

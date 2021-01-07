@@ -19,11 +19,21 @@ describe('POST /vendors', () => {
     return Vendor.deleteMany({});
   });
 
-  it('should successfully insert a vendor', async () => {
+  it('should successfully insert a SEAMLESS type vendor', async () => {
     const main = await request().post('/vendors').send({
       _id: '154151546',
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
+    });
+
+    expect(main.status).to.eqls(201);
+  });
+
+  it('should successfully insert a TRANSFER type vendor', async () => {
+    const main = await request().post('/vendors').send({
+      _id: '154151546',
+      name: 'Luis Angelo Belmonte',
+      type: 'TRANSFER',
     });
 
     expect(main.status).to.eqls(201);
@@ -160,7 +170,7 @@ describe('PUT /vendors/:id', () => {
     return Vendor.deleteMany({});
   });
 
-  it('should successfully update a vendor', async () => {
+  it('should successfully update to a TRANSFER vendor', async () => {
     const mock = await request().post('/vendors').send({
       _id: '154151546',
       name: 'Luis Angelo Belmonte',
@@ -172,6 +182,23 @@ describe('PUT /vendors/:id', () => {
     const main = await request().put('/vendors/154151546').send({
       name: 'Luis Angelo Belmonte',
       type: 'TRANSFER',
+    });
+
+    expect(main.status).to.eqls(204);
+  });
+
+  it('should successfully update to a SEAMLESS vendor', async () => {
+    const mock = await request().post('/vendors').send({
+      _id: '154151546',
+      name: 'Luis Angelo Belmonte',
+      type: 'TRANSFER',
+    });
+
+    expect(mock.status).to.eqls(201);
+
+    const main = await request().put('/vendors/154151546').send({
+      name: 'Luis Angelo Belmonte',
+      type: 'SEAMLESS',
     });
 
     expect(main.status).to.eqls(204);

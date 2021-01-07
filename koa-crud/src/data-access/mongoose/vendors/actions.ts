@@ -25,7 +25,7 @@ const actions = ({ Vendor }: any) => {
     const user = await Vendor.findOneAndUpdate(
       { ...filters },
       { ...info },
-      { new: true },
+      { new: true, runValidators: true }
     );
     return user;
   }

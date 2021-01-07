@@ -27,4 +27,4 @@ type Vendor = {
   dateTimeUpdated: Date;
 };
 
-export { HttpRequest, HttpResponse, Vendor };
+export { HttpRequest, HttpResponse, Vendor, VendorType };
