@@ -1,9 +1,8 @@
 const actions = ({ Vendor }: any) => {
   async function insertOneVendor(info: any) {
-    const vendor = new Vendor({
+    const vendor = Vendor.create({
       ...info,
     });
-    await vendor.save();
     return vendor;
   }
 
@@ -13,12 +12,12 @@ const actions = ({ Vendor }: any) => {
   }
 
   async function selectAllVendors() {
-    const vendor = await Vendor.find();
+    const vendor = await Vendor.find().lean();
     return vendor;
   }
 
   async function selectOneVendorByFilters(filters: any) {
-    const vendor = await Vendor.find({ ...filters });
+    const vendor = await Vendor.findOne({ ...filters });
     return vendor;
   }
 
