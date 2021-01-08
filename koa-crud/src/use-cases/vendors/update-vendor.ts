@@ -1,6 +1,14 @@
-import { UseCase } from '../../types';
+import { UseCase, VendorStore } from '../../types';
 
-const updateVendor = ({ vendorsStore, vendorEntity, R }): UseCase => {
+const updateVendor = ({
+  vendorsStore,
+  vendorEntity,
+  R,
+}: {
+  vendorsStore: VendorStore;
+  vendorEntity;
+  R;
+}): UseCase => {
   return async function ({ id, info }) {
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       throw new Error(`Invalid ID`);
@@ -16,12 +24,15 @@ const updateVendor = ({ vendorsStore, vendorEntity, R }): UseCase => {
 
     const vendor = await vendorEntity({ ...info });
 
-    const updated = vendorsStore.updateVendorByFilters(
+    const updated = await vendorsStore.updateVendorByFilters(
       { _id: id },
       R.omit(['dateTimeCreated'], vendor),
     );
 
-    return updated;
+    return {
+      message: '',
+      data: updated,
+    };
   };
 };
 

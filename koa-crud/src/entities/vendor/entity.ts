@@ -9,7 +9,12 @@ const entity = () => {
     type: string;
     dateTimeCreated: Date;
     dateTimeUpdated: Date;
-  }) {
+  }): Promise<{
+    name: string;
+    type: string;
+    dateTimeCreated: Date;
+    dateTimeUpdated: Date;
+  }> {
     if (!name) {
       throw new Error(`Please input name`);
     }

@@ -2,9 +2,9 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import server from '../src/index';
+import server from '../../../src/index';
 
-import { Vendor } from '../src/lib/mongoose/models/vendor';
+import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 chai.use(chaiHttp);
 
@@ -102,7 +102,7 @@ describe('GET /vendors', () => {
     const main = await request().get('/vendors');
 
     expect(main.status).to.eqls(200);
-    expect(main.body.view.length).to.eqls(1);
+    expect(main.body.data.length).to.eqls(1);
   });
 });
 
@@ -123,7 +123,7 @@ describe('GET /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().get(`/vendors/${mock.body.posted._id}`);
+    const main = await request().get(`/vendors/${mock.body.data._id}`);
 
     expect(main.status).to.eqls(200);
   });
@@ -159,7 +159,7 @@ describe('PUT /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
+    const main = await request().put(`/vendors/${mock.body.data._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'TRANSFER',
     });
@@ -175,7 +175,7 @@ describe('PUT /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
+    const main = await request().put(`/vendors/${mock.body.data._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'SEAMLESS',
     });
@@ -207,7 +207,7 @@ describe('PUT /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
+    const main = await request().put(`/vendors/${mock.body.data._id}`).send({
       name: null,
       type: 'TRANSFER',
     });
@@ -223,7 +223,7 @@ describe('PUT /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
+    const main = await request().put(`/vendors/${mock.body.data._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: null,
     });
@@ -239,7 +239,7 @@ describe('PUT /vendors/:id', () => {
 
     expect(mock.status).to.eqls(201);
 
-    const main = await request().put(`/vendors/${mock.body.posted._id}`).send({
+    const main = await request().put(`/vendors/${mock.body.data._id}`).send({
       name: 'Luis Angelo Belmonte',
       type: 'qwe',
     });
@@ -264,10 +264,10 @@ describe('PUT /vendors/:id', () => {
 
       expect(mock.status).to.eqls(201);
 
-      const main = await request().delete(`/vendors/${mock.body.posted._id}`);
+      const main = await request().delete(`/vendors/${mock.body.data._id}`);
 
       expect(main.status).to.eqls(200);
-      expect(main.body.deleted).to.be.true;
+      expect(main.body.data).to.eqls(mock.body.data._id);
     });
 
     it(`should throw an error if id doensn't exist`, async () => {

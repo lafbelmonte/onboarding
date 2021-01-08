@@ -1,6 +1,10 @@
-import { UseCase } from '../../types';
+import { UseCase, VendorStore } from '../../types';
 
-const deleteOneVendor = ({ vendorsStore }): UseCase => {
+const deleteOneVendor = ({
+  vendorsStore,
+}: {
+  vendorsStore: VendorStore;
+}): UseCase => {
   return async function useCase({ id }) {
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       throw new Error(`Invalid ID`);
@@ -14,9 +18,12 @@ const deleteOneVendor = ({ vendorsStore }): UseCase => {
       throw new Error(`Vendor doesn't exist`);
     }
 
-    const deleted = vendorsStore.deleteOneVendor({ _id: id });
+    await vendorsStore.deleteOneVendor({ _id: id });
 
-    return deleted;
+    return {
+      message: `Vendor with ID: ${id} is deleted`,
+      data: id,
+    };
   };
 };
 

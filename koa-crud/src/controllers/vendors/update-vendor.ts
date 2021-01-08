@@ -25,7 +25,7 @@ const updateVendor = ({
           'Last-Modified': new Date().toUTCString(),
         },
         statusCode: 204,
-        body: { put },
+        body: put,
       };
     } catch (e) {
       return {
