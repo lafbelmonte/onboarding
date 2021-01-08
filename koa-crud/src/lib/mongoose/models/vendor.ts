@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Vendor, VendorType, VendorDocument } from '../../../types/index';
+import { VendorType, VendorDocument } from '../../../types/index';
 
 const schema = new Schema({
   name: String,

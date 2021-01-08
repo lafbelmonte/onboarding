@@ -2,9 +2,9 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import server from '../src/index';
+import server from '../../../src/index';
 
-import { Vendor } from '../src/lib/mongoose/models/vendor';
+import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 chai.use(chaiHttp);
 

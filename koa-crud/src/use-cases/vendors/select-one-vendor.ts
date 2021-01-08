@@ -1,6 +1,10 @@
-import { UseCase } from '../../types';
+import { UseCase, VendorStore } from '../../types';
 
-const selectOneVendor = ({ vendorsStore }): UseCase => {
+const selectOneVendor = ({
+  vendorsStore,
+}: {
+  vendorsStore: VendorStore;
+}): UseCase => {
   return async function useCase({ id }) {
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       throw new Error(`Invalid ID`);
@@ -15,7 +19,11 @@ const selectOneVendor = ({ vendorsStore }): UseCase => {
     }
 
     const vendor = await vendorsStore.selectOneVendorByFilters({ _id: id });
-    return vendor;
+
+    return {
+      message: '',
+      data: vendor,
+    };
   };
 };
 

@@ -24,7 +24,7 @@ const insertVendor = ({
           'Last-Modified': new Date().toUTCString(),
         },
         statusCode: 201,
-        body: { posted },
+        body: posted,
       };
     } catch (e) {
       return {
