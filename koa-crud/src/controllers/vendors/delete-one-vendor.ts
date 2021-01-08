@@ -20,7 +20,7 @@ const deleteOneVendor = ({
       return {
         headers,
         statusCode: 200,
-        body: { deleted },
+        body: deleted,
       };
     } catch (e) {
       return {

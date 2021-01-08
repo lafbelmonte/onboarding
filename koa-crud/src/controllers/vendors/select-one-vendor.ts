@@ -20,7 +20,7 @@ const selectOneVendor = ({
       return {
         headers,
         statusCode: 200,
-        body: { view },
+        body: view,
       };
     } catch (e) {
       return {

@@ -6,8 +6,6 @@ async function initializeDatabase(): Promise<void> {
       `mongodb://root:lostintheabyss@localhost:27017/vendors?authSource=admin`,
       { useNewUrlParser: true },
     );
-
-    console.log('Db connected successfully');
   } catch (e) {
     throw new Error(e);
   }

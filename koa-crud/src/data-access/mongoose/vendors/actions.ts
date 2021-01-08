@@ -1,36 +1,25 @@
-import { Vendor as VendorModel } from '../../../lib/mongoose/models/vendor';
+import { VendorStore } from '../../../types/index';
 
-import { VendorDocument } from '../../../types/index';
-
-const actions = ({ Vendor }: { Vendor: typeof VendorModel }) => {
-  async function insertOneVendor(
-    info: typeof VendorModel,
-  ): Promise<VendorDocument> {
+const actions = ({ Vendor }): VendorStore => {
+  async function insertOneVendor(info) {
     return Vendor.create({
       ...info,
     });
   }
 
-  async function vendorExistsByFilter(
-    filters: Pick<VendorDocument, '_id' | 'name' | 'type'>,
-  ): Promise<boolean> {
+  async function vendorExistsByFilter(filters) {
     return Vendor.exists(filters);
   }
 
-  async function selectAllVendors(): Promise<VendorDocument[]> {
+  async function selectAllVendors() {
     return Vendor.find().lean();
   }
 
-  async function selectOneVendorByFilters(
-    filters: Pick<VendorDocument, '_id' | 'name' | 'type'>,
-  ): Promise<VendorDocument> {
+  async function selectOneVendorByFilters(filters) {
     return Vendor.findOne({ ...filters });
   }
 
-  async function updateVendorByFilters(
-    filters: Pick<VendorDocument, '_id' | 'name' | 'type'>,
-    info: typeof VendorModel,
-  ): Promise<VendorDocument> {
+  async function updateVendorByFilters(filters, info) {
     return Vendor.findOneAndUpdate(
       { ...filters },
       { ...info },
@@ -38,9 +27,7 @@ const actions = ({ Vendor }: { Vendor: typeof VendorModel }) => {
     );
   }
 
-  async function deleteOneVendor(
-    filters: Pick<VendorDocument, '_id' | 'name' | 'type'>,
-  ): Promise<boolean> {
+  async function deleteOneVendor(filters) {
     const vendor = await Vendor.deleteOne({ ...filters });
 
     const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);

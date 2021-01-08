@@ -1,6 +1,12 @@
-import { UseCase } from '../../types';
+import { UseCase, VendorStore } from '../../types';
 
-const insertVendor = ({ vendorsStore, vendorEntity }): UseCase => {
+const insertVendor = ({
+  vendorsStore,
+  vendorEntity,
+}: {
+  vendorsStore: VendorStore;
+  vendorEntity;
+}): UseCase => {
   return async function ({ info }) {
     const vendor = await vendorEntity(info);
 
@@ -14,7 +20,10 @@ const insertVendor = ({ vendorsStore, vendorEntity }): UseCase => {
 
     const inserted = await vendorsStore.insertOneVendor(vendor);
 
-    return inserted;
+    return {
+      message: '',
+      data: inserted,
+    };
   };
 };
 
