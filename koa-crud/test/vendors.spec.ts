@@ -21,67 +21,80 @@ describe('Vendor Endpoints', function () {
     beforeEach(() => {
       return Vendor.deleteMany({});
     });
-  
-    it('should successfully insert a SEAMLESS type vendor', async function () {
-      const main = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
+    
+    describe('GIVEN a SEAMLESS type', function () {
+      it('should successfully insert a SEAMLESS type vendor', async function () {
+        const main = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: 'SEAMLESS',
+        });
+    
+        expect(main.status).to.eqls(201);
       });
-  
-      expect(main.status).to.eqls(201);
     });
-  
-    it('should successfully insert a TRANSFER type vendor', async function () {
-      const main = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: 'TRANSFER',
+    
+    describe('GIVEN a TRANSFER type', function () {
+      it('should successfully insert a TRANSFER type vendor', async function () {
+        const main = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: 'TRANSFER',
+        });
+    
+        expect(main.status).to.eqls(201);
       });
-  
-      expect(main.status).to.eqls(201);
     });
-  
-    it('should throw an error if no name is given', async function () {
-      const main = await this.request().post('/vendors').send({
-        name: null,
-        type: 'SEAMLESS',
+    
+    describe('GIVEN no name', function () {
+      it('should throw an error', async function () {
+        const main = await this.request().post('/vendors').send({
+          name: null,
+          type: 'SEAMLESS',
+        });
+    
+        expect(main.status).to.eqls(400);
       });
-  
-      expect(main.status).to.eqls(400);
     });
-  
-    it('should throw an error if no type is given', async function () {
-      const main = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: null,
-      });
-  
-      expect(main.status).to.eqls(400);
+    
+    describe('GIVEN no type', function () {
+      it('should throw an error if no type', async function () {
+        const main = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: null,
+        });
+    
+        expect(main.status).to.eqls(400);
+      });  
     });
-  
-    it('should throw an error if invalid type is given', async function () {
-      const main = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: 'qwe',
+    
+    describe('GIVEN an invalid type', function () {
+      it('should throw an error', async function () {
+        const main = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: 'qwe',
+        });
+    
+        expect(main.status).to.eqls(400);
       });
-  
-      expect(main.status).to.eqls(400);
     });
+    
+    
+    describe('GIVEN a the same vendor name exists', function () {
+      it('should throw an error', async function () {
   
-    it('should throw an error if vendor name already exists', async function () {
-  
-      const mock = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
+        const mock = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: 'SEAMLESS',
+        });
+    
+        expect(mock.status).to.eqls(201);
+    
+        const main = await this.request().post('/vendors').send({
+          name: 'Luis Angelo Belmonte',
+          type: 'SEAMLESS',
+        });
+    
+        expect(main.status).to.eqls(400);
       });
-  
-      expect(mock.status).to.eqls(201);
-  
-      const main = await this.request().post('/vendors').send({
-        name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
-      });
-  
-      expect(main.status).to.eqls(400);
     });
   });
   
