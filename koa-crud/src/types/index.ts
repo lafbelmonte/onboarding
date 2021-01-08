@@ -23,7 +23,7 @@ enum VendorType {
 }
 
 type Vendor = {
-  _id: string;
+  _id?: string;
   name: string;
   type: VendorType;
   dateTimeCreated: Date;

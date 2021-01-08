@@ -16,7 +16,7 @@ const actions = ({ Vendor }): VendorStore => {
   }
 
   async function selectOneVendorByFilters(filters) {
-    return Vendor.findOne({ ...filters });
+    return Vendor.findOne({ ...filters }).lean();
   }
 
   async function updateVendorByFilters(filters, info) {

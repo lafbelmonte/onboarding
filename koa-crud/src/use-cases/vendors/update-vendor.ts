@@ -10,10 +10,6 @@ const updateVendor = ({
   R;
 }): UseCase => {
   return async function ({ id, info }) {
-    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-      throw new Error(`Invalid ID`);
-    }
-
     const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
     });

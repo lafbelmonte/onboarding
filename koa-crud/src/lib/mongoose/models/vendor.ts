@@ -1,11 +1,22 @@
 import { Schema, model } from 'mongoose';
+import { nanoid } from 'nanoid';
 import { VendorType, VendorDocument } from '../../../types/index';
 
 const schema = new Schema({
-  name: String,
+  _id: {
+    type: String,
+    default() {
+      return nanoid();
+    },
+  },
+  name: {
+    type: String,
+    required: true,
+  },
   type: {
     type: String,
     enum: [VendorType.Seamless, VendorType.Transfer],
+    required: true,
   },
   dateTimeCreated: { type: Date, default: Date.now },
   dateTimeUpdated: { type: Date, default: Date.now },
