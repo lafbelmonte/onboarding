@@ -1,7 +1,14 @@
 import { Schema, model } from 'mongoose';
+import { nanoid } from 'nanoid';
 import { VendorType, VendorDocument } from '../../../types/index';
 
 const schema = new Schema({
+  _id: {
+    type: String,
+    default() {
+      return nanoid();
+    },
+  },
   name: {
     type: String,
     required: true,

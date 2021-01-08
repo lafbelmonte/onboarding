@@ -135,20 +135,6 @@ describe('Vendor Store', () => {
           .fulfilled.be.false;
       });
     });
-
-    describe('GIVEN invalid filters', () => {
-      it('should throw an error', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        await insertOneVendor(mock);
-        await expect(vendorExistsByFilter({ _id: 'qwe' })).to.eventually
-          .rejected;
-      });
-    });
   });
 
   describe('Select All Vendors', () => {
@@ -191,9 +177,9 @@ describe('Vendor Store', () => {
           dateTimeUpdated: new Date(),
         };
         const main = await insertOneVendor(mock);
-        await expect(selectOneVendorByFilters({ _id: main._id }))
-          .to.eventually.fulfilled.and.property('_id')
-          .eqls(main._id);
+        await expect(
+          selectOneVendorByFilters({ _id: main._id }),
+        ).to.eventually.fulfilled.property('_id', main._id);
       });
     });
 
@@ -208,20 +194,6 @@ describe('Vendor Store', () => {
         await insertOneVendor(mock);
         await expect(selectOneVendorByFilters({ _id: mockedId })).to.eventually
           .fulfilled.and.null;
-      });
-    });
-
-    describe('GIVEN invalid filters', () => {
-      it('should return the vendor', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        await insertOneVendor(mock);
-        await expect(selectOneVendorByFilters({ _id: 'qwe' })).to.eventually
-          .rejected;
       });
     });
   });
@@ -247,9 +219,7 @@ describe('Vendor Store', () => {
               dateTimeUpdated: new Date(),
             },
           ),
-        )
-          .to.eventually.fulfilled.property('type')
-          .eqls('SEAMLESS');
+        ).to.eventually.fulfilled.property('type', 'SEAMLESS');
       });
     });
 
@@ -273,9 +243,7 @@ describe('Vendor Store', () => {
               dateTimeUpdated: new Date(),
             },
           ),
-        )
-          .to.eventually.fulfilled.property('type')
-          .eqls('TRANSFER');
+        ).to.eventually.fulfilled.property('type', 'TRANSFER');
       });
     });
 
@@ -348,12 +316,6 @@ describe('Vendor Store', () => {
       it('should return true', async () => {
         await expect(deleteOneVendor({ _id: mockedId })).to.eventually.fulfilled
           .and.be.false;
-      });
-    });
-
-    describe('GIVEN invalid vendor ID', () => {
-      it('should return true', async () => {
-        await expect(deleteOneVendor({ _id: 'qwe' })).to.eventually.rejected;
       });
     });
   });

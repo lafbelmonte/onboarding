@@ -193,14 +193,6 @@ describe('Vendor Use Cases', () => {
       });
     });
 
-    describe('GIVEN invalid ID', () => {
-      it('should throw an error', async () => {
-        await expect(
-          selectOneVendorUseCase({ id: 'qwe', info: null, source: null }),
-        ).to.eventually.rejectedWith('Invalid ID');
-      });
-    });
-
     describe('GIVEN valid but not existent ID', () => {
       it('should throw an error', async () => {
         await expect(
@@ -265,18 +257,6 @@ describe('Vendor Use Cases', () => {
             source: null,
           }),
         ).to.eventually.fulfilled.and.have.keys('message', 'data');
-      });
-    });
-
-    describe('Given an invalid ID', () => {
-      it('should throw an error', async () => {
-        await expect(
-          updateVendorUseCase({
-            id: 'qwe',
-            info: { name: 'Luis Angelo Belmonte', type: 'SEAMLESS' },
-            source: null,
-          }),
-        ).to.eventually.rejectedWith('Invalid ID');
       });
     });
 
@@ -390,14 +370,6 @@ describe('Vendor Use Cases', () => {
             info: null,
           }),
         ).to.eventually.fulfilled.and.have.keys('message', 'data');
-      });
-    });
-
-    describe('GIVEN an invalid ID', () => {
-      it('should throw an error', async () => {
-        await expect(
-          deleteOneVendorUseCase({ id: 'qwe', source: null, info: null }),
-        ).to.eventually.rejectedWith('Invalid ID');
       });
     });
 
