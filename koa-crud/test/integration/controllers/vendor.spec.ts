@@ -8,6 +8,8 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { initializeDatabase } from '../../../src/lib/mongoose';
 
+import { VendorType } from '../../../src/types';
+
 import {
   selectAllVendorsController,
   selectOneVendorController,
@@ -18,10 +20,12 @@ import {
 
 chai.use(chaiAsPromised);
 
-const mockedId = mongoose.Types.ObjectId().toString();
-
 describe('Vendor Controller', () => {
-  before(() => initializeDatabase());
+  before(async function () {
+    this.mockedId = mongoose.Types.ObjectId().toString();
+    this.mock =  null
+    await initializeDatabase()
+  });
 
   describe('Adding a vendor', () => {
     afterEach(() => {
@@ -37,7 +41,7 @@ describe('Vendor Controller', () => {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
-            type: 'SEAMLESS',
+            type: VendorType.Seamless,
           },
           query: null,
           params: null,
@@ -62,7 +66,7 @@ describe('Vendor Controller', () => {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
-            type: 'SEAMLESS',
+            type: VendorType.Transfer,
           },
           query: null,
           params: null,
@@ -87,7 +91,7 @@ describe('Vendor Controller', () => {
         const main = {
           body: {
             name: null,
-            type: 'SEAMLESS',
+            type: VendorType.Seamless,
           },
           query: null,
           params: null,
@@ -158,11 +162,11 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN an existing vendor name', () => {
-      it('should return an error status code', async () => {
-        const mock = {
+      it('should return an error status code', async function () {
+        this.mock = {
           body: {
             name: 'Luis Angelo Belmonte',
-            type: 'SEAMLESS',
+            type: VendorType.Seamless,
           },
           query: null,
           params: null,
@@ -177,11 +181,11 @@ describe('Vendor Controller', () => {
         };
 
         await expect(
-          insertVendorController(mock),
+          insertVendorController(this.mock),
         ).to.eventually.fulfilled.property('statusCode', 201);
 
         await expect(
-          insertVendorController(mock),
+          insertVendorController(this.mock),
         ).to.eventually.fulfilled.property('statusCode', 400);
       });
     });
@@ -192,12 +196,12 @@ describe('Vendor Controller', () => {
       return Vendor.deleteMany({});
     });
 
-    before(async () => {
+    before(async function () {
       await Vendor.deleteMany({});
-      const mock = {
+      this.mock = {
         body: {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         },
         query: null,
         params: null,
@@ -211,7 +215,7 @@ describe('Vendor Controller', () => {
         },
       };
 
-      await insertVendorController(mock);
+      await insertVendorController(this.mock);
     });
 
     it('should return a success status code', async () => {
@@ -240,14 +244,12 @@ describe('Vendor Controller', () => {
       return Vendor.deleteMany({});
     });
 
-    let mock;
-
-    before(async () => {
+    before(async function() {
       await Vendor.deleteMany({});
-      mock = await insertVendorController({
+      this.mock = await insertVendorController({
         body: {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         },
         query: null,
         params: null,
@@ -263,12 +265,12 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN existent vendor ID', () => {
-      it('should return a successfull status code', async () => {
+      it('should return a successfull status code', async function () {
         const main = {
           body: null,
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -287,12 +289,12 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN non existent vendor ID', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function() {
         const main = {
           body: null,
           query: null,
           params: {
-            id: mockedId,
+            id: this.mockedId,
           },
           ip: null,
           method: null,
@@ -316,14 +318,12 @@ describe('Vendor Controller', () => {
       return Vendor.deleteMany({});
     });
 
-    let mock;
-
-    before(async () => {
+    before(async function () {
       await Vendor.deleteMany({});
-      mock = await insertVendorController({
+      this.mock = await insertVendorController({
         body: {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         },
         query: null,
         params: null,
@@ -339,15 +339,15 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
-      it('should return a successfull status code', async () => {
+      it('should return a successfull status code', async function () {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
-            type: 'SEAMLESS',
+            type: VendorType.Seamless,
           },
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -366,15 +366,15 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
-      it('should return a successfull status code', async () => {
+      it('should return a successfull status code', async function () {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
-            type: 'TRANSFER',
+            type: VendorType.Transfer,
           },
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -393,15 +393,15 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN no name', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function () {
         const main = {
           body: {
             name: null,
-            type: 'TRANSFER',
+            type: VendorType.Transfer,
           },
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -420,7 +420,7 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN no type', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function () {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
@@ -428,7 +428,7 @@ describe('Vendor Controller', () => {
           },
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -447,7 +447,7 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN invalid type', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function () {
         const main = {
           body: {
             name: 'Luis Angelo Belmonte',
@@ -455,7 +455,7 @@ describe('Vendor Controller', () => {
           },
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -479,14 +479,12 @@ describe('Vendor Controller', () => {
       return Vendor.deleteMany({});
     });
 
-    let mock;
-
-    before(async () => {
+    before(async function () {
       await Vendor.deleteMany({});
-      mock = await insertVendorController({
+      this.mock = await insertVendorController({
         body: {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         },
         query: null,
         params: null,
@@ -502,12 +500,12 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN an existent vendor ID', () => {
-      it('should return a successfull status code', async () => {
+      it('should return a successfull status code', async function() {
         const main = {
           body: null,
           query: null,
           params: {
-            id: mock.body.data._id,
+            id: this.mock.body.data._id,
           },
           ip: null,
           method: null,
@@ -526,12 +524,12 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN a non existent vendor ID', () => {
-      it('should return a successfull status code', async () => {
+      it('should return a successfull status code', async function () {
         const main = {
           body: null,
           query: null,
           params: {
-            id: mockedId,
+            id: this.mockedId,
           },
           ip: null,
           method: null,
