@@ -23,8 +23,8 @@ chai.use(chaiAsPromised);
 describe('Vendor Controller', () => {
   before(async function () {
     this.mockedId = mongoose.Types.ObjectId().toString();
-    this.mock =  null
-    await initializeDatabase()
+    this.mock = null;
+    await initializeDatabase();
   });
 
   describe('Adding a vendor', () => {
@@ -244,7 +244,7 @@ describe('Vendor Controller', () => {
       return Vendor.deleteMany({});
     });
 
-    before(async function() {
+    before(async function () {
       await Vendor.deleteMany({});
       this.mock = await insertVendorController({
         body: {
@@ -289,7 +289,7 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN non existent vendor ID', () => {
-      it('should return an error status code', async function() {
+      it('should return an error status code', async function () {
         const main = {
           body: null,
           query: null,
@@ -500,7 +500,7 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN an existent vendor ID', () => {
-      it('should return a successfull status code', async function() {
+      it('should return a successfull status code', async function () {
         const main = {
           body: null,
           query: null,
