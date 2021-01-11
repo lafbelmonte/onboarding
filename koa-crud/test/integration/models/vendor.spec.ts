@@ -14,9 +14,9 @@ chai.use(chaiAsPromised);
 
 describe('Vendor Models', () => {
   before(async function () {
-    this.mock = null
+    this.mock = null;
     this.mockedId = mongoose.Types.ObjectId().toString();
-    await initializeDatabase()
+    await initializeDatabase();
   });
 
   describe('Creating a vendor', () => {
@@ -84,7 +84,6 @@ describe('Vendor Models', () => {
       return Vendor.deleteMany({});
     });
 
-
     before(async function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
@@ -101,11 +100,10 @@ describe('Vendor Models', () => {
         };
 
         await expect(
-          Vendor.findOneAndUpdate(
-            { _id: this.mock._id },
-            data,
-            { new: true, runValidators: true },
-          ),
+          Vendor.findOneAndUpdate({ _id: this.mock._id }, data, {
+            new: true,
+            runValidators: true,
+          }),
         ).to.eventually.fulfilled;
       });
     });
@@ -118,11 +116,10 @@ describe('Vendor Models', () => {
         };
 
         await expect(
-          Vendor.findOneAndUpdate(
-            { _id: this.mock._id },
-            data,
-            { new: true, runValidators: true },
-          ),
+          Vendor.findOneAndUpdate({ _id: this.mock._id }, data, {
+            new: true,
+            runValidators: true,
+          }),
         ).to.eventually.fulfilled;
       });
     });
@@ -134,11 +131,10 @@ describe('Vendor Models', () => {
           type: '',
         };
         await expect(
-          Vendor.findOneAndUpdate(
-            { _id: this.mock._id },
-            data,
-            { new: true, runValidators: true },
-          ),
+          Vendor.findOneAndUpdate({ _id: this.mock._id }, data, {
+            new: true,
+            runValidators: true,
+          }),
         ).to.eventually.rejected;
       });
     });
@@ -150,11 +146,10 @@ describe('Vendor Models', () => {
           type: VendorType.Transfer,
         };
         await expect(
-          Vendor.findOneAndUpdate(
-            { _id: this.mock._id },
-            data,
-            { new: true, runValidators: true },
-          ),
+          Vendor.findOneAndUpdate({ _id: this.mock._id }, data, {
+            new: true,
+            runValidators: true,
+          }),
         ).to.eventually.rejected;
       });
     });
@@ -175,15 +170,15 @@ describe('Vendor Models', () => {
 
     describe('GIVEN existent vendor ID', () => {
       it('should be fulfilled and return true', async function () {
-        await expect(Vendor.exists({ _id: this.mock._id })).to.eventually.fulfilled
-          .be.true;
+        await expect(Vendor.exists({ _id: this.mock._id })).to.eventually
+          .fulfilled.be.true;
       });
     });
 
     describe('GIVEN a non existent vendor ID', () => {
       it('should be fulfilled and return true', async function () {
-        await expect(Vendor.exists({ _id: this.mockedId })).to.eventually.fulfilled
-          .be.false;
+        await expect(Vendor.exists({ _id: this.mockedId })).to.eventually
+          .fulfilled.be.false;
       });
     });
   });
@@ -196,7 +191,8 @@ describe('Vendor Models', () => {
 
   describe('Find One Vendor', () => {
     it('should be fulfilled', async function () {
-      await expect(Vendor.findOne({ _id: this.mockedId })).to.eventually.fulfilled;
+      await expect(Vendor.findOne({ _id: this.mockedId })).to.eventually
+        .fulfilled;
     });
   });
 
@@ -215,7 +211,8 @@ describe('Vendor Models', () => {
           name: 'Luis Angelo Belmonte',
           type: VendorType.Seamless,
         };
-        const main = await expect(Vendor.create(this.mock)).to.eventually.fulfilled;
+        const main = await expect(Vendor.create(this.mock)).to.eventually
+          .fulfilled;
 
         await expect(
           Vendor.deleteOne({ _id: main._id }),
