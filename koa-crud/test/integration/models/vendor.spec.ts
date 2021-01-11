@@ -30,51 +30,51 @@ describe('Vendor Models', () => {
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
       it('should be fulfilled', async () => {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: VendorType.Seamless,
         };
-        await expect(Vendor.create(main)).to.eventually.fulfilled;
+        await expect(Vendor.create(data)).to.eventually.fulfilled;
       });
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
       it('should be fulfilled', async () => {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: VendorType.Transfer,
         };
-        await expect(Vendor.create(main)).to.eventually.fulfilled;
+        await expect(Vendor.create(data)).to.eventually.fulfilled;
       });
     });
 
     describe('GIVEN no name', () => {
       it('should be rejected', async () => {
-        const main = {
+        const data = {
           name: '',
           type: VendorType.Transfer,
         };
-        await expect(Vendor.create(main)).to.eventually.rejected;
+        await expect(Vendor.create(data)).to.eventually.rejected;
       });
     });
 
     describe('GIVEN no type', () => {
       it('should be rejected', async () => {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: '',
         };
-        await expect(Vendor.create(main)).to.eventually.rejected;
+        await expect(Vendor.create(data)).to.eventually.rejected;
       });
     });
 
     describe('GIVEN invalid type', () => {
       it('should be rejected', async () => {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: 'qwe',
         };
-        await expect(Vendor.create(main)).to.eventually.rejected;
+        await expect(Vendor.create(data)).to.eventually.rejected;
       });
     });
   });
@@ -95,7 +95,7 @@ describe('Vendor Models', () => {
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
       it('should be fulfilled', async function () {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: VendorType.Seamless,
         };
@@ -103,7 +103,7 @@ describe('Vendor Models', () => {
         await expect(
           Vendor.findOneAndUpdate(
             { _id: this.mock._id },
-            { ...main },
+            data,
             { new: true, runValidators: true },
           ),
         ).to.eventually.fulfilled;
@@ -112,7 +112,7 @@ describe('Vendor Models', () => {
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
       it('should be fulfilled', async function () {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: VendorType.Transfer,
         };
@@ -120,7 +120,7 @@ describe('Vendor Models', () => {
         await expect(
           Vendor.findOneAndUpdate(
             { _id: this.mock._id },
-            { ...main },
+            data,
             { new: true, runValidators: true },
           ),
         ).to.eventually.fulfilled;
@@ -129,14 +129,14 @@ describe('Vendor Models', () => {
 
     describe('GIVEN invalid type', () => {
       it('should be rejected', async function () {
-        const main = {
+        const data = {
           name: 'Luis Angelo Belmonte',
           type: '',
         };
         await expect(
           Vendor.findOneAndUpdate(
             { _id: this.mock._id },
-            { ...main },
+            data,
             { new: true, runValidators: true },
           ),
         ).to.eventually.rejected;
@@ -145,14 +145,14 @@ describe('Vendor Models', () => {
 
     describe('GIVEN no name', () => {
       it('should be rejected', async function () {
-        const main = {
+        const data = {
           name: '',
           type: VendorType.Transfer,
         };
         await expect(
           Vendor.findOneAndUpdate(
             { _id: this.mock._id },
-            { ...main },
+            data,
             { new: true, runValidators: true },
           ),
         ).to.eventually.rejected;
