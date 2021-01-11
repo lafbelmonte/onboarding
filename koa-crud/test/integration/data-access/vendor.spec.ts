@@ -1,4 +1,3 @@
-// @ts-nocheck
 import chai, { expect } from 'chai';
 
 import chaiAsPromised from 'chai-as-promised';
