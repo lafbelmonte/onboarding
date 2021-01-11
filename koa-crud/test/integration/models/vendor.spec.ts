@@ -32,7 +32,7 @@ describe('Vendor Models', () => {
       it('should be fulfilled', async () => {
         const main = {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         };
         await expect(Vendor.create(main)).to.eventually.fulfilled;
       });
@@ -42,7 +42,7 @@ describe('Vendor Models', () => {
       it('should be fulfilled', async () => {
         const main = {
           name: 'Luis Angelo Belmonte',
-          type: 'TRANSFER',
+          type: VendorType.Transfer,
         };
         await expect(Vendor.create(main)).to.eventually.fulfilled;
       });
@@ -52,7 +52,7 @@ describe('Vendor Models', () => {
       it('should be rejected', async () => {
         const main = {
           name: '',
-          type: 'TRANSFER',
+          type: VendorType.Transfer,
         };
         await expect(Vendor.create(main)).to.eventually.rejected;
       });
@@ -89,7 +89,7 @@ describe('Vendor Models', () => {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
         name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
+        type: VendorType.Seamless,
       });
     });
 
@@ -169,7 +169,7 @@ describe('Vendor Models', () => {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
         name: 'Luis Angelo Belmonte',
-        type: 'SEAMLESS',
+        type: VendorType.Seamless,
       });
     });
 
@@ -213,7 +213,7 @@ describe('Vendor Models', () => {
       it('should be fulfilled and deleted count should be 1', async function () {
         this.mock = {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         };
         const main = await expect(Vendor.create(this.mock)).to.eventually.fulfilled;
 
@@ -227,7 +227,7 @@ describe('Vendor Models', () => {
       it('should be fulfilled and deleted count should be 0', async function () {
         this.mock = {
           name: 'Luis Angelo Belmonte',
-          type: 'SEAMLESS',
+          type: VendorType.Seamless,
         };
         await expect(Vendor.create(this.mock)).to.eventually.fulfilled;
 
