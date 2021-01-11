@@ -2,8 +2,11 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-body';
 import R from 'ramda';
+import { ApolloServer } from 'apollo-server-koa';
 import serializer from './serializer';
 import { initializeDatabase } from '../mongoose';
+import typeDefs from '../../graphql/typeDefs';
+import resolvers from '../../graphql/resolvers';
 
 class KoaApp {
   private app: Koa;
@@ -17,11 +20,17 @@ class KoaApp {
     this.port = port;
     this.router = new Router();
     this.initializeMiddlewares();
+    this.initializeGraphQl();
     this.initializeRoutes(routes);
   }
 
   private initializeMiddlewares(): void {
     this.app.use(bodyParser());
+  }
+
+  private initializeGraphQl(): void {
+    const graphQlserver = new ApolloServer({ typeDefs, resolvers });
+    graphQlserver.applyMiddleware({ app: this.app, path: '/graphql' });
   }
 
   private initializeRoutes(routes: any[]) {
