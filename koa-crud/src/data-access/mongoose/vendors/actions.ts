@@ -12,11 +12,11 @@ const actions = ({ Vendor }): VendorStore => {
   }
 
   async function selectAllVendors() {
-    return Vendor.find().lean();
+    return Vendor.find().lean({virtuals: true});
   }
 
   async function selectOneVendorByFilters(filters) {
-    return Vendor.findOne({ ...filters }).lean();
+    return Vendor.findOne({ ...filters }).lean({virtuals: true});
   }
 
   async function updateVendorByFilters(filters, info) {
