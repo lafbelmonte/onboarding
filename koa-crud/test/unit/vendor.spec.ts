@@ -2,7 +2,10 @@ import chai, { expect } from 'chai';
 
 import chaiAsPromised from 'chai-as-promised';
 
+import { Chance } from 'chance';
 import { vendorEntity } from '../../src/entities/vendor';
+
+const chance = new Chance();
 
 chai.use(chaiAsPromised);
 
@@ -10,7 +13,7 @@ describe('Vendor Entity', () => {
   describe('Given expected input', () => {
     it('should return the expected output', async () => {
       const mock = {
-        name: 'Luis Angelo Belmonte',
+        name: chance.name({ middle: true }),
         type: 'SEAMLESS',
         dateTimeCreated: new Date(),
         dateTimeUpdated: new Date(),
@@ -43,7 +46,7 @@ describe('Vendor Entity', () => {
   describe('Given no type', () => {
     it('should throw an error', async () => {
       const mock = {
-        name: 'Luis Angelo Belmonte',
+        name: chance.name({ middle: true }),
         type: '',
         dateTimeCreated: new Date(),
         dateTimeUpdated: new Date(),

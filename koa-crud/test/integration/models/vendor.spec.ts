@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import mongoose from 'mongoose';
 
+import { Chance } from 'chance';
 import { initializeDatabase } from '../../../src/lib/mongoose';
 
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
@@ -12,8 +13,11 @@ import { VendorType } from '../../../src/types';
 
 chai.use(chaiAsPromised);
 
+const chance = new Chance();
+
 describe('Vendor Models', () => {
   before(async function () {
+    this.randomName = () => chance.name({ middle: true });
     this.mock = null;
     this.mockedId = mongoose.Types.ObjectId().toString();
     await initializeDatabase();
@@ -29,9 +33,9 @@ describe('Vendor Models', () => {
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
-      it('should be fulfilled', async () => {
+      it('should be fulfilled', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Seamless,
         };
         await expect(Vendor.create(data)).to.eventually.fulfilled;
@@ -39,9 +43,9 @@ describe('Vendor Models', () => {
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
-      it('should be fulfilled', async () => {
+      it('should be fulfilled', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Transfer,
         };
         await expect(Vendor.create(data)).to.eventually.fulfilled;
@@ -59,9 +63,9 @@ describe('Vendor Models', () => {
     });
 
     describe('GIVEN no type', () => {
-      it('should be rejected', async () => {
+      it('should be rejected', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: '',
         };
         await expect(Vendor.create(data)).to.eventually.rejected;
@@ -69,9 +73,9 @@ describe('Vendor Models', () => {
     });
 
     describe('GIVEN invalid type', () => {
-      it('should be rejected', async () => {
+      it('should be rejected', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: 'qwe',
         };
         await expect(Vendor.create(data)).to.eventually.rejected;
@@ -87,7 +91,7 @@ describe('Vendor Models', () => {
     before(async function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
-        name: 'Luis Angelo Belmonte',
+        name: this.randomName(),
         type: VendorType.Seamless,
       });
     });
@@ -95,7 +99,7 @@ describe('Vendor Models', () => {
     describe('GIVEN correct inputs and SEAMLESS type', () => {
       it('should be fulfilled', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Seamless,
         };
 
@@ -111,7 +115,7 @@ describe('Vendor Models', () => {
     describe('GIVEN correct inputs and TRANSFER type', () => {
       it('should be fulfilled', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Transfer,
         };
 
@@ -127,7 +131,7 @@ describe('Vendor Models', () => {
     describe('GIVEN invalid type', () => {
       it('should be rejected', async function () {
         const data = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: '',
         };
         await expect(
@@ -163,7 +167,7 @@ describe('Vendor Models', () => {
     before(async function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
-        name: 'Luis Angelo Belmonte',
+        name: this.randomName(),
         type: VendorType.Seamless,
       });
     });
@@ -208,7 +212,7 @@ describe('Vendor Models', () => {
     describe('GIVEN existent vendor ID', () => {
       it('should be fulfilled and deleted count should be 1', async function () {
         this.mock = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Seamless,
         };
         const main = await expect(Vendor.create(this.mock)).to.eventually
@@ -223,7 +227,7 @@ describe('Vendor Models', () => {
     describe('GIVEN non existent vendor ID', () => {
       it('should be fulfilled and deleted count should be 0', async function () {
         this.mock = {
-          name: 'Luis Angelo Belmonte',
+          name: this.randomName(),
           type: VendorType.Seamless,
         };
         await expect(Vendor.create(this.mock)).to.eventually.fulfilled;

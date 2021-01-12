@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import mongoose from 'mongoose';
 
+import { Chance } from 'chance';
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { vendorsStore } from '../../../src/data-access/mongoose/vendors';
@@ -14,7 +15,7 @@ import { VendorType } from '../../../src/types';
 
 chai.use(chaiAsPromised);
 
-const mockedId = mongoose.Types.ObjectId().toString();
+const chance = new Chance();
 
 const {
   insertOneVendor,
@@ -26,7 +27,12 @@ const {
 } = vendorsStore;
 
 describe('Vendor Store', () => {
-  before(() => initializeDatabase());
+  before(async function () {
+    this.mock = null;
+    this.randomName = () => chance.name({ middle: true });
+    this.mockedId = mongoose.Types.ObjectId().toString();
+    await initializeDatabase();
+  });
 
   describe('Insert one Vendor', () => {
     afterEach(() => {
@@ -38,181 +44,160 @@ describe('Vendor Store', () => {
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
-      it('should successfully add vendor to the database', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
+      it('should successfully add vendor to the database', async function () {
+        this.mock = {
+          name: this.randomName(),
           type: VendorType.Seamless,
           dateTimeCreated: new Date(),
           dateTimeUpdated: new Date(),
         };
-        await expect(insertOneVendor(mock)).to.eventually.fulfilled;
+        await expect(insertOneVendor(this.mock)).to.eventually.fulfilled;
       });
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
-      it('should successfully add vendor to the database', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
+      it('should successfully add vendor to the database', async function () {
+        this.mock = {
+          name: this.randomName(),
           type: VendorType.Transfer,
           dateTimeCreated: new Date(),
           dateTimeUpdated: new Date(),
         };
-        await expect(insertOneVendor(mock)).to.eventually.fulfilled;
+        await expect(insertOneVendor(this.mock)).to.eventually.fulfilled;
       });
     });
 
     describe('GIVEN no name', () => {
-      it('should throw an error', async () => {
-        const mock = {
+      it('should throw an error', async function () {
+        this.mock = {
           name: '',
           type: VendorType.Seamless,
           dateTimeCreated: new Date(),
           dateTimeUpdated: new Date(),
         };
-        await expect(insertOneVendor(mock)).to.eventually.rejected;
+        await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
     });
 
     describe('GIVEN no type', () => {
-      it('should throw an error', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
+      it('should throw an error', async function () {
+        this.mock = {
+          name: this.randomName(),
           type: '',
           dateTimeCreated: new Date(),
           dateTimeUpdated: new Date(),
         };
-        await expect(insertOneVendor(mock)).to.eventually.rejected;
+        await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
     });
 
     describe('GIVEN invalid type', () => {
-      it('should throw an error', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
+      it('should throw an error', async function () {
+        this.mock = {
+          name: this.randomName(),
           type: 'qwe',
           dateTimeCreated: new Date(),
           dateTimeUpdated: new Date(),
         };
-        await expect(insertOneVendor(mock)).to.eventually.rejected;
+        await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
     });
   });
 
   describe('Vendor exists? By filters', () => {
-    afterEach(() => {
+    after(() => {
       return Vendor.deleteMany({});
     });
 
-    beforeEach(() => {
-      return Vendor.deleteMany({});
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
     });
-
     describe('GIVEN existent filters', () => {
-      it('should return true', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
-        await expect(vendorExistsByFilter({ _id: main._id })).to.eventually
+      it('should return true', async function () {
+        await expect(vendorExistsByFilter({ _id: this.mock._id })).to.eventually
           .fulfilled.be.true;
       });
     });
 
     describe('GIVEN non existent filters', () => {
-      it('should return false', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        await insertOneVendor(mock);
-        await expect(vendorExistsByFilter({ _id: mockedId })).to.eventually
+      it('should return false', async function () {
+        await expect(vendorExistsByFilter({ _id: this.mockedId })).to.eventually
           .fulfilled.be.false;
       });
     });
   });
 
   describe('Select All Vendors', () => {
-    afterEach(() => {
+    after(() => {
       return Vendor.deleteMany({});
     });
 
-    beforeEach(() => {
-      return Vendor.deleteMany({});
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
     });
 
     it('should return a list of vendors', async () => {
-      const mock = {
-        name: 'Luis Angelo Belmonte',
-        type: VendorType.Transfer,
-        dateTimeCreated: new Date(),
-        dateTimeUpdated: new Date(),
-      };
-      await insertOneVendor(mock);
-
       await expect(selectAllVendors()).eventually.fulfilled.and.have.length(1);
     });
   });
 
   describe('Select One Vendor By Filters', () => {
-    afterEach(() => {
+    after(() => {
       return Vendor.deleteMany({});
     });
 
-    beforeEach(() => {
-      return Vendor.deleteMany({});
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
     });
 
     describe('GIVEN existent filters', () => {
-      it('should return the vendor', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
+      it('should return the vendor', async function () {
         await expect(
-          selectOneVendorByFilters({ _id: main._id }),
-        ).to.eventually.fulfilled.property('_id', main._id);
+          selectOneVendorByFilters({ _id: this.mock._id }),
+        ).to.eventually.fulfilled.property('_id', this.mock._id);
       });
     });
 
     describe('GIVEN non existent filters', () => {
-      it('should return the vendor', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        await insertOneVendor(mock);
-        await expect(selectOneVendorByFilters({ _id: mockedId })).to.eventually
-          .fulfilled.and.null;
+      it('should return the vendor', async function () {
+        await expect(selectOneVendorByFilters({ _id: this.mockedId })).to
+          .eventually.fulfilled.and.null;
       });
     });
   });
 
   describe('Updating a vendor', () => {
-    describe('GIVEN correct inputs and SEAMLESS type', () => {
-      it('should update the vendor to SEAMLESS', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
+    after(() => {
+      return Vendor.deleteMany({});
+    });
 
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
+    });
+
+    describe('GIVEN correct inputs and SEAMLESS type', () => {
+      it('should update the vendor to SEAMLESS', async function () {
         await expect(
           updateVendorByFilters(
-            { _id: main._id },
+            { _id: this.mock._id },
             {
-              name: 'Luis Angelo Belmonte',
+              name: this.randomName(),
               type: VendorType.Seamless,
               dateTimeCreated: new Date(),
               dateTimeUpdated: new Date(),
@@ -223,20 +208,12 @@ describe('Vendor Store', () => {
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
-      it('should update the vendor to TRANSFER', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
-
+      it('should update the vendor to TRANSFER', async function () {
         await expect(
           updateVendorByFilters(
-            { _id: main._id },
+            { _id: this.mock._id },
             {
-              name: 'Luis Angelo Belmonte',
+              name: this.randomName(),
               type: VendorType.Transfer,
               dateTimeCreated: new Date(),
               dateTimeUpdated: new Date(),
@@ -247,20 +224,12 @@ describe('Vendor Store', () => {
     });
 
     describe('GIVEN invalid type', () => {
-      it('should throw an error', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
-
+      it('should throw an error', async function () {
         await expect(
           updateVendorByFilters(
-            { _id: main._id },
+            { _id: this.mock._id },
             {
-              name: 'Luis Angelo Belmonte',
+              name: this.randomName(),
               type: 'qwe',
               dateTimeCreated: new Date(),
               dateTimeUpdated: new Date(),
@@ -271,20 +240,12 @@ describe('Vendor Store', () => {
     });
 
     describe('GIVEN non existent ID', () => {
-      it('should return null', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        await insertOneVendor(mock);
-
+      it('should return null', async function () {
         await expect(
           updateVendorByFilters(
-            { _id: mockedId },
+            { _id: this.mockedId },
             {
-              name: 'Luis Angelo Belmonte',
+              name: this.randomName(),
               type: VendorType.Transfer,
               dateTimeCreated: new Date(),
               dateTimeUpdated: new Date(),
@@ -296,25 +257,29 @@ describe('Vendor Store', () => {
   });
 
   describe('Deleting a Vendor', () => {
-    describe('GIVEN valid and existent vendor ID', () => {
-      it('should return true', async () => {
-        const mock = {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
-        };
-        const main = await insertOneVendor(mock);
+    after(() => {
+      return Vendor.deleteMany({});
+    });
 
-        await expect(deleteOneVendor({ _id: main._id })).to.eventually.fulfilled
-          .and.be.true;
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
+    });
+
+    describe('GIVEN valid and existent vendor ID', () => {
+      it('should return true', async function () {
+        await expect(deleteOneVendor({ _id: this.mock._id })).to.eventually
+          .fulfilled.and.be.true;
       });
     });
 
     describe('GIVEN non existent vendor ID', () => {
-      it('should return true', async () => {
-        await expect(deleteOneVendor({ _id: mockedId })).to.eventually.fulfilled
-          .and.be.false;
+      it('should return true', async function () {
+        await expect(deleteOneVendor({ _id: this.mockedId })).to.eventually
+          .fulfilled.and.be.false;
       });
     });
   });
