@@ -1,20 +1,5 @@
 const entity = () => {
-  return async function vendor({
-    name,
-    type,
-    dateTimeCreated,
-    dateTimeUpdated,
-  }: {
-    name: string;
-    type: string;
-    dateTimeCreated: Date;
-    dateTimeUpdated: Date;
-  }): Promise<{
-    name: string;
-    type: string;
-    dateTimeCreated: Date;
-    dateTimeUpdated: Date;
-  }> {
+  return async function vendor({ name, type }) {
     if (!name) {
       throw new Error(`Please input name`);
     }
@@ -26,8 +11,6 @@ const entity = () => {
     return {
       name,
       type,
-      dateTimeCreated,
-      dateTimeUpdated: new Date(),
     };
   };
 };

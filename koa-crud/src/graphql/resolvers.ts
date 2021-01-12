@@ -6,6 +6,8 @@ import {
   deleteOneVendorUseCase,
 } from '../use-cases/vendors';
 
+import { insertMemberUseCase } from '../use-cases/members';
+
 const Query = {
   vendors: async () =>
     selectAllVendorsUseCase({ id: null, info: null, source: null }),
@@ -20,6 +22,8 @@ const Mutation = {
     updateVendorUseCase({ id: args.input.id, info: args.input, source: null }),
   deleteVendor: async (obj, args) =>
     deleteOneVendorUseCase({ id: args.id, info: null, source: null }),
+  createMember: async (obj, args) =>
+    insertMemberUseCase({ id: null, info: args.input, source: null }),
 };
 
 export default {

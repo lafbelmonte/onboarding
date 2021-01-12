@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { VendorType, VendorDocument } from '../../../types/index';
+import { MemberDocument } from '../../../types/index';
 
 const schema = new Schema(
   {
@@ -11,21 +11,21 @@ const schema = new Schema(
         return nanoid();
       },
     },
-    name: {
+    username: {
       type: String,
       required: true,
     },
-    type: {
+    password: {
       type: String,
-      enum: [VendorType.Seamless, VendorType.Transfer],
       required: true,
     },
+    realName: String,
   },
   { timestamps: true },
 );
 
 schema.plugin(mongooseLeanVirtuals);
 
-const Vendor = model<VendorDocument>('Vendor', schema);
+const Member = model<MemberDocument>('Member', schema);
 
-export { Vendor };
+export { Member };

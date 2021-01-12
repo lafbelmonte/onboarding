@@ -1,10 +1,10 @@
-import { UseCase, VendorStore } from '../../types';
+import { UseCase, VendorsStore } from '../../types';
 
 const insertVendor = ({
   vendorsStore,
   vendorEntity,
 }: {
-  vendorsStore: VendorStore;
+  vendorsStore: VendorsStore;
   vendorEntity;
 }): UseCase => {
   return async function ({ info }) {

@@ -1,9 +1,9 @@
-import { UseCase, VendorStore } from '../../types';
+import { UseCase, VendorsStore } from '../../types';
 
 const deleteOneVendor = ({
   vendorsStore,
 }: {
-  vendorsStore: VendorStore;
+  vendorsStore: VendorsStore;
 }): UseCase => {
   return async function useCase({ id }) {
     const vendorExists = await vendorsStore.vendorExistsByFilter({

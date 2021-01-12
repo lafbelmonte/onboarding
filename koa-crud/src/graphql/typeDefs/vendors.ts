@@ -1,11 +1,11 @@
 import { gql } from 'apollo-server-koa';
 
 export default gql`
-  type Query {
+  extend type Query {
     vendors: [Vendor]
     vendor(id: ID!): Vendor
   }
-  type Mutation {
+  extend type Mutation {
     createVendor(input: CreateVendorInput!): Boolean
     updateVendor(input: UpdateVendorInput!): Boolean
     deleteVendor(id: ID!): Boolean
@@ -22,7 +22,7 @@ export default gql`
   }
 
   input UpdateVendorInput {
-    id: ID! 
+    id: ID!
     name: String!
     type: VendorType!
   }
@@ -31,7 +31,7 @@ export default gql`
     id: ID!
     name: String
     type: String
-    dateTimeCreated: String
-    dateTimeUpdated: String
+    createdAt: String!
+    updatedAt: String!
   }
 `;
