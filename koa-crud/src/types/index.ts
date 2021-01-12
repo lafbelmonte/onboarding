@@ -36,7 +36,7 @@ type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
 
 type Serializer = (controller: Controller) => (ctx: Context) => Promise<void>;
 
-type UseCase = ({ id, info, source }) => Promise<{ message: string; data }>;
+type UseCase = ({ id, info, source }) => Promise<any>;
 
 type VendorFilters = {
   _id?: string;

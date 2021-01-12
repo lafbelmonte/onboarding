@@ -20,15 +20,12 @@ const updateVendor = ({
 
     const vendor = await vendorEntity({ ...info });
 
-    const updated = await vendorsStore.updateVendorByFilters(
+    await vendorsStore.updateVendorByFilters(
       { _id: id },
       R.omit(['dateTimeCreated'], vendor),
     );
 
-    return {
-      message: '',
-      data: updated,
-    };
+    return true;
   };
 };
 

@@ -18,12 +18,9 @@ const insertVendor = ({
       throw new Error(`Vendor already exists`);
     }
 
-    const inserted = await vendorsStore.insertOneVendor(vendor);
+    await vendorsStore.insertOneVendor(vendor);
 
-    return {
-      message: '',
-      data: inserted,
-    };
+    return true;
   };
 };
 

@@ -6,11 +6,8 @@ const selectAllVendors = ({
   vendorsStore: VendorStore;
 }): UseCase => {
   return async function useCase() {
-    const view = await vendorsStore.selectAllVendors();
-    return {
-      message: '',
-      data: view,
-    };
+    const vendors = await vendorsStore.selectAllVendors();
+    return vendors;
   };
 };
 

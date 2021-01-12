@@ -16,10 +16,7 @@ const deleteOneVendor = ({
 
     await vendorsStore.deleteOneVendor({ _id: id });
 
-    return {
-      message: `Vendor with ID: ${id} is deleted`,
-      data: id,
-    };
+    return true;
   };
 };
 
