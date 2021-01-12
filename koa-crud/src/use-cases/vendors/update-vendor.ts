@@ -18,7 +18,7 @@ const updateVendor = ({
       throw new Error(`Vendor ID doesn't exist`);
     }
 
-    const vendor = await vendorEntity({ ...info });
+    const vendor = await vendorEntity(info);
 
     await vendorsStore.updateVendorByFilters(
       { _id: id },

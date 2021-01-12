@@ -15,9 +15,9 @@ const Query = {
 
 const Mutation = {
   createVendor: async (obj, args) =>
-    insertVendorUseCase({ id: null, info: args, source: null }),
+    insertVendorUseCase({ id: null, info: args.input, source: null }),
   updateVendor: async (obj, args) =>
-    updateVendorUseCase({ id: args.id, info: args, source: null }),
+    updateVendorUseCase({ id: args.input.id, info: args.input, source: null }),
   deleteVendor: async (obj, args) =>
     deleteOneVendorUseCase({ id: args.id, info: null, source: null }),
 };
