@@ -16,10 +16,7 @@ const selectOneVendor = ({
 
     const vendor = await vendorsStore.selectOneVendorByFilters({ _id: id });
 
-    return {
-      message: '',
-      data: vendor,
-    };
+    return vendor;
   };
 };
 

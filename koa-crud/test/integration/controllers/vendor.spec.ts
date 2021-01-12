@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import mongoose from 'mongoose';
 
+import { Chance } from 'chance';
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { initializeDatabase } from '../../../src/lib/mongoose';
@@ -18,12 +19,15 @@ import {
   deleteOneVendorController,
 } from '../../../src/controllers/vendors';
 
+const chance = new Chance();
+
 chai.use(chaiAsPromised);
 
 describe('Vendor Controller', () => {
   before(async function () {
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
+    this.randomName = () => chance.name({ middle: true });
     await initializeDatabase();
   });
 
@@ -37,10 +41,10 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
-      it('should return a success status code', async () => {
+      it('should return a success status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: VendorType.Seamless,
           },
           query: null,
@@ -62,10 +66,10 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN correct inputs and TRANSFER type', () => {
-      it('should return a success status code', async () => {
+      it('should return a success status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: VendorType.Transfer,
           },
           query: null,
@@ -112,10 +116,10 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN no type', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: null,
           },
           query: null,
@@ -137,10 +141,10 @@ describe('Vendor Controller', () => {
     });
 
     describe('GIVEN an invalid type', () => {
-      it('should return an error status code', async () => {
+      it('should return an error status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: 'qwe',
           },
           query: null,
@@ -165,7 +169,7 @@ describe('Vendor Controller', () => {
       it('should return an error status code', async function () {
         this.mock = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: VendorType.Seamless,
           },
           query: null,
@@ -198,24 +202,10 @@ describe('Vendor Controller', () => {
 
     before(async function () {
       await Vendor.deleteMany({});
-      this.mock = {
-        body: {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-        },
-        query: null,
-        params: null,
-        ip: null,
-        method: null,
-        path: null,
-        headers: {
-          'Content-Type': null,
-          Referer: null,
-          'User-Agent': null,
-        },
-      };
-
-      await insertVendorController(this.mock);
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
     });
 
     it('should return a success status code', async () => {
@@ -246,21 +236,9 @@ describe('Vendor Controller', () => {
 
     before(async function () {
       await Vendor.deleteMany({});
-      this.mock = await insertVendorController({
-        body: {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-        },
-        query: null,
-        params: null,
-        ip: null,
-        method: null,
-        path: null,
-        headers: {
-          'Content-Type': null,
-          Referer: null,
-          'User-Agent': null,
-        },
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
       });
     });
 
@@ -270,7 +248,7 @@ describe('Vendor Controller', () => {
           body: null,
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -320,21 +298,9 @@ describe('Vendor Controller', () => {
 
     before(async function () {
       await Vendor.deleteMany({});
-      this.mock = await insertVendorController({
-        body: {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-        },
-        query: null,
-        params: null,
-        ip: null,
-        method: null,
-        path: null,
-        headers: {
-          'Content-Type': null,
-          Referer: null,
-          'User-Agent': null,
-        },
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
       });
     });
 
@@ -342,12 +308,12 @@ describe('Vendor Controller', () => {
       it('should return a successfull status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: VendorType.Seamless,
           },
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -369,12 +335,12 @@ describe('Vendor Controller', () => {
       it('should return a successfull status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: VendorType.Transfer,
           },
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -401,7 +367,7 @@ describe('Vendor Controller', () => {
           },
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -423,12 +389,12 @@ describe('Vendor Controller', () => {
       it('should return an error status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: null,
           },
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -450,12 +416,12 @@ describe('Vendor Controller', () => {
       it('should return an error status code', async function () {
         const main = {
           body: {
-            name: 'Luis Angelo Belmonte',
+            name: this.randomName(),
             type: 'qwe',
           },
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,
@@ -481,21 +447,9 @@ describe('Vendor Controller', () => {
 
     before(async function () {
       await Vendor.deleteMany({});
-      this.mock = await insertVendorController({
-        body: {
-          name: 'Luis Angelo Belmonte',
-          type: VendorType.Seamless,
-        },
-        query: null,
-        params: null,
-        ip: null,
-        method: null,
-        path: null,
-        headers: {
-          'Content-Type': null,
-          Referer: null,
-          'User-Agent': null,
-        },
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
       });
     });
 
@@ -505,7 +459,7 @@ describe('Vendor Controller', () => {
           body: null,
           query: null,
           params: {
-            id: this.mock.body.data._id,
+            id: this.mock._id,
           },
           ip: null,
           method: null,

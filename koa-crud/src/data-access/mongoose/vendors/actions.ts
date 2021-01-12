@@ -2,9 +2,7 @@ import { VendorStore } from '../../../types/index';
 
 const actions = ({ Vendor }): VendorStore => {
   async function insertOneVendor(info) {
-    return Vendor.create({
-      ...info,
-    });
+    return Vendor.create(info);
   }
 
   async function vendorExistsByFilter(filters) {
@@ -12,23 +10,23 @@ const actions = ({ Vendor }): VendorStore => {
   }
 
   async function selectAllVendors() {
-    return Vendor.find().lean();
+    return Vendor.find().lean({ virtuals: true });
   }
 
   async function selectOneVendorByFilters(filters) {
-    return Vendor.findOne({ ...filters }).lean();
+    return Vendor.findOne(filters).lean({ virtuals: true });
   }
 
   async function updateVendorByFilters(filters, info) {
     return Vendor.findOneAndUpdate(
-      { ...filters },
-      { ...info },
+      filters,
+      info,
       { new: true, runValidators: true },
     );
   }
 
   async function deleteOneVendor(filters) {
-    const vendor = await Vendor.deleteOne({ ...filters });
+    const vendor = await Vendor.deleteOne(filters);
 
     const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
 

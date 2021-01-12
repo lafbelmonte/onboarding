@@ -2,27 +2,33 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   type Query {
-    vendors: ArrayOfVendorReturn
-    vendor(id: String): VendorReturn
+    vendors: [Vendor]
+    vendor(id: ID!): Vendor
   }
   type Mutation {
-    createVendor(name: String, type: String): VendorReturn
-    updateVendor(id: String, name: String, type: String): VendorReturn
-    deleteVendor(id: String): DeleteVendorReturn
+    createVendor(input: CreateVendorInput!): Boolean
+    updateVendor(input: UpdateVendorInput!): Boolean
+    deleteVendor(id: ID!): Boolean
   }
-  type DeleteVendorReturn {
-    message: String
+
+  enum VendorType {
+    SEAMLESS
+    TRANSFER
   }
-  type ArrayOfVendorReturn {
-    message: String
-    data: [Vendor]
+
+  input CreateVendorInput {
+    name: String!
+    type: VendorType!
   }
-  type VendorReturn {
-    message: String
-    data: Vendor
+
+  input UpdateVendorInput {
+    id: ID! 
+    name: String!
+    type: VendorType!
   }
+
   type Vendor {
-    _id: ID!
+    id: ID!
     name: String
     type: String
     dateTimeCreated: String

@@ -18,17 +18,14 @@ const updateVendor = ({
       throw new Error(`Vendor ID doesn't exist`);
     }
 
-    const vendor = await vendorEntity({ ...info });
+    const vendor = await vendorEntity(info);
 
-    const updated = await vendorsStore.updateVendorByFilters(
+    await vendorsStore.updateVendorByFilters(
       { _id: id },
       R.omit(['dateTimeCreated'], vendor),
     );
 
-    return {
-      message: '',
-      data: updated,
-    };
+    return true;
   };
 };
 
