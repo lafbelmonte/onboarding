@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 async function initializeDatabase(): Promise<void> {
   try {
     await mongoose.connect(
-      `mongodb://root:lostintheabyss@localhost:27017/vendors?authSource=admin`,
+      `mongodb://root:lostintheabyss@localhost:27017/onboarding?authSource=admin`,
       { useNewUrlParser: true },
     );
   } catch (e) {

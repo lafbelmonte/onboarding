@@ -17,6 +17,12 @@ type HttpResponse = {
   body;
 };
 
+type UseCase = ({ id, info, source }) => Promise<any>;
+
+type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
+
+type Serializer = (controller: Controller) => (ctx: Context) => Promise<void>;
+
 enum VendorType {
   Seamless = 'SEAMLESS',
   Transfer = 'TRANSFER',
@@ -26,17 +32,9 @@ type Vendor = {
   _id?: string;
   name: string;
   type: VendorType;
-  dateTimeCreated: Date;
-  dateTimeUpdated: Date;
 };
 
 type VendorDocument = Vendor & Document;
-
-type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
-
-type Serializer = (controller: Controller) => (ctx: Context) => Promise<void>;
-
-type UseCase = ({ id, info, source }) => Promise<any>;
 
 type VendorFilters = {
   _id?: string;
@@ -44,7 +42,7 @@ type VendorFilters = {
   type?: string;
 };
 
-type VendorStore = {
+type VendorsStore = {
   insertOneVendor: (info: Vendor) => Promise<VendorDocument>;
   vendorExistsByFilter: (filters: VendorFilters) => Promise<boolean>;
   selectAllVendors: () => Promise<VendorDocument[]>;
@@ -56,6 +54,26 @@ type VendorStore = {
   deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
 };
 
+type Member = {
+  _id?: string;
+  username: string;
+  password: string;
+  realName?: string | null;
+};
+
+type MemberFilters = {
+  _id?: string;
+  username?: string;
+  realName?: string;
+};
+
+type MemberDocument = Member & Document;
+
+type MembersStore = {
+  insertOneMember: (info: Member) => Promise<MemberDocument>;
+  memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
+};
+
 export {
   HttpRequest,
   HttpResponse,
@@ -65,5 +83,8 @@ export {
   Controller,
   UseCase,
   VendorDocument,
-  VendorStore,
+  VendorsStore,
+  MemberDocument,
+  Member,
+  MembersStore,
 };

@@ -1,11 +1,11 @@
-import { UseCase, VendorStore } from '../../types';
+import { UseCase, VendorsStore } from '../../types';
 
 const updateVendor = ({
   vendorsStore,
   vendorEntity,
   R,
 }: {
-  vendorsStore: VendorStore;
+  vendorsStore: VendorsStore;
   vendorEntity;
   R;
 }): UseCase => {

@@ -1,6 +1,6 @@
-import { VendorStore } from '../../../types/index';
+import { VendorsStore } from '../../../types/index';
 
-const actions = ({ Vendor }): VendorStore => {
+const actions = ({ Vendor }): VendorsStore => {
   async function insertOneVendor(info) {
     return Vendor.create(info);
   }
@@ -18,11 +18,10 @@ const actions = ({ Vendor }): VendorStore => {
   }
 
   async function updateVendorByFilters(filters, info) {
-    return Vendor.findOneAndUpdate(
-      filters,
-      info,
-      { new: true, runValidators: true },
-    );
+    return Vendor.findOneAndUpdate(filters, info, {
+      new: true,
+      runValidators: true,
+    });
   }
 
   async function deleteOneVendor(filters) {
