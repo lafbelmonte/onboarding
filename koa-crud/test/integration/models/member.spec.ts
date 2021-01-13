@@ -65,33 +65,4 @@ describe('Member Models', () => {
       });
     });
   });
-
-  describe('Member exists', () => {
-    after(() => {
-      return Member.deleteMany({});
-    });
-
-    before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
-        username: this.randomUsername(),
-        password: this.randomPassword(),
-        realName: this.randomRealName(),
-      });
-    });
-
-    describe('GIVEN existent member ID', () => {
-      it('should be fulfilled and return true', async function () {
-        await expect(Member.exists({ _id: this.mock._id })).to.eventually
-          .fulfilled.be.true;
-      });
-    });
-
-    describe('GIVEN a non existent member ID', () => {
-      it('should be fulfilled and return true', async function () {
-        await expect(Member.exists({ _id: this.mockedId })).to.eventually
-          .fulfilled.be.false;
-      });
-    });
-  });
 });

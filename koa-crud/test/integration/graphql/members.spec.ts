@@ -120,4 +120,103 @@ describe('Member Queries', function () {
       });
     });
   });
+
+  describe('List all members', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+    });
+
+    it('should return list of members', async function () {
+      this.mock = {
+        query: {
+          members: {
+            id: true,
+            username: true,
+            realName: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      };
+
+      const query = jsonToGraphQLQuery(this.mock);
+      const main = await this.request().post('/graphql').send({ query });
+      expect(main.statusCode).to.eqls(200);
+      expect(main.body.data.members).have.length(1);
+    });
+  });
+
+  describe('List member by ID', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN an existing and valid ID', () => {
+      it('should return the member with that ID', async function () {
+        this.mock = {
+          query: {
+            member: {
+              __args: {
+                id: this.mock._id,
+              },
+              id: true,
+              username: true,
+              realName: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.member.id).eqls(this.baseId);
+      });
+    });
+
+    describe('GIVEN a non existent ID', () => {
+      it(`should throw an error`, async function () {
+        this.mock = {
+          query: {
+            member: {
+              __args: {
+                id: this.mockedId,
+              },
+              id: true,
+              username: true,
+              realName: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Member doesn't exist`);
+      });
+    });
+  });
 });
