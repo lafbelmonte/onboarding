@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import { Chance } from 'chance';
 import { vendorEntity } from '../../src/entities/vendor';
+import { VendorType } from '../../src/types';
 
 const chance = new Chance();
 
@@ -14,16 +15,12 @@ describe('Vendor Entity', () => {
     it('should return the expected output', async () => {
       const mock = {
         name: chance.name({ middle: true }),
-        type: 'SEAMLESS',
-        dateTimeCreated: new Date(),
-        dateTimeUpdated: new Date(),
+        type: VendorType.Seamless,
       };
 
       await expect(vendorEntity(mock)).to.eventually.fulfilled.and.have.keys(
         'name',
         'type',
-        'dateTimeCreated',
-        'dateTimeUpdated',
       );
     });
   });
@@ -32,9 +29,7 @@ describe('Vendor Entity', () => {
     it('should throw an error', async () => {
       const mock = {
         name: '',
-        type: 'SEAMLESS',
-        dateTimeCreated: new Date(),
-        dateTimeUpdated: new Date(),
+        type: VendorType.Seamless,
       };
 
       await expect(vendorEntity(mock)).to.eventually.rejectedWith(
@@ -48,8 +43,6 @@ describe('Vendor Entity', () => {
       const mock = {
         name: chance.name({ middle: true }),
         type: '',
-        dateTimeCreated: new Date(),
-        dateTimeUpdated: new Date(),
       };
 
       await expect(vendorEntity(mock)).to.eventually.rejectedWith(

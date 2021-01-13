@@ -8,6 +8,7 @@ export default gql`
   input CreateMemberInput {
     username: String!
     password: String!
+    realName: String
   }
 
   type Member {
