@@ -65,4 +65,66 @@ describe('Member Models', () => {
       });
     });
   });
+
+  describe('Updating a member', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN correct inputs', () => {
+      it('should be fulfilled', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+        await expect(
+          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+            new: true,
+          }),
+        ).to.eventually.fulfilled;
+      });
+    });
+
+    describe('GIVEN no username', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          username: '',
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+        await expect(
+          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+            new: true,
+          }),
+        ).to.eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no password', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: '',
+          realName: this.randomRealName(),
+        };
+        await expect(
+          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+            new: true,
+          }),
+        ).to.eventually.rejected;
+      });
+    });
+  });
 });
