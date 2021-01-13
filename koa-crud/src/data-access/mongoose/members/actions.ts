@@ -17,11 +17,18 @@ const actions = ({ Member }): MembersStore => {
     return Member.findOne(filters).lean({ virtuals: true });
   }
 
+  async function updateMemberByFilters(filters, info) {
+    return Member.findOneAndUpdate(filters, info, {
+      new: true,
+    });
+  }
+
   return {
     insertOneMember,
     memberExistsByFilter,
     selectAllMembers,
     selectOneMemberByFilters,
+    updateMemberByFilters,
   };
 };
 
