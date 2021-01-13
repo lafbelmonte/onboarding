@@ -5,7 +5,11 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { insertMemberUseCase } from '../../../src/use-cases/members';
+import {
+  insertMemberUseCase,
+  selectAllMembersUseCase,
+  selectOneMemberUseCase,
+} from '../../../src/use-cases/members';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
@@ -104,6 +108,89 @@ describe('Member Use Cases', () => {
         await expect(insertMemberUseCase(this.mock)).to.eventually.rejectedWith(
           'Username already exists',
         );
+      });
+    });
+  });
+
+  describe('Selecting All Members', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = {
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      };
+      await Member.create(this.mock);
+    });
+
+    it('should return list of vendors', async function () {
+      await expect(
+        selectAllMembersUseCase({ id: null, info: null, source: null }),
+      ).to.eventually.fulfilled.and.length(1);
+    });
+  });
+
+  describe('Selecting All Members', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = {
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      };
+      await Member.create(this.mock);
+    });
+
+    it('should return list of vendors', async function () {
+      await expect(
+        selectAllMembersUseCase({ id: null, info: null, source: null }),
+      ).to.eventually.fulfilled.and.length(1);
+    });
+  });
+
+  describe('Selecting One Member', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+    });
+
+    describe('GIVEN valid ID', () => {
+      it('should return the member corresponding with the GIVEN ID', async function () {
+        await expect(
+          selectOneMemberUseCase({
+            id: this.mock._id,
+            info: null,
+            source: null,
+          }),
+        ).to.eventually.fulfilled.property('_id', this.mock._id);
+      });
+    });
+
+    describe('GIVEN valid but not existent ID', () => {
+      it('should throw an error', async function () {
+        await expect(
+          selectOneMemberUseCase({
+            id: this.mockedId,
+            info: null,
+            source: null,
+          }),
+        ).to.eventually.rejectedWith("Member doesn't exist");
       });
     });
   });

@@ -94,4 +94,17 @@ describe('Member Models', () => {
       });
     });
   });
+
+  describe('Find Members', () => {
+    it('should be fulfilled', async () => {
+      await expect(Member.find().lean()).to.eventually.fulfilled;
+    });
+  });
+
+  describe('Find One Member', () => {
+    it('should be fulfilled', async function () {
+      await expect(Member.findOne({ _id: this.mockedId })).to.eventually
+        .fulfilled;
+    });
+  });
 });

@@ -15,7 +15,12 @@ chai.use(chaiAsPromised);
 
 const chance = new Chance();
 
-const { insertOneMember, memberExistsByFilter } = membersStore;
+const {
+  insertOneMember,
+  memberExistsByFilter,
+  selectOneMemberByFilters,
+  selectAllMembers,
+} = membersStore;
 
 describe('Member Store', () => {
   before(async function () {
@@ -94,6 +99,55 @@ describe('Member Store', () => {
       it('should return false', async function () {
         await expect(memberExistsByFilter({ _id: this.mockedId })).to.eventually
           .fulfilled.be.false;
+      });
+    });
+  });
+
+  describe('Select All Members', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+    });
+
+    it('should return a list of vendors', async () => {
+      await expect(selectAllMembers()).eventually.fulfilled.and.have.length(1);
+    });
+  });
+
+  describe('Select One Member By Filters', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+    });
+
+    describe('GIVEN existent filters', () => {
+      it('should return the vendor', async function () {
+        await expect(
+          selectOneMemberByFilters({ _id: this.mock._id }),
+        ).to.eventually.fulfilled.property('_id', this.mock._id);
+      });
+    });
+
+    describe('GIVEN non existent filters', () => {
+      it('should return the vendor', async function () {
+        await expect(selectOneMemberByFilters({ _id: this.mockedId })).to
+          .eventually.fulfilled.and.null;
       });
     });
   });
