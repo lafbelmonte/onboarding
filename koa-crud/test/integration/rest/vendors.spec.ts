@@ -1,26 +1,21 @@
-/*eslint-disable */
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
+import mongoose from 'mongoose';
+import { Chance } from 'chance';
 import server from '../../../src/index';
 
-import mongoose from 'mongoose';
-
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
-
 
 import { VendorType } from '../../../src/types';
 
 chai.use(chaiHttp);
 
-import { Chance } from 'chance'
-
-const chance = new Chance()
-
+const chance = new Chance();
 
 describe('Vendor Endpoints', function () {
   before(function () {
-    this.randomName = () => chance.name({ middle: true })
+    this.randomName = () => chance.name({ middle: true });
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
     this.request = () => chai.request(server.callback());
@@ -90,11 +85,9 @@ describe('Vendor Endpoints', function () {
       });
     });
 
-
     describe('GIVEN an existing vendor name', function () {
       it('should throw an error', async function () {
-
-        const name = this.randomName()
+        const name = this.randomName();
         const mock = await this.request().post('/vendors').send({
           name,
           type: VendorType.Seamless,
@@ -121,14 +114,11 @@ describe('Vendor Endpoints', function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
         name: this.randomName(),
-        type: VendorType.Seamless
-      })
+        type: VendorType.Seamless,
+      });
     });
 
-
-
     it('should return list of vendors', async function () {
-     
       const main = await this.request().get('/vendors');
       expect(main.status).to.eqls(200);
       expect(main.body.length).to.eqls(1);
@@ -144,31 +134,25 @@ describe('Vendor Endpoints', function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
         name: this.randomName(),
-        type: VendorType.Seamless
-      })
+        type: VendorType.Seamless,
+      });
     });
-
 
     describe('GIVEN an existing and valid ID', () => {
       it('should return the vendor with that ID', async function () {
-
         const main = await this.request().get(`/vendors/${this.mock._id}`);
 
         expect(main.status).to.eqls(200);
       });
-    })
+    });
 
     describe('GIVEN a non existent ID', () => {
       it(`should throw an error`, async function () {
-
         const main = await this.request().get(`/vendors/${this.mockedId}`);
 
         expect(main.status).to.eqls(400);
       });
-
-    })
-
-
+    });
   });
 
   describe('PUT /vendors/:id', () => {
@@ -180,128 +164,117 @@ describe('Vendor Endpoints', function () {
       await Vendor.deleteMany({});
       this.mock = await Vendor.create({
         name: this.randomName(),
-        type: VendorType.Seamless
-      })
+        type: VendorType.Seamless,
+      });
     });
 
     describe('GIVEN a valid ID and TRANSFER type', () => {
       it('should successfully update to a TRANSFER vendor', async function () {
-
-        const main = await this.request().put(`/vendors/${this.mock._id}`).send({
-          name: this.randomName(),
-          type: VendorType.Transfer,
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mock._id}`)
+          .send({
+            name: this.randomName(),
+            type: VendorType.Transfer,
+          });
 
         expect(main.status).to.eqls(204);
       });
-
-    })
-
+    });
 
     describe('GIVEN a valid ID and SEAMLESS type', () => {
       it('should successfully update to a SEAMLESS vendor', async function () {
-
-        const main = await this.request().put(`/vendors/${this.mock._id}`).send({
-          name: this.randomName(),
-          type: VendorType.Seamless,
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mock._id}`)
+          .send({
+            name: this.randomName(),
+            type: VendorType.Seamless,
+          });
 
         expect(main.status).to.eqls(204);
       });
-
-    })
+    });
 
     describe('GIVEN non existent ID', () => {
       it(`should throw an error`, async function () {
-
-        const main = await this.request().put(`/vendors/${this.mockedId}`).send({
-          name: this.randomName(),
-          type: VendorType.Seamless,
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mockedId}`)
+          .send({
+            name: this.randomName(),
+            type: VendorType.Seamless,
+          });
 
         expect(main.status).to.eqls(400);
       });
-
-    })
+    });
 
     describe('GIVEN no name', () => {
       it(`should throw an error`, async function () {
-
-        const main = await this.request().put(`/vendors/${this.mock._id}`).send({
-          name: null,
-          type: VendorType.Seamless,
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mock._id}`)
+          .send({
+            name: null,
+            type: VendorType.Seamless,
+          });
 
         expect(main.status).to.eqls(400);
       });
-
-    })
+    });
 
     describe('GIVEN no type', () => {
       it(`should throw an error`, async function () {
-
-        const main = await this.request().put(`/vendors/${this.mock._id}`).send({
-          name: this.randomName(),
-          type: null,
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mock._id}`)
+          .send({
+            name: this.randomName(),
+            type: null,
+          });
 
         expect(main.status).to.eqls(400);
       });
-
-    })
+    });
 
     describe('GIVEN an invalid type', () => {
-
       it(`should throw an error`, async function () {
-
-        const main = await this.request().put(`/vendors/${this.mock._id}`).send({
-          name: this.randomName(),
-          type: 'qwe',
-        });
+        const main = await this.request()
+          .put(`/vendors/${this.mock._id}`)
+          .send({
+            name: this.randomName(),
+            type: 'qwe',
+          });
 
         expect(main.status).to.eqls(400);
       });
-
-    })
-
+    });
 
     describe('DELETE /vendors/:id', () => {
       after(() => {
         return Vendor.deleteMany({});
       });
-  
+
       before(async function () {
         await Vendor.deleteMany({});
         this.mock = await Vendor.create({
           name: this.randomName(),
-          type: VendorType.Seamless
-        })
+          type: VendorType.Seamless,
+        });
       });
 
-
       describe('GIVEN a valid ID', () => {
-
         it(`should delete vendor and return it's ID`, async function () {
-
           const main = await this.request().delete(`/vendors/${this.mock._id}`);
 
           expect(main.status).to.eqls(200);
           expect(main.body).to.be.true;
         });
-
-
-      })
+      });
 
       describe('GIVEN an invalid ID', () => {
         it(`should throw an error if id doensn't exist`, async function () {
-
-          const main = await this.request().delete(`/vendors/${this.mockedId}`)
+          const main = await this.request().delete(`/vendors/${this.mockedId}`);
 
           expect(main.status).to.eqls(400);
         });
-      })
-
+      });
     });
   });
 });
-
