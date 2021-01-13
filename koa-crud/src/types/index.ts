@@ -72,6 +72,8 @@ type MemberDocument = Member & Document;
 type MembersStore = {
   insertOneMember: (info: Member) => Promise<MemberDocument>;
   memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
+  selectAllMembers: () => Promise<MemberDocument[]>;
+  selectOneMemberByFilters: (filters: MemberFilters) => Promise<MemberDocument>;
 };
 
 export {

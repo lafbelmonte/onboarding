@@ -9,9 +9,19 @@ const actions = ({ Member }): MembersStore => {
     return Member.exists(filters);
   }
 
+  async function selectAllMembers() {
+    return Member.find().lean({ virtuals: true });
+  }
+
+  async function selectOneMemberByFilters(filters) {
+    return Member.findOne(filters).lean({ virtuals: true });
+  }
+
   return {
     insertOneMember,
     memberExistsByFilter,
+    selectAllMembers,
+    selectOneMemberByFilters,
   };
 };
 
