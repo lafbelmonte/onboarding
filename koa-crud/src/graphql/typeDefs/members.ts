@@ -8,6 +8,14 @@ export default gql`
 
   extend type Mutation {
     createMember(input: CreateMemberInput!): Boolean
+    updateMember(input: UpdateMemberInput!): Boolean
+  }
+
+  input UpdateMemberInput {
+    id: ID
+    username: String!
+    realName: String
+    password: String!
   }
 
   input CreateMemberInput {

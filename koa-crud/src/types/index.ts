@@ -62,7 +62,7 @@ type Member = {
 };
 
 type MemberFilters = {
-  _id?: string;
+  _id?: string | Record<string, any>;
   username?: string;
   realName?: string;
 };
@@ -74,6 +74,10 @@ type MembersStore = {
   memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
   selectAllMembers: () => Promise<MemberDocument[]>;
   selectOneMemberByFilters: (filters: MemberFilters) => Promise<MemberDocument>;
+  updateMemberByFilters: (
+    filters: MemberFilters,
+    info: Member,
+  ) => Promise<MemberDocument>;
 };
 
 export {
