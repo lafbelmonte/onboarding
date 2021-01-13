@@ -1,6 +1,11 @@
 import { gql } from 'apollo-server-koa';
 
 export default gql`
+  extend type Query {
+    members: [Member]
+    member(id: ID!): Member
+  }
+
   extend type Mutation {
     createMember(input: CreateMemberInput!): Boolean
   }
