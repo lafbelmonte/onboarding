@@ -20,7 +20,6 @@ const actions = ({ Member }): MembersStore => {
   async function updateMemberByFilters(filters, info) {
     return Member.findOneAndUpdate(filters, info, {
       new: true,
-      runValidators: true,
     });
   }
 

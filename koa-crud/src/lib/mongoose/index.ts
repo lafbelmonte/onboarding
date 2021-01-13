@@ -6,6 +6,8 @@ async function initializeDatabase(): Promise<void> {
       `mongodb://root:lostintheabyss@localhost:27017/onboarding?authSource=admin`,
       { useNewUrlParser: true },
     );
+
+    mongoose.set('runValidators', true);
   } catch (e) {
     throw new Error(e);
   }
