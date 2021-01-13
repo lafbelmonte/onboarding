@@ -58,7 +58,7 @@ type Member = {
   _id?: string;
   username: string;
   password: string;
-  realName: string;
+  realName?: string | null;
 };
 
 type MemberFilters = {
