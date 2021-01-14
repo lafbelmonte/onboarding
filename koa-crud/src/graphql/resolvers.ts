@@ -11,6 +11,7 @@ import {
   insertMemberUseCase,
   selectOneMemberUseCase,
   updateMemberUseCase,
+  deleteOneMemberUseCase
 } from '../use-cases/members';
 
 const Query = {
@@ -43,6 +44,7 @@ const Mutation = {
       info: args.input,
       source: null,
     }),
+  deleteMember: async (obj, args) => deleteOneMemberUseCase({ id: args.id, info: null, source: null })
 };
 
 export default {

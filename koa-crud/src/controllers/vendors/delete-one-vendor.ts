@@ -3,7 +3,7 @@ import { UseCase, Controller } from '../../types';
 const deleteOneVendor = ({
   deleteOneVendorUseCase,
 }: {
-  deleteOneVendorUseCase: UseCase;
+  deleteOneVendorUseCase: UseCase<boolean>;
 }): Controller => {
   return async function controller(httpRequest) {
     const headers = {

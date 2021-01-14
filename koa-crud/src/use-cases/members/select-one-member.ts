@@ -1,10 +1,10 @@
-import { UseCase, MembersStore } from '../../types';
+import { UseCase, MembersStore, MemberDocument } from '../../types';
 
 const selectOneMember = ({
   membersStore,
 }: {
   membersStore: MembersStore;
-}): UseCase => {
+}): UseCase<MemberDocument> => {
   return async function useCase({ id }) {
     const memberExists = await membersStore.memberExistsByFilter({
       _id: id,

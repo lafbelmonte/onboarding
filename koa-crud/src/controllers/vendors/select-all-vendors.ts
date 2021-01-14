@@ -1,9 +1,9 @@
-import { Controller, UseCase } from '../../types';
+import { Controller, UseCase, VendorDocument } from '../../types';
 
 const selectAllVendors = ({
   selectAllVendorsUseCase,
 }: {
-  selectAllVendorsUseCase: UseCase;
+  selectAllVendorsUseCase: UseCase<VendorDocument[]>;
 }): Controller => {
   return async function controller() {
     const headers = {

@@ -17,7 +17,7 @@ type HttpResponse = {
   body;
 };
 
-type UseCase = ({ id, info, source }) => Promise<any>;
+type UseCase<T> = ({ id, info, source }) => Promise<T>;
 
 type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
 
@@ -78,6 +78,7 @@ type MembersStore = {
     filters: MemberFilters,
     info: Member,
   ) => Promise<MemberDocument>;
+  deleteOneMember: (filters: MemberFilters) => Promise<boolean>;
 };
 
 export {

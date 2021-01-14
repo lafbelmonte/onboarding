@@ -6,7 +6,7 @@ const updateMember = ({
 }: {
   membersStore: MembersStore;
   memberEntity;
-}): UseCase => {
+}): UseCase<boolean> => {
   return async function ({ id, info }) {
     const memberExists = await membersStore.memberExistsByFilter({
       _id: id,

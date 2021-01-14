@@ -1,10 +1,10 @@
-import { UseCase, VendorsStore } from '../../types';
+import { UseCase, VendorsStore, VendorDocument } from '../../types';
 
 const selectAllVendors = ({
   vendorsStore,
 }: {
   vendorsStore: VendorsStore;
-}): UseCase => {
+}): UseCase<VendorDocument[]> => {
   return async function useCase() {
     const vendors = await vendorsStore.selectAllVendors();
     return vendors;

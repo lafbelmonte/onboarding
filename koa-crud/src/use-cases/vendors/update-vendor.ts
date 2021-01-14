@@ -8,7 +8,7 @@ const updateVendor = ({
   vendorsStore: VendorsStore;
   vendorEntity;
   R;
-}): UseCase => {
+}): UseCase<boolean> => {
   return async function ({ id, info }) {
     const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
