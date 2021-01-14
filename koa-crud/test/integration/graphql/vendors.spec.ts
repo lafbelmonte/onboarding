@@ -203,4 +203,110 @@ describe('Vendor Queries', function () {
       });
     });
   });
+
+  describe('List all vendors', () => {
+    after(() => {
+      return Vendor.deleteMany({});
+    });
+
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
+    });
+
+    it('should return list of vendors', async function () {
+      this.mock = {
+        query: {
+          vendors: {
+            id: true,
+            name: true,
+            type: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      };
+
+      const query = jsonToGraphQLQuery(this.mock);
+      const main = await this.request()
+        .post('/graphql')
+        .set('Authorization', `Bearer ${this.token}`)
+        .send({ query });
+      expect(main.statusCode).to.eqls(200);
+      expect(main.body.data.vendors).have.length(1);
+    });
+  });
+
+  describe('List vendor by ID', () => {
+    after(() => {
+      return Vendor.deleteMany({});
+    });
+
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN existent ID', () => {
+      it('should return the vendor with that ID', async function () {
+        this.mock = {
+          query: {
+            vendor: {
+              __args: {
+                id: this.baseId,
+              },
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.vendor.id).eqls(this.baseId);
+      });
+    });
+
+    describe('GIVEN non existent ID', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            vendor: {
+              __args: {
+                id: this.mockedId,
+              },
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Vendor doesn't exist`);
+      });
+    });
+  });
 });
