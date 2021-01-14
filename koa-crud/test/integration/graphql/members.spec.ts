@@ -357,4 +357,56 @@ describe('Member Queries', function () {
       });
     });
   });
+
+  describe('Member Deletion', () => {
+    afterEach(() => {
+      return Member.deleteMany({});
+    });
+
+    beforeEach(() => {
+      return Member.deleteMany({});
+    });
+
+    describe('Given an existent ID', () => {
+      it('should return true', async function () {
+        const data = await Member.create({
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        });
+
+        this.mock = {
+          mutation: {
+            deleteMember: {
+              __args: {
+                id: data._id,
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('deleteMember', true);
+      });
+    });
+
+    describe('Given a non existent ID', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            deleteMember: {
+              __args: {
+                id: this.mockedId,
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Member doesn't exist`);
+      });
+    });
+  });
 });

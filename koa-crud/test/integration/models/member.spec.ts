@@ -127,4 +127,45 @@ describe('Member Models', () => {
       });
     });
   });
+
+  describe('Delete One Member', () => {
+    afterEach(() => {
+      return Member.deleteMany({});
+    });
+
+    beforeEach(() => {
+      return Member.deleteMany({});
+    });
+
+    describe('GIVEN existent vendor ID', () => {
+      it('should be fulfilled and deleted count should be 1', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+        const main = await expect(Member.create(this.mock)).to.eventually
+          .fulfilled;
+
+        await expect(
+          Member.deleteOne({ _id: main._id }),
+        ).to.eventually.fulfilled.property('deletedCount', 1);
+      });
+    });
+
+    describe('GIVEN non existent vendor ID', () => {
+      it('should be fulfilled and deleted count should be 0', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+        await expect(Member.create(this.mock)).to.eventually.fulfilled;
+
+        await expect(
+          Member.deleteOne({ _id: this.mockedId }),
+        ).to.eventually.fulfilled.property('deletedCount', 0);
+      });
+    });
+  });
 });
