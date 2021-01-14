@@ -56,6 +56,51 @@ describe('Vendor Queries', function () {
       return Vendor.deleteMany({});
     });
 
+    describe('Given no token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            createVendor: {
+              __args: {
+                input: {
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Seamless),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('Given erroneous token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            createVendor: {
+              __args: {
+                input: {
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Seamless),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer qwe`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
     describe('Given correct inputs and SEAMLESS type', () => {
       it('should return true', async function () {
         this.mock = {
@@ -81,7 +126,7 @@ describe('Vendor Queries', function () {
     });
 
     describe('Given correct inputs and TRANSFER type', () => {
-      it('should throw an error', async function () {
+      it('should return true', async function () {
         this.mock = {
           mutation: {
             createVendor: {
@@ -129,7 +174,7 @@ describe('Vendor Queries', function () {
     });
 
     describe('Given invalid type', () => {
-      it('should throw an error', async function () {
+      it('should throw an error and return an error status code', async function () {
         this.mock = {
           mutation: {
             createVendor: {
@@ -152,7 +197,7 @@ describe('Vendor Queries', function () {
     });
 
     describe('Given no type', () => {
-      it('should throw an error', async function () {
+      it('should throw an error and return error status code', async function () {
         this.mock = {
           mutation: {
             createVendor: {
@@ -217,6 +262,49 @@ describe('Vendor Queries', function () {
       });
     });
 
+    describe('Given no token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            vendors: {
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('Given erroneous token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            vendors: {
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer qwe`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
     it('should return list of vendors', async function () {
       this.mock = {
         query: {
@@ -253,6 +341,55 @@ describe('Vendor Queries', function () {
       });
 
       this.baseId = this.mock._id;
+    });
+
+    describe('Given no token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            vendor: {
+              __args: {
+                id: this.baseId,
+              },
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('Given erroneous token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            vendor: {
+              __args: {
+                id: this.baseId,
+              },
+              id: true,
+              name: true,
+              type: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer qwe`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
     });
 
     describe('GIVEN existent ID', () => {
@@ -295,6 +432,336 @@ describe('Vendor Queries', function () {
               type: true,
               createdAt: true,
               updatedAt: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Vendor doesn't exist`);
+      });
+    });
+  });
+
+  describe('Updating a vendor', () => {
+    after(() => {
+      return Vendor.deleteMany({});
+    });
+
+    before(async function () {
+      await Vendor.deleteMany({});
+      this.mock = await Vendor.create({
+        name: this.randomName(),
+        type: VendorType.Seamless,
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('Given no token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Transfer),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('Given erroneous token', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Transfer),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer qwe`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('GIVEN a valid ID and TRANSFER type', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Transfer),
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('updateVendor', true);
+      });
+    });
+
+    describe('GIVEN a valid ID and Seamless type', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Seamless),
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('updateVendor', true);
+      });
+    });
+
+    describe('GIVEN no name', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: '',
+                  type: new EnumType(VendorType.Seamless),
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Please input name');
+      });
+    });
+
+    describe('GIVEN no type', () => {
+      it('should throw an error and return error status code', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: '',
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(400);
+      });
+    });
+
+    describe('GIVEN invalid type', () => {
+      it('should throw an error and return error status code', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  name: this.randomName(),
+                  type: 'qwe',
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(400);
+      });
+    });
+
+    describe('GIVEN non existent ID', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateVendor: {
+              __args: {
+                input: {
+                  id: this.mockedId,
+                  name: this.randomName(),
+                  type: new EnumType(VendorType.Transfer),
+                },
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Vendor ID doesn't exist`);
+      });
+    });
+  });
+
+  describe('Deleting a vendor', () => {
+    after(() => {
+      return Vendor.deleteMany({});
+    });
+
+    before(async function () {
+      await Vendor.deleteMany({});
+    });
+
+    describe('Given no token', () => {
+      it('should throw an error', async function () {
+        const data = await Vendor.create({
+          name: this.randomName(),
+          type: VendorType.Seamless,
+        });
+
+        this.mock = {
+          mutation: {
+            deleteVendor: {
+              __args: {
+                id: data._id,
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('Given erroneous token', () => {
+      it('should throw an error', async function () {
+        const data = await Vendor.create({
+          name: this.randomName(),
+          type: VendorType.Seamless,
+        });
+
+        this.mock = {
+          mutation: {
+            deleteVendor: {
+              __args: {
+                id: data._id,
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer qwe`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Forbidden');
+      });
+    });
+
+    describe('GIVEN an existent ID', () => {
+      it('should return true', async function () {
+        const data = await Vendor.create({
+          name: this.randomName(),
+          type: VendorType.Seamless,
+        });
+
+        this.mock = {
+          mutation: {
+            deleteVendor: {
+              __args: {
+                id: data._id,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request()
+          .post('/graphql')
+          .set('Authorization', `Bearer ${this.token}`)
+          .send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('deleteVendor', true);
+      });
+    });
+
+    describe('GIVEN a non existent ID', () => {
+      it('should throw an error', async function () {
+        const data = await Vendor.create({
+          name: this.randomName(),
+          type: VendorType.Seamless,
+        });
+
+        this.mock = {
+          mutation: {
+            deleteVendor: {
+              __args: {
+                id: this.mockedId,
+              },
             },
           },
         };
