@@ -7,6 +7,7 @@ import serializer from './serializer';
 import { initializeDatabase } from '../mongoose';
 import typeDefs from '../../graphql/typeDefs';
 import resolvers from '../../graphql/resolvers';
+import { verifyToken } from '../jwt/index';
 
 class KoaApp {
   private app: Koa;
@@ -29,7 +30,11 @@ class KoaApp {
   }
 
   private initializeGraphQl(): void {
-    const graphQlserver = new ApolloServer({ typeDefs, resolvers });
+    const graphQlserver = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: verifyToken,
+    });
     graphQlserver.applyMiddleware({ app: this.app, path: '/graphql' });
   }
 
