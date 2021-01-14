@@ -48,8 +48,6 @@ describe('Vendor Store', () => {
         this.mock = {
           name: this.randomName(),
           type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.fulfilled;
       });
@@ -60,8 +58,6 @@ describe('Vendor Store', () => {
         this.mock = {
           name: this.randomName(),
           type: VendorType.Transfer,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.fulfilled;
       });
@@ -72,8 +68,6 @@ describe('Vendor Store', () => {
         this.mock = {
           name: '',
           type: VendorType.Seamless,
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
@@ -84,8 +78,6 @@ describe('Vendor Store', () => {
         this.mock = {
           name: this.randomName(),
           type: '',
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
@@ -96,8 +88,6 @@ describe('Vendor Store', () => {
         this.mock = {
           name: this.randomName(),
           type: 'qwe',
-          dateTimeCreated: new Date(),
-          dateTimeUpdated: new Date(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
@@ -199,8 +189,6 @@ describe('Vendor Store', () => {
             {
               name: this.randomName(),
               type: VendorType.Seamless,
-              dateTimeCreated: new Date(),
-              dateTimeUpdated: new Date(),
             },
           ),
         ).to.eventually.fulfilled.property('type', 'SEAMLESS');
@@ -215,8 +203,6 @@ describe('Vendor Store', () => {
             {
               name: this.randomName(),
               type: VendorType.Transfer,
-              dateTimeCreated: new Date(),
-              dateTimeUpdated: new Date(),
             },
           ),
         ).to.eventually.fulfilled.property('type', 'TRANSFER');
@@ -231,8 +217,6 @@ describe('Vendor Store', () => {
             {
               name: this.randomName(),
               type: 'qwe',
-              dateTimeCreated: new Date(),
-              dateTimeUpdated: new Date(),
             },
           ),
         ).to.eventually.rejected;
@@ -247,8 +231,6 @@ describe('Vendor Store', () => {
             {
               name: this.randomName(),
               type: VendorType.Transfer,
-              dateTimeCreated: new Date(),
-              dateTimeUpdated: new Date(),
             },
           ),
         ).to.eventually.fulfilled.and.be.null;
