@@ -31,14 +31,13 @@ const actions = ({ Member }): MembersStore => {
     return isDeleted;
   }
 
-
   return {
     insertOneMember,
     memberExistsByFilter,
     selectAllMembers,
     selectOneMemberByFilters,
     updateMemberByFilters,
-    deleteOneMember
+    deleteOneMember,
   };
 };
 
