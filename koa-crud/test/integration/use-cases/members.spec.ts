@@ -10,7 +10,7 @@ import {
   selectAllMembersUseCase,
   selectOneMemberUseCase,
   updateMemberUseCase,
-  deleteOneMemberUseCase
+  deleteOneMemberUseCase,
 } from '../../../src/use-cases/members';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
@@ -313,11 +313,5 @@ describe('Member Use Cases', () => {
         ).to.eventually.rejectedWith("Member doesn't exist");
       });
     });
-
-
-
   });
-
-
-
 });

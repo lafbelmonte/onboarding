@@ -21,7 +21,7 @@ const {
   selectOneMemberByFilters,
   selectAllMembers,
   updateMemberByFilters,
-  deleteOneMember
+  deleteOneMember,
 } = membersStore;
 
 describe('Member Store', () => {
@@ -239,5 +239,4 @@ describe('Member Store', () => {
       });
     });
   });
-
 });

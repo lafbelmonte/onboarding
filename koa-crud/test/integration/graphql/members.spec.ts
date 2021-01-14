@@ -358,8 +358,7 @@ describe('Member Queries', function () {
     });
   });
 
-
-  describe('Member Creation', () => {
+  describe('Member Deletion', () => {
     afterEach(() => {
       return Member.deleteMany({});
     });
@@ -370,7 +369,6 @@ describe('Member Queries', function () {
 
     describe('Given an existent ID', () => {
       it('should return true', async function () {
-
         const data = await Member.create({
           username: this.randomUsername(),
           password: this.randomPassword(),
@@ -381,7 +379,7 @@ describe('Member Queries', function () {
           mutation: {
             deleteMember: {
               __args: {
-                id: data._id
+                id: data._id,
               },
             },
           },
@@ -395,12 +393,11 @@ describe('Member Queries', function () {
 
     describe('Given a non existent ID', () => {
       it('should return true', async function () {
-
         this.mock = {
           mutation: {
             deleteMember: {
               __args: {
-                id: this.mockedId
+                id: this.mockedId,
               },
             },
           },
@@ -408,12 +405,8 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Member doesn\'t exist`);
+        expect(main.body.errors[0].message).eqls(`Member doesn't exist`);
       });
     });
-
-
   });
-
-
 });

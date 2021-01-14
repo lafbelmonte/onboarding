@@ -1,24 +1,23 @@
 import { UseCase, MembersStore } from '../../types';
 
 const deleteOneMember = ({
-    membersStore,
+  membersStore,
 }: {
-    membersStore: MembersStore;
+  membersStore: MembersStore;
 }): UseCase<boolean> => {
-    return async function useCase({ id }) {
+  return async function useCase({ id }) {
+    const memberExists = await membersStore.memberExistsByFilter({
+      _id: id,
+    });
 
-        const memberExists = await membersStore.memberExistsByFilter({
-            _id: id,
-        });
+    if (!memberExists) {
+      throw new Error(`Member doesn't exist`);
+    }
 
-        if (!memberExists) {
-            throw new Error(`Member doesn't exist`);
-        }
+    await membersStore.deleteOneMember({ _id: id });
 
-        await membersStore.deleteOneMember({ _id: id });
-
-        return true;
-    };
+    return true;
+  };
 };
 
 export default deleteOneMember;

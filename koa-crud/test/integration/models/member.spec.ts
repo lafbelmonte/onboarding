@@ -128,7 +128,6 @@ describe('Member Models', () => {
     });
   });
 
-
   describe('Delete One Member', () => {
     afterEach(() => {
       return Member.deleteMany({});

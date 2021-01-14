@@ -6,18 +6,18 @@ import insertMember from './insert-member';
 import selectAllMembers from './select-all-members';
 import selectOneMember from './select-one-member';
 import updateMember from './update-member';
-import deleteOneMember from './delete-one-member'
+import deleteOneMember from './delete-one-member';
 
 const insertMemberUseCase = insertMember({ memberEntity, membersStore });
 const selectAllMembersUseCase = selectAllMembers({ membersStore });
 const selectOneMemberUseCase = selectOneMember({ membersStore });
 const updateMemberUseCase = updateMember({ memberEntity, membersStore });
-const deleteOneMemberUseCase = deleteOneMember({ membersStore })
+const deleteOneMemberUseCase = deleteOneMember({ membersStore });
 
 export {
   insertMemberUseCase,
   selectAllMembersUseCase,
   selectOneMemberUseCase,
   updateMemberUseCase,
-  deleteOneMemberUseCase
+  deleteOneMemberUseCase,
 };
