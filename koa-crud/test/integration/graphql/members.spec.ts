@@ -219,4 +219,142 @@ describe('Member Queries', function () {
       });
     });
   });
+
+  describe('Updating a member', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('Given correct inputs', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            updateMember: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  username: this.randomUsername(),
+                  password: this.randomPassword(),
+                  realName: this.randomRealName(),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('updateMember', true);
+      });
+    });
+
+    describe('Given no username', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateMember: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  username: '',
+                  password: this.randomPassword(),
+                  realName: this.randomRealName(),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Please input username');
+      });
+    });
+
+    describe('Given no password', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateMember: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  username: '',
+                  password: this.randomPassword(),
+                  realName: this.randomRealName(),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Please input username');
+      });
+    });
+
+    describe('Given non existent ID', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            updateMember: {
+              __args: {
+                input: {
+                  id: this.mockedId,
+                  username: '',
+                  password: this.randomPassword(),
+                  realName: this.randomRealName(),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Member ID doesn't exist`);
+      });
+    });
+
+    describe('Given existing username', () => {
+      it('should throw an error', async function () {
+        const data = await Member.create({
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        });
+
+        this.mock = {
+          mutation: {
+            updateMember: {
+              __args: {
+                input: {
+                  id: this.baseId,
+                  username: data.username,
+                  password: this.randomPassword(),
+                  realName: this.randomRealName(),
+                },
+              },
+            },
+          },
+        };
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(`Username already exists`);
+      });
+    });
+  });
 });

@@ -20,6 +20,7 @@ const {
   memberExistsByFilter,
   selectOneMemberByFilters,
   selectAllMembers,
+  updateMemberByFilters,
 } = membersStore;
 
 describe('Member Store', () => {
@@ -117,7 +118,7 @@ describe('Member Store', () => {
       });
     });
 
-    it('should return a list of vendors', async () => {
+    it('should return a list of members', async () => {
       await expect(selectAllMembers()).eventually.fulfilled.and.have.length(1);
     });
   });
@@ -137,7 +138,7 @@ describe('Member Store', () => {
     });
 
     describe('GIVEN existent filters', () => {
-      it('should return the vendor', async function () {
+      it('should return the member', async function () {
         await expect(
           selectOneMemberByFilters({ _id: this.mock._id }),
         ).to.eventually.fulfilled.property('_id', this.mock._id);
@@ -145,9 +146,64 @@ describe('Member Store', () => {
     });
 
     describe('GIVEN non existent filters', () => {
-      it('should return the vendor', async function () {
+      it('should return null', async function () {
         await expect(selectOneMemberByFilters({ _id: this.mockedId })).to
           .eventually.fulfilled.and.null;
+      });
+    });
+  });
+
+  describe('Update member by filters', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN correct inputs', () => {
+      it('should be fulfilled', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+
+        await expect(updateMemberByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.fulfilled;
+      });
+    });
+
+    describe('GIVEN no username', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          username: '',
+          password: this.randomPassword(),
+          realName: this.randomRealName(),
+        };
+
+        await expect(updateMemberByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no username', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          username: this.randomUsername(),
+          password: '',
+          realName: this.randomRealName(),
+        };
+        await expect(updateMemberByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
       });
     });
   });
