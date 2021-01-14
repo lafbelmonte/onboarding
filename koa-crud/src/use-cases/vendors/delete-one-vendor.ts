@@ -4,7 +4,7 @@ const deleteOneVendor = ({
   vendorsStore,
 }: {
   vendorsStore: VendorsStore;
-}): UseCase => {
+}): UseCase<boolean> => {
   return async function useCase({ id }) {
     const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,

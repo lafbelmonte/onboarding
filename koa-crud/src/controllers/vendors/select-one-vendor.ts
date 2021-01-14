@@ -1,9 +1,9 @@
-import { UseCase, Controller } from '../../types';
+import { UseCase, Controller, VendorDocument } from '../../types';
 
 const selectOneVendor = ({
   selectOneVendorUseCase,
 }: {
-  selectOneVendorUseCase: UseCase;
+  selectOneVendorUseCase: UseCase<VendorDocument>;
 }): Controller => {
   return async function controller(httpRequest) {
     const headers = {

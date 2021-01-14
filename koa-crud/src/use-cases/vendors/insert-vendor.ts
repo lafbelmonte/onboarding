@@ -6,7 +6,7 @@ const insertVendor = ({
 }: {
   vendorsStore: VendorsStore;
   vendorEntity;
-}): UseCase => {
+}): UseCase<boolean> => {
   return async function ({ info }) {
     const vendor = await vendorEntity(info);
 

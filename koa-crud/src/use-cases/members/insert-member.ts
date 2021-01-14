@@ -6,7 +6,7 @@ const insertMember = ({
 }: {
   memberEntity;
   membersStore: MembersStore;
-}): UseCase => {
+}): UseCase<boolean> => {
   return async function ({ info }) {
     const member = await memberEntity(info);
 

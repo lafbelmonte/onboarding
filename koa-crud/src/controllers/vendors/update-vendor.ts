@@ -3,7 +3,7 @@ import { UseCase, Controller } from '../../types';
 const updateVendor = ({
   updateVendorUseCase,
 }: {
-  updateVendorUseCase: UseCase;
+  updateVendorUseCase: UseCase<boolean>;
 }): Controller => {
   return async function controller(httpRequest) {
     try {

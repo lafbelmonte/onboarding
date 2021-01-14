@@ -23,12 +23,21 @@ const actions = ({ Member }): MembersStore => {
     });
   }
 
+  async function deleteOneMember(filters) {
+    const vendor = await Member.deleteOne(filters);
+
+    const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
+
+    return isDeleted;
+  }
+
   return {
     insertOneMember,
     memberExistsByFilter,
     selectAllMembers,
     selectOneMemberByFilters,
     updateMemberByFilters,
+    deleteOneMember,
   };
 };
 

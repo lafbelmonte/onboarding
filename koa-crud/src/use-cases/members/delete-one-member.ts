@@ -1,10 +1,10 @@
-import { UseCase, MembersStore, MemberDocument } from '../../types';
+import { UseCase, MembersStore } from '../../types';
 
-const selectOneMember = ({
+const deleteOneMember = ({
   membersStore,
 }: {
   membersStore: MembersStore;
-}): UseCase<MemberDocument> => {
+}): UseCase<boolean> => {
   return async function useCase({ id }) {
     const memberExists = await membersStore.memberExistsByFilter({
       _id: id,
@@ -14,10 +14,10 @@ const selectOneMember = ({
       throw new Error(`Member doesn't exist`);
     }
 
-    const member = await membersStore.selectOneMemberByFilters({ _id: id });
+    await membersStore.deleteOneMember({ _id: id });
 
-    return member;
+    return true;
   };
 };
 
-export default selectOneMember;
+export default deleteOneMember;

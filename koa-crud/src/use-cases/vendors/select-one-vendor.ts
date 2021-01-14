@@ -1,10 +1,10 @@
-import { UseCase, VendorsStore } from '../../types';
+import { UseCase, VendorsStore, VendorDocument } from '../../types';
 
 const selectOneVendor = ({
   vendorsStore,
 }: {
   vendorsStore: VendorsStore;
-}): UseCase => {
+}): UseCase<VendorDocument> => {
   return async function useCase({ id }) {
     const vendorExists = await vendorsStore.vendorExistsByFilter({
       _id: id,
