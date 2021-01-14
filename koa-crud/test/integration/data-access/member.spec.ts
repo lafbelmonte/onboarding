@@ -21,6 +21,7 @@ const {
   selectOneMemberByFilters,
   selectAllMembers,
   updateMemberByFilters,
+  deleteOneMember
 } = membersStore;
 
 describe('Member Store', () => {
@@ -207,4 +208,36 @@ describe('Member Store', () => {
       });
     });
   });
+
+  describe('Deleting a Member', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN valid and existent vendor ID', () => {
+      it('should return true', async function () {
+        await expect(deleteOneMember({ _id: this.mock._id })).to.eventually
+          .fulfilled.and.be.true;
+      });
+    });
+
+    describe('GIVEN non existent vendor ID', () => {
+      it('should return false', async function () {
+        await expect(deleteOneMember({ _id: this.mockedId })).to.eventually
+          .fulfilled.and.be.false;
+      });
+    });
+  });
+
 });

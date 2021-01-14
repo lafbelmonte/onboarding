@@ -10,6 +10,7 @@ import {
   selectAllMembersUseCase,
   selectOneMemberUseCase,
   updateMemberUseCase,
+  deleteOneMemberUseCase
 } from '../../../src/use-cases/members';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
@@ -274,4 +275,49 @@ describe('Member Use Cases', () => {
       });
     });
   });
+
+  describe('Deleting a Member', () => {
+    after(() => {
+      return Member.deleteMany({});
+    });
+
+    before(async function () {
+      await Member.deleteMany({});
+      this.mock = await Member.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(),
+      });
+    });
+
+    describe('GIVEN a valid ID', () => {
+      it('should return true', async function () {
+        await expect(
+          deleteOneMemberUseCase({
+            id: this.mock._id,
+            source: null,
+            info: null,
+          }),
+        ).to.eventually.fulfilled.and.be.true;
+      });
+    });
+
+    describe('GIVEN a non existent ID', () => {
+      it('should throw an error', async function () {
+        await expect(
+          deleteOneMemberUseCase({
+            id: this.mock._id,
+            source: null,
+            info: null,
+          }),
+        ).to.eventually.rejectedWith("Member doesn't exist");
+      });
+    });
+
+
+
+  });
+
+
+
 });
