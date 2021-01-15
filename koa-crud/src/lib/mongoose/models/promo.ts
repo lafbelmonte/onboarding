@@ -56,8 +56,7 @@ const schema = new Schema(
       type: Number,
     },
     requiredMemberFields: {
-      type: [RequiredMemberFieldsSchema],
-      default: null
+      type: [RequiredMemberFieldsSchema]
     }
   },
   { timestamps: true },
