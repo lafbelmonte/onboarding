@@ -8,12 +8,6 @@ import {
 } from '../../../types/index';
 
 const RequiredMemberFieldsSchema = new Schema({
-  _id: {
-    type: String,
-    default() {
-      return nanoid();
-    },
-  },
   realName: {
     type: String,
     required: true,
@@ -26,7 +20,7 @@ const RequiredMemberFieldsSchema = new Schema({
     type: String,
     required: true,
   },
-});
+}, { _id: false });
 
 const schema = new Schema(
   {
@@ -61,7 +55,10 @@ const schema = new Schema(
     minimumBalance: {
       type: Number,
     },
-    requiredMemberFields: [RequiredMemberFieldsSchema],
+    requiredMemberFields: {
+      type: [RequiredMemberFieldsSchema],
+      default: null
+    }
   },
   { timestamps: true },
 );

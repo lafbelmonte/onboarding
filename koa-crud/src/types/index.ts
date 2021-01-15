@@ -92,7 +92,7 @@ enum PromoStatus {
   Inactive = 'INACTIVE',
 }
 
-interface RequiredMemberFields {
+type RequiredMemberFields = {
   realName: string;
   email: string;
   bankAccount: string;
