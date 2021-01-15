@@ -43,13 +43,13 @@ type VendorFilters = {
 };
 
 type VendorsStore = {
-  insertOneVendor: (info: Vendor) => Promise<VendorDocument>;
+  insertOneVendor: (info: VendorDocument) => Promise<VendorDocument>;
   vendorExistsByFilter: (filters: VendorFilters) => Promise<boolean>;
   selectAllVendors: () => Promise<VendorDocument[]>;
   selectOneVendorByFilters: (filters: VendorFilters) => Promise<VendorDocument>;
   updateVendorByFilters: (
     filters: VendorFilters,
-    info: Vendor,
+    info: VendorDocument,
   ) => Promise<VendorDocument>;
   deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
 };
@@ -70,15 +70,49 @@ type MemberFilters = {
 type MemberDocument = Member & Document;
 
 type MembersStore = {
-  insertOneMember: (info: Member) => Promise<MemberDocument>;
+  insertOneMember: (info: MemberDocument) => Promise<MemberDocument>;
   memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
   selectAllMembers: () => Promise<MemberDocument[]>;
   selectOneMemberByFilters: (filters: MemberFilters) => Promise<MemberDocument>;
   updateMemberByFilters: (
     filters: MemberFilters,
-    info: Member,
+    info: MemberDocument,
   ) => Promise<MemberDocument>;
   deleteOneMember: (filters: MemberFilters) => Promise<boolean>;
+};
+
+enum PromoTemplate {
+  Deposit = 'DEPOSIT',
+  SignUp = 'SIGN_UP',
+}
+
+enum PromoStatus {
+  Draft = 'DRAFT',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+interface RequiredMemberFields {
+  realName: string;
+  email: string;
+  bankAccount: string;
+}
+
+type Promo = {
+  _id?: string;
+  name: string;
+  template: PromoTemplate;
+  title: string;
+  description: string;
+  status: PromoStatus;
+  minimumBalance?: number;
+  requiredMemberFields?: RequiredMemberFields;
+};
+
+type PromoDocument = Promo & Document;
+
+type PromosStore = {
+  insertOnePromo: (info: PromoDocument) => Promise<PromoDocument>;
 };
 
 export {
@@ -94,4 +128,9 @@ export {
   MemberDocument,
   Member,
   MembersStore,
+  PromoTemplate,
+  PromoStatus,
+  PromoDocument,
+  PromosStore,
+  Promo,
 };
