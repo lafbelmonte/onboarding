@@ -10,10 +10,10 @@ export default gql`
     SIGN_UP
   }
 
-  input RequiredMemberFieldsInput {
-    realName: String!
-    email: String!
-    bankAccount: String!
+  enum RequiredMemberFieldsInput {
+    EMAIL
+    REAL_NAME
+    BANK_ACCOUNT
   }
 
   input CreatePromoInput {

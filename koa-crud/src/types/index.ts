@@ -92,10 +92,10 @@ enum PromoStatus {
   Inactive = 'INACTIVE',
 }
 
-type RequiredMemberFields = {
-  realName: string;
-  email: string;
-  bankAccount: string;
+enum RequiredMemberFields {
+  Email = 'EMAIL',
+  Realname = 'REAL_NAME',
+  BankAccount = 'BANK_ACCOUNT',
 }
 
 type Promo = {
@@ -106,7 +106,7 @@ type Promo = {
   description: string;
   status: PromoStatus;
   minimumBalance?: number;
-  requiredMemberFields?: RequiredMemberFields;
+  requiredMemberFields?: RequiredMemberFields[];
 };
 
 type PromoDocument = Promo & Document;
@@ -133,4 +133,5 @@ export {
   PromoDocument,
   PromosStore,
   Promo,
+  RequiredMemberFields,
 };

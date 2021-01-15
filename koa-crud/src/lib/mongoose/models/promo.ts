@@ -5,22 +5,8 @@ import {
   PromoTemplate,
   PromoStatus,
   PromoDocument,
+  RequiredMemberFields,
 } from '../../../types/index';
-
-const RequiredMemberFieldsSchema = new Schema({
-  realName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  bankAccount: {
-    type: String,
-    required: true,
-  },
-}, { _id: false });
 
 const schema = new Schema(
   {
@@ -56,8 +42,10 @@ const schema = new Schema(
       type: Number,
     },
     requiredMemberFields: {
-      type: [RequiredMemberFieldsSchema]
-    }
+      type: [String],
+      enum: RequiredMemberFields,
+      default: [],
+    },
   },
   { timestamps: true },
 );
