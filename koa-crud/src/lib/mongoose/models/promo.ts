@@ -38,6 +38,14 @@ const schema = new Schema(
       enum: [PromoStatus.Active, PromoStatus.Inactive, PromoStatus.Draft],
       default: PromoStatus.Draft,
     },
+    submitted: {
+      type: Boolean,
+      default: true,
+    },
+    enabled: {
+      type: Boolean,
+      default: true,
+    },
     minimumBalance: {
       type: Number,
     },

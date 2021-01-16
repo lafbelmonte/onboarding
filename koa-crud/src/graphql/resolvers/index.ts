@@ -14,13 +14,15 @@ import {
   deleteVendor,
 } from './vendors';
 
-import { createPromo } from './promos';
+import { createPromo, promos, promo } from './promos';
 
 const Query = {
   members,
   member,
   vendors,
   vendor,
+  promos,
+  promo,
 };
 const Mutation = {
   createMember,

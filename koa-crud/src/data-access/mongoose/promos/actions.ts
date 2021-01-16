@@ -5,8 +5,18 @@ const actions = ({ Promo }): PromosStore => {
     return Promo.create(info);
   }
 
+  async function selectAllPromos() {
+    return Promo.find().lean({ virtuals: true });
+  }
+
+  async function selectOnePromoByFilters(filters) {
+    return Promo.findOne(filters).lean({ virtuals: true });
+  }
+
   return {
     insertOnePromo,
+    selectAllPromos,
+    selectOnePromoByFilters,
   };
 };
 
