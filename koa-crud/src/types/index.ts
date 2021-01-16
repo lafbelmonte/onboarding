@@ -119,8 +119,13 @@ type PromoFilters = {
 
 type PromosStore = {
   insertOnePromo: (info: Promo) => Promise<PromoDocument>;
+  promoExistsByFilter: (filters: PromoFilters) => Promise<boolean>;
   selectAllPromos: () => Promise<PromoDocument[]>;
   selectOnePromoByFilters: (filters: PromoFilters) => Promise<PromoDocument>;
+  updatePromoByFilters: (
+    filters: PromoFilters,
+    info: Promo,
+  ) => Promise<PromoDocument>;
 };
 
 export {

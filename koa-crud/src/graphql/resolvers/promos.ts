@@ -2,6 +2,7 @@ import {
   insertPromoUseCase,
   selectAllPromosUseCase,
   selectOnePromoUseCase,
+  updatePromoUseCase,
 } from '../../use-cases/promos';
 
 const createPromo = async (obj, args) =>
@@ -13,4 +14,11 @@ const promos = async (obj, args, ctx) =>
 const promo = async (obj, args) =>
   selectOnePromoUseCase({ id: args.id, info: null, source: null });
 
-export { createPromo, promos, promo };
+const updatePromo = async (obj, args) =>
+  updatePromoUseCase({
+    id: args.input.id,
+    info: args.input,
+    source: null,
+  });
+
+export { createPromo, promos, promo, updatePromo };
