@@ -43,13 +43,13 @@ type VendorFilters = {
 };
 
 type VendorsStore = {
-  insertOneVendor: (info: VendorDocument) => Promise<VendorDocument>;
+  insertOneVendor: (info: Vendor) => Promise<VendorDocument>;
   vendorExistsByFilter: (filters: VendorFilters) => Promise<boolean>;
   selectAllVendors: () => Promise<VendorDocument[]>;
   selectOneVendorByFilters: (filters: VendorFilters) => Promise<VendorDocument>;
   updateVendorByFilters: (
     filters: VendorFilters,
-    info: VendorDocument,
+    info: Vendor,
   ) => Promise<VendorDocument>;
   deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
 };
@@ -70,13 +70,13 @@ type MemberFilters = {
 type MemberDocument = Member & Document;
 
 type MembersStore = {
-  insertOneMember: (info: MemberDocument) => Promise<MemberDocument>;
+  insertOneMember: (info: Member) => Promise<MemberDocument>;
   memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
   selectAllMembers: () => Promise<MemberDocument[]>;
   selectOneMemberByFilters: (filters: MemberFilters) => Promise<MemberDocument>;
   updateMemberByFilters: (
     filters: MemberFilters,
-    info: MemberDocument,
+    info: Member,
   ) => Promise<MemberDocument>;
   deleteOneMember: (filters: MemberFilters) => Promise<boolean>;
 };
@@ -107,12 +107,20 @@ type Promo = {
   status: PromoStatus;
   minimumBalance?: number;
   requiredMemberFields?: RequiredMemberFields[];
+  submitted: boolean;
+  enabled: boolean;
 };
 
 type PromoDocument = Promo & Document;
 
+type PromoFilters = {
+  _id?: string | Record<string, any>;
+};
+
 type PromosStore = {
-  insertOnePromo: (info: PromoDocument) => Promise<PromoDocument>;
+  insertOnePromo: (info: Promo) => Promise<PromoDocument>;
+  selectAllPromos: () => Promise<PromoDocument[]>;
+  selectOnePromoByFilters: (filters: PromoFilters) => Promise<PromoDocument>;
 };
 
 export {
