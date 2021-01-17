@@ -23,12 +23,21 @@ const actions = ({ Promo }): PromosStore => {
     });
   }
 
+  async function deleteOnePromo(filters) {
+    const vendor = await Promo.deleteOne(filters);
+
+    const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
+
+    return isDeleted;
+  }
+
   return {
     insertOnePromo,
     promoExistsByFilter,
     selectAllPromos,
     selectOnePromoByFilters,
     updatePromoByFilters,
+    deleteOnePromo,
   };
 };
 

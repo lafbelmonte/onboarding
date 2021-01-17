@@ -3,6 +3,7 @@ import {
   selectAllPromosUseCase,
   selectOnePromoUseCase,
   updatePromoUseCase,
+  deleteOnePromoUseCase,
 } from '../../use-cases/promos';
 
 const createPromo = async (obj, args) =>
@@ -21,4 +22,7 @@ const updatePromo = async (obj, args) =>
     source: null,
   });
 
-export { createPromo, promos, promo, updatePromo };
+const deletePromo = async (obj, args) =>
+  deleteOnePromoUseCase({ id: args.id, info: null, source: null });
+
+export { createPromo, promos, promo, updatePromo, deletePromo };

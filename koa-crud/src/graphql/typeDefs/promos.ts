@@ -9,6 +9,7 @@ export default gql`
   extend type Mutation {
     createPromo(input: CreatePromoInput!): Boolean
     updatePromo(input: UpdatePromoInput!): Boolean
+    deletePromo(id: ID!): Boolean
   }
 
   enum PromoTemplate {
