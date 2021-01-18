@@ -1,3 +1,5 @@
+import { PromoTemplate, Promo } from '../../types';
+
 import {
   members,
   member,
@@ -15,6 +17,7 @@ import {
 } from './vendors';
 
 import { createPromo, promos, promo, updatePromo, deletePromo } from './promos';
+import { enrollToPromo } from './promo-enrollments';
 
 const Query = {
   members,
@@ -34,9 +37,18 @@ const Mutation = {
   createPromo,
   updatePromo,
   deletePromo,
+  enrollToPromo,
 };
 
 export default {
   Query,
   Mutation,
+  Promo: {
+    __resolveType(parent: Promo) {
+      if (parent.template === PromoTemplate.Deposit) {
+        return 'DepositPromo';
+      }
+      return 'SignUpPromo';
+    },
+  },
 };

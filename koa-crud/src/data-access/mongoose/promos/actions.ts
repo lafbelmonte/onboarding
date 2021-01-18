@@ -1,6 +1,7 @@
 import { PromosStore } from '../../../types/index';
+import { Promo as PromoModel } from '../../../lib/mongoose/models/promo';
 
-const actions = ({ Promo }): PromosStore => {
+const actions = ({ Promo }: { Promo: typeof PromoModel }): PromosStore => {
   async function insertOnePromo(info) {
     return Promo.create(info);
   }

@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
+import { Context } from 'koa';
 
-function verifyToken(ctx) {
+function verifyToken(
+  ctx: Context,
+): {
+  allowed: boolean;
+} {
   const bearer = ctx.ctx.get('Authorization').split(' ');
 
   let allowed = true;
@@ -23,7 +28,7 @@ function verifyToken(ctx) {
   return { allowed };
 }
 
-function generateToken(payload) {
+function generateToken(payload: string): string {
   const token = jwt.sign(
     {
       data: payload,

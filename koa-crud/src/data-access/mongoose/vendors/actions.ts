@@ -1,6 +1,7 @@
 import { VendorsStore } from '../../../types/index';
+import { Vendor as VendorModel } from '../../../lib/mongoose/models/vendor';
 
-const actions = ({ Vendor }): VendorsStore => {
+const actions = ({ Vendor }: { Vendor: typeof VendorModel }): VendorsStore => {
   async function insertOneVendor(info) {
     return Vendor.create(info);
   }

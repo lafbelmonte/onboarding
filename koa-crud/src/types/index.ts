@@ -129,6 +129,22 @@ type PromosStore = {
   deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
+enum PromoEnrollmentStatus {
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  Processing = 'PROCESSING',
+  Approved = 'APPROVED',
+}
+
+type PromoEnrollment = {
+  _id?: string;
+  promo: string;
+  member: string;
+  status: PromoEnrollmentStatus;
+};
+
+type PromoEnrollmentDocument = PromoEnrollment & Document;
+
 export {
   HttpRequest,
   HttpResponse,
@@ -148,4 +164,7 @@ export {
   PromosStore,
   Promo,
   RequiredMemberFields,
+  PromoEnrollment,
+  PromoEnrollmentStatus,
+  PromoEnrollmentDocument,
 };

@@ -29,19 +29,25 @@ export default gql`
     INACTIVE
   }
 
-  type Promo {
+  interface Promo {
     id: ID!
     name: String!
-    template: String!
+    template: PromoTemplate!
     status: String!
     title: String!
     description: String!
-    minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
     createdAt: String!
     updatedAt: String!
     submitted: Boolean!
     enabled: Boolean!
+  }
+
+  type DepositPromo implements Promo {
+    minimumBalance: Float!
+  }
+
+  type SignUpPromo implements Promo {
+    requiredMemberFields: [RequiredMemberFieldsInput]!
   }
 
   input CreatePromoInput {
