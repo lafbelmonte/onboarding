@@ -20,7 +20,7 @@ const updatePromo = ({
 
     const promo = await promoEntity(info);
 
-    const truthlyPromo = await R.filter(R.complement(R.isNil))(promo);
+    const truthlyPromo = R.filter(Boolean)(promo);
 
     await promosStore.updatePromoByFilters({ _id: id }, truthlyPromo);
 
