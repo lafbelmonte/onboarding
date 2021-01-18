@@ -8,6 +8,7 @@ export default gql`
 
   extend type Mutation {
     createPromo(input: CreatePromoInput!): Boolean
+    updatePromo(input: UpdatePromoInput!): Boolean
   }
 
   enum PromoTemplate {
@@ -15,10 +16,16 @@ export default gql`
     SIGN_UP
   }
 
-  enum RequiredMemberFieldsInput {
+  enum RequiredMemberFields {
     EMAIL
     REAL_NAME
     BANK_ACCOUNT
+  }
+
+  enum PromoStatus {
+    DRAFT
+    ACTIVE
+    INACTIVE
   }
 
   type Promo {
@@ -29,7 +36,7 @@ export default gql`
     title: String!
     description: String!
     minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
+    requiredMemberFields: [RequiredMemberFields]
     createdAt: String!
     updatedAt: String!
     submitted: Boolean!
@@ -42,6 +49,19 @@ export default gql`
     title: String!
     description: String!
     minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
+    requiredMemberFields: [RequiredMemberFields]
+  }
+
+  input UpdatePromoInput {
+    id: ID!
+    name: String!
+    template: PromoTemplate!
+    title: String!
+    description: String!
+    minimumBalance: Float
+    requiredMemberFields: [RequiredMemberFields]
+    submitted: Boolean
+    enabled: Boolean
+    status: PromoStatus
   }
 `;

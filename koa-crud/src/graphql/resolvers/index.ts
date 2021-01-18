@@ -14,7 +14,7 @@ import {
   deleteVendor,
 } from './vendors';
 
-import { createPromo, promos, promo } from './promos';
+import { createPromo, promos, promo, updatePromo } from './promos';
 
 const Query = {
   members,
@@ -32,6 +32,7 @@ const Mutation = {
   updateVendor,
   deleteVendor,
   createPromo,
+  updatePromo,
 };
 
 export default {

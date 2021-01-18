@@ -12,6 +12,7 @@ const entity = ({ R }) => {
     submitted,
     enabled,
   }): Promise<Promo> {
+
     if (!name) {
       throw new Error(`Please input name`);
     }
@@ -27,6 +28,7 @@ const entity = ({ R }) => {
     if (!description) {
       throw new Error(`Please input description`);
     }
+
 
     if (!Object.values(PromoTemplate).includes(template)) {
       throw new Error(`Invalid template`);
