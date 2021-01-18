@@ -7,9 +7,9 @@ export default gql`
   }
 
   extend type Mutation {
-    createMember(input: CreateMemberInput!): Boolean
-    updateMember(input: UpdateMemberInput!): Boolean
-    deleteMember(id: ID!): Boolean
+    createMember(input: CreateMemberInput!): Boolean!
+    updateMember(input: UpdateMemberInput!): Boolean!
+    deleteMember(id: ID!): Boolean!
   }
 
   input UpdateMemberInput {
