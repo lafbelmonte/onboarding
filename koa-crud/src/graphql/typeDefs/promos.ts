@@ -17,7 +17,7 @@ export default gql`
     SIGN_UP
   }
 
-  enum RequiredMemberFieldsInput {
+  enum RequiredMemberFields {
     EMAIL
     REAL_NAME
     BANK_ACCOUNT
@@ -37,7 +37,7 @@ export default gql`
     title: String!
     description: String!
     minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
+    requiredMemberFields: [RequiredMemberFields]
     createdAt: String!
     updatedAt: String!
     submitted: Boolean!
@@ -50,7 +50,7 @@ export default gql`
     title: String!
     description: String!
     minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
+    requiredMemberFields: [RequiredMemberFields]
   }
 
   input UpdatePromoInput {
@@ -60,7 +60,7 @@ export default gql`
     title: String!
     description: String!
     minimumBalance: Float
-    requiredMemberFields: [RequiredMemberFieldsInput]
+    requiredMemberFields: [RequiredMemberFields]
     submitted: Boolean
     enabled: Boolean
     status: PromoStatus
