@@ -751,7 +751,7 @@ describe('Vendor Queries', function () {
 
     describe('GIVEN a non existent ID', () => {
       it('should throw an error', async function () {
-        const data = await Vendor.create({
+        await Vendor.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });

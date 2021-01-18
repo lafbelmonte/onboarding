@@ -9,6 +9,8 @@ const entity = ({ R }) => {
     status,
     minimumBalance,
     requiredMemberFields,
+    submitted,
+    enabled,
   }): Promise<Promo> {
     if (!name) {
       throw new Error(`Please input name`);
@@ -70,6 +72,8 @@ const entity = ({ R }) => {
       status,
       minimumBalance,
       requiredMemberFields,
+      submitted,
+      enabled,
     };
   };
 };
