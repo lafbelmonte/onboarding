@@ -25,6 +25,8 @@ const {
   insertOnePromo,
   selectAllPromos,
   selectOnePromoByFilters,
+  updatePromoByFilters,
+  deleteOnePromo,
 } = promosStore;
 
 describe('Promo Store', () => {
@@ -183,6 +185,231 @@ describe('Promo Store', () => {
       it('should return null', async function () {
         await expect(selectOnePromoByFilters({ _id: this.mockedId })).to
           .eventually.fulfilled.and.null;
+      });
+    });
+  });
+
+  describe('Updating a Promo', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+      this.mock = await Promo.create({
+        name: this.randomName(),
+        template: PromoTemplate.Deposit,
+        title: this.randomTitle(),
+        description: this.randomDescription(),
+        minimumBalance: this.randomBalance(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('GIVEN correct inputs and deposit template', () => {
+      it('should be fulfilled', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.Deposit,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          minimumBalance: this.randomBalance(),
+          status: PromoStatus.Active,
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.fulfilled;
+      });
+    });
+
+    describe('GIVEN correct inputs and signup template', () => {
+      it('should be fulfilled', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.SignUp,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+          status: PromoStatus.Active,
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.fulfilled;
+      });
+    });
+
+    describe('GIVEN invalid status', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.SignUp,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+          status: this.randomName(),
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no name', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: '',
+          template: PromoTemplate.SignUp,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no template', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: '',
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN invalid template', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: this.randomName(),
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no title', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.SignUp,
+          title: '',
+          description: this.randomDescription(),
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN no description', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.SignUp,
+          title: this.randomTitle(),
+          description: '',
+          requiredMemberFields: [
+            RequiredMemberFields.BankAccount,
+            RequiredMemberFields.Email,
+            RequiredMemberFields.Realname,
+          ],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+
+    describe('GIVEN invalid required member fields', () => {
+      it('should be rejected', async function () {
+        this.mock = {
+          name: this.randomName(),
+          template: PromoTemplate.SignUp,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          requiredMemberFields: [this.randomTitle()],
+        };
+
+        await expect(updatePromoByFilters({ _id: this.baseId }, this.mock)).to
+          .eventually.rejected;
+      });
+    });
+  });
+
+  describe('Deleting a promo', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+    });
+
+    describe('GIVEN valid and existent vendor ID', () => {
+      it('should return true', async function () {
+        this.mock = await Promo.create({
+          name: this.randomName(),
+          template: PromoTemplate.Deposit,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          minimumBalance: this.randomBalance(),
+        });
+
+        await expect(deleteOnePromo({ _id: this.mock._id })).to.eventually
+          .fulfilled.and.be.true;
+      });
+    });
+
+    describe('GIVEN non existent vendor ID', () => {
+      it('should return false', async function () {
+        await Promo.create({
+          name: this.randomName(),
+          template: PromoTemplate.Deposit,
+          title: this.randomTitle(),
+          description: this.randomDescription(),
+          minimumBalance: this.randomBalance(),
+        });
+
+        await expect(deleteOnePromo({ _id: this.mockedId })).to.eventually
+          .fulfilled.and.be.false;
       });
     });
   });
