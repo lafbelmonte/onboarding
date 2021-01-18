@@ -6,7 +6,11 @@ import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
 
-import { insertPromoUseCase } from '../../../src/use-cases/promos';
+import {
+  insertPromoUseCase,
+  selectOnePromoUseCase,
+  selectAllPromosUseCase,
+} from '../../../src/use-cases/promos';
 
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 
@@ -276,6 +280,70 @@ describe('Promo Use Cases', () => {
         await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
           'Invalid input field: minimumBalance for sign up',
         );
+      });
+    });
+  });
+
+  describe('Selecting All Promos', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+      this.mock = await Promo.create({
+        name: this.randomName(),
+        template: PromoTemplate.Deposit,
+        title: this.randomTitle(),
+        description: this.randomDescription(),
+        minimumBalance: this.randomBalance(),
+      });
+    });
+
+    it('should return list of promos', async function () {
+      await expect(
+        selectAllPromosUseCase({ id: null, info: null, source: null }),
+      ).to.eventually.fulfilled.and.length(1);
+    });
+  });
+
+  describe('Selecting One Promo', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+      this.mock = await Promo.create({
+        name: this.randomName(),
+        template: PromoTemplate.Deposit,
+        title: this.randomTitle(),
+        description: this.randomDescription(),
+        minimumBalance: this.randomBalance(),
+      });
+    });
+
+    describe('GIVEN existent filters', () => {
+      it('should return the promo', async function () {
+        await expect(
+          selectOnePromoUseCase({
+            id: this.mock._id,
+            info: null,
+            source: null,
+          }),
+        ).to.eventually.fulfilled.property('_id', this.mock._id);
+      });
+    });
+
+    describe('GIVEN non existent filters', () => {
+      it('should throw an error', async function () {
+        await expect(
+          selectOnePromoUseCase({
+            id: this.mockedId,
+            info: null,
+            source: null,
+          }),
+        ).to.eventually.rejectedWith('Promo not found');
       });
     });
   });

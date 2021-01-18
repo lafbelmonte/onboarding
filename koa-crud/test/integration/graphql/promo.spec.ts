@@ -338,4 +338,125 @@ describe('Promo Queries', function () {
       });
     });
   });
+
+  describe('List all promos', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+      this.mock = await Promo.create({
+        name: this.randomName(),
+        template: PromoTemplate.Deposit,
+        title: this.randomTitle(),
+        description: this.randomDescription(),
+        minimumBalance: this.randomBalance(),
+      });
+    });
+
+    it('should return list of promos', async function () {
+      this.mock = {
+        query: {
+          promos: {
+            id: true,
+            name: true,
+            status: true,
+            template: true,
+            title: true,
+            createdAt: true,
+            updatedAt: true,
+            requiredMemberFields: true,
+            minimumBalance: true,
+            submitted: true,
+            enabled: true,
+          },
+        },
+      };
+
+      const query = jsonToGraphQLQuery(this.mock);
+      const main = await this.request().post('/graphql').send({ query });
+      expect(main.statusCode).to.eqls(200);
+      expect(main.body.data.promos).have.length(1);
+    });
+  });
+
+  describe('List promo by ID', () => {
+    after(() => {
+      return Promo.deleteMany({});
+    });
+
+    before(async function () {
+      await Promo.deleteMany({});
+      this.mock = await Promo.create({
+        name: this.randomName(),
+        template: PromoTemplate.Deposit,
+        title: this.randomTitle(),
+        description: this.randomDescription(),
+        minimumBalance: this.randomBalance(),
+      });
+
+      this.baseId = this.mock._id;
+    });
+
+    describe('Given existent ID', () => {
+      it('should return the promo with that ID', async function () {
+        this.mock = {
+          query: {
+            promo: {
+              __args: {
+                id: this.baseId,
+              },
+              id: true,
+              name: true,
+              status: true,
+              template: true,
+              title: true,
+              createdAt: true,
+              updatedAt: true,
+              requiredMemberFields: true,
+              minimumBalance: true,
+              submitted: true,
+              enabled: true,
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promo.id).eqls(this.baseId);
+      });
+
+      describe('Given a non existent ID', () => {
+        it('should throw an error', async function () {
+          this.mock = {
+            query: {
+              promo: {
+                __args: {
+                  id: this.mockedId,
+                },
+                id: true,
+                name: true,
+                status: true,
+                template: true,
+                title: true,
+                createdAt: true,
+                updatedAt: true,
+                requiredMemberFields: true,
+                minimumBalance: true,
+                submitted: true,
+                enabled: true,
+              },
+            },
+          };
+
+          const query = jsonToGraphQLQuery(this.mock);
+          const main = await this.request().post('/graphql').send({ query });
+          expect(main.statusCode).to.eqls(200);
+          expect(main.body.errors[0].message).eqls(`Promo not found`);
+        });
+      });
+    });
+  });
 });
