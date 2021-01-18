@@ -6,9 +6,9 @@ export default gql`
     vendor(id: ID!): Vendor
   }
   extend type Mutation {
-    createVendor(input: CreateVendorInput!): Boolean
-    updateVendor(input: UpdateVendorInput!): Boolean
-    deleteVendor(id: ID!): Boolean
+    createVendor(input: CreateVendorInput!): Boolean!
+    updateVendor(input: UpdateVendorInput!): Boolean!
+    deleteVendor(id: ID!): Boolean!
   }
 
   enum VendorType {
