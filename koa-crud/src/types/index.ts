@@ -126,6 +126,7 @@ type PromosStore = {
     filters: PromoFilters,
     info: Promo,
   ) => Promise<PromoDocument>;
+  deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
 export {

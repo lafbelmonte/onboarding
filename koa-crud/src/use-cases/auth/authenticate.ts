@@ -3,12 +3,10 @@ import { UseCase, MembersStore } from '../../types';
 const authenticate = ({
   membersStore,
   bcrypt,
-  jwt,
   generateToken,
 }: {
   membersStore: MembersStore;
   bcrypt;
-  jwt;
   generateToken;
 }): UseCase<string> => {
   return async function ({ info }) {
