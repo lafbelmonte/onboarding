@@ -13,22 +13,30 @@ export default gql`
   }
 
   input UpdateMemberInput {
-    id: ID
+    id: ID!
     username: String!
     realName: String
-    password: String!
+    email: String
+    bankAccount: String
+    balance: Float
   }
 
   input CreateMemberInput {
     username: String!
     password: String!
     realName: String
+    email: String
+    bankAccount: String
+    balance: Float
   }
 
   type Member {
     id: ID!
     username: String!
     realName: String
+    email: String
+    bankAccount: String
+    balance: Float
     createdAt: String!
     updatedAt: String!
   }

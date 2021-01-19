@@ -3,9 +3,11 @@ import { UseCase, MembersStore } from '../../types';
 const updateMember = ({
   memberEntity,
   membersStore,
+  R,
 }: {
   membersStore: MembersStore;
   memberEntity;
+  R;
 }): UseCase<boolean> => {
   return async function ({ id, info }) {
     const memberExists = await membersStore.memberExistsByFilter({
@@ -27,7 +29,10 @@ const updateMember = ({
       throw new Error(`Username already exists`);
     }
 
-    await membersStore.updateMemberByFilters({ _id: id }, member);
+    await membersStore.updateMemberByFilters(
+      { _id: id },
+      R.omit(['password'], member),
+    );
 
     return true;
   };

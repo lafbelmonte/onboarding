@@ -43,11 +43,31 @@ export default gql`
   }
 
   type DepositPromo implements Promo {
+    id: ID!
+    name: String!
+    template: PromoTemplate!
+    status: String!
+    title: String!
+    description: String!
+    createdAt: String!
+    updatedAt: String!
+    submitted: Boolean!
+    enabled: Boolean!
     minimumBalance: Float!
   }
 
   type SignUpPromo implements Promo {
-    requiredMemberFields: [RequiredMemberFieldsInput]!
+    id: ID!
+    name: String!
+    template: PromoTemplate!
+    status: String!
+    title: String!
+    description: String!
+    createdAt: String!
+    updatedAt: String!
+    submitted: Boolean!
+    enabled: Boolean!
+    requiredMemberFields: [RequiredMemberFields]!
   }
 
   input CreatePromoInput {

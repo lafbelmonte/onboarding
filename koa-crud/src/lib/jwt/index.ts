@@ -5,10 +5,12 @@ function verifyToken(
   ctx: Context,
 ): {
   allowed: boolean;
+  userId: string;
 } {
   const bearer = ctx.ctx.get('Authorization').split(' ');
 
   let allowed = true;
+  let decoded;
 
   const token = bearer[1];
 
@@ -20,12 +22,12 @@ function verifyToken(
     allowed = false;
   }
   try {
-    jwt.verify(token, 'secret');
+    decoded = jwt.verify(token, 'secret');
   } catch (e) {
     allowed = false;
   }
 
-  return { allowed };
+  return { allowed, userId: decoded };
 }
 
 function generateToken(payload: string): string {

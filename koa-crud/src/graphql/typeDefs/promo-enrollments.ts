@@ -7,6 +7,5 @@ export default gql`
 
   input EnrollToPromoInput {
     promo: String!
-    member: String!
   }
 `;
