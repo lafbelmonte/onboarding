@@ -8,6 +8,10 @@ const insertMember = ({
   membersStore: MembersStore;
 }): UseCase<boolean> => {
   return async function ({ info }) {
+    if (!info.password) {
+      throw new Error(`Please input password`);
+    }
+
     const member = await memberEntity(info);
 
     const usernameExists = await membersStore.memberExistsByFilter({

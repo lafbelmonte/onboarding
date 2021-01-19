@@ -19,6 +19,15 @@ const schema = new Schema(
       type: String,
       required: true,
     },
+    balance: {
+      type: Number,
+    },
+    email: {
+      type: String,
+    },
+    bankAccount: {
+      type: String,
+    },
     realName: String,
   },
   { timestamps: true },

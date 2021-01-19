@@ -5,19 +5,21 @@ const entity = ({ bcrypt }) => {
     username,
     password,
     realName,
+    email,
+    bankAccount,
+    balance,
   }): Promise<Member> {
     if (!username) {
       throw new Error(`Please input username`);
     }
 
-    if (!password) {
-      throw new Error(`Please input password`);
-    }
-
     return {
       username,
-      password: await bcrypt.hash(password, 10),
+      password: password ? await bcrypt.hash(password, 10) : null,
       realName,
+      email,
+      bankAccount,
+      balance,
     };
   };
 };

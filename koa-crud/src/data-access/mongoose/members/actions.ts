@@ -1,6 +1,7 @@
 import { MembersStore } from '../../../types/index';
+import { Member as MemberModel } from '../../../lib/mongoose/models/member';
 
-const actions = ({ Member }): MembersStore => {
+const actions = ({ Member }: { Member: typeof MemberModel }): MembersStore => {
   async function insertOneMember(info) {
     return Member.create(info);
   }

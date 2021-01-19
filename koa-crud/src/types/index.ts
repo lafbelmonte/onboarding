@@ -59,6 +59,9 @@ type Member = {
   username: string;
   password: string;
   realName?: string | null;
+  email?: string | null;
+  bankAccount?: string | null;
+  balance?: number | null;
 };
 
 type MemberFilters = {
@@ -129,6 +132,40 @@ type PromosStore = {
   deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
+enum PromoEnrollmentStatus {
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  Processing = 'PROCESSING',
+  Approved = 'APPROVED',
+}
+
+type PromoEnrollment = {
+  _id?: string;
+  promo: string;
+  member: string;
+  status?: PromoEnrollmentStatus;
+};
+
+type PromoEnrollmentFilters = {
+  _id?: string | Record<string, any>;
+  promo?: string;
+  member?: string;
+};
+
+type PromoEnrollmentDocument = PromoEnrollment & Document;
+
+type PromoEnrollmentsStore = {
+  insertPromoEnrollment: (
+    info: PromoEnrollment,
+  ) => Promise<PromoEnrollmentDocument>;
+  promoEnrollmentExistsByFilter: (
+    filters: PromoEnrollmentFilters,
+  ) => Promise<boolean>;
+  selectOnePromoEnrollmentByFilters: (
+    filters: PromoEnrollmentFilters,
+  ) => Promise<PromoEnrollmentDocument>;
+};
+
 export {
   HttpRequest,
   HttpResponse,
@@ -148,4 +185,8 @@ export {
   PromosStore,
   Promo,
   RequiredMemberFields,
+  PromoEnrollment,
+  PromoEnrollmentStatus,
+  PromoEnrollmentDocument,
+  PromoEnrollmentsStore,
 };

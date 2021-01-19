@@ -41,7 +41,7 @@ const entity = ({ R }) => {
         throw new Error(`Please input required member fields`);
       }
 
-      await R.map((requiredMemberField) => {
+      R.map((requiredMemberField) => {
         if (
           !Object.values(RequiredMemberFields).includes(requiredMemberField)
         ) {
