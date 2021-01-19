@@ -245,7 +245,6 @@ describe('Member Queries', function () {
                 input: {
                   id: this.baseId,
                   username: this.randomUsername(),
-                  password: this.randomPassword(),
                   realName: this.randomRealName(),
                 },
               },
@@ -268,30 +267,6 @@ describe('Member Queries', function () {
                 input: {
                   id: this.baseId,
                   username: '',
-                  password: this.randomPassword(),
-                  realName: this.randomRealName(),
-                },
-              },
-            },
-          },
-        };
-        const query = jsonToGraphQLQuery(this.mock);
-        const main = await this.request().post('/graphql').send({ query });
-        expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Please input username');
-      });
-    });
-
-    describe('Given no password', () => {
-      it('should throw an error', async function () {
-        this.mock = {
-          mutation: {
-            updateMember: {
-              __args: {
-                input: {
-                  id: this.baseId,
-                  username: '',
-                  password: this.randomPassword(),
                   realName: this.randomRealName(),
                 },
               },
@@ -314,7 +289,6 @@ describe('Member Queries', function () {
                 input: {
                   id: this.mockedId,
                   username: '',
-                  password: this.randomPassword(),
                   realName: this.randomRealName(),
                 },
               },
@@ -343,7 +317,6 @@ describe('Member Queries', function () {
                 input: {
                   id: this.baseId,
                   username: data.username,
-                  password: this.randomPassword(),
                   realName: this.randomRealName(),
                 },
               },

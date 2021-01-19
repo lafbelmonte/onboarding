@@ -221,22 +221,6 @@ describe('Member Use Cases', () => {
       });
     });
 
-    describe('GIVEN no password', () => {
-      it('should throw an error', async function () {
-        await expect(
-          updateMemberUseCase({
-            id: this.mock._id,
-            info: {
-              username: this.randomUsername(),
-              password: '',
-              realName: this.randomRealName(),
-            },
-            source: null,
-          }),
-        ).to.eventually.rejectedWith('Please input password');
-      });
-    });
-
     describe('GIVEN non existent ID', () => {
       it('should throw an error', async function () {
         await expect(
