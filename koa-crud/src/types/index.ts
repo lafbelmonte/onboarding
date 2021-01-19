@@ -141,8 +141,8 @@ enum PromoEnrollmentRequestStatus {
 
 type PromoEnrollmentRequest = {
   _id?: string;
-  promo: string;
-  member: string;
+  promo: Promo | string;
+  member: Member | string;
   status?: PromoEnrollmentRequestStatus;
 };
 
@@ -164,6 +164,23 @@ type PromoEnrollmentRequestsStore = {
   selectOnePromoEnrollmentByFilters: (
     filters: PromoEnrollmentRequestFilters,
   ) => Promise<PromoEnrollmentRequestDocument>;
+  selectAllPromoEnrollmentRequests: () => Promise<
+    PromoEnrollmentRequestDocument[]
+  >;
+};
+
+type Edge<T> = {
+  node: T;
+  cursor: string;
+};
+
+type Connection<T> = {
+  totalCount: number;
+  pageInfo: {
+    endCursor: string;
+    hasNextPage: boolean;
+  };
+  edges: Edge<T>[];
 };
 
 export {
@@ -189,4 +206,6 @@ export {
   PromoEnrollmentRequestStatus,
   PromoEnrollmentRequestDocument,
   PromoEnrollmentRequestsStore,
+  Connection,
+  Edge,
 };

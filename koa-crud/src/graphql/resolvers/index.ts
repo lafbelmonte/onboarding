@@ -17,7 +17,11 @@ import {
 } from './vendors';
 
 import { createPromo, promos, promo, updatePromo, deletePromo } from './promos';
-import { enrollToPromo } from './promo-enrollments';
+import {
+  enrollToPromo,
+  promoEnrollmentRequests,
+  promoEnrollmentRequest,
+} from './promo-enrollments';
 
 const Query = {
   members,
@@ -26,6 +30,8 @@ const Query = {
   vendor,
   promos,
   promo,
+  promoEnrollmentRequests,
+  promoEnrollmentRequest,
 };
 const Mutation = {
   createMember,

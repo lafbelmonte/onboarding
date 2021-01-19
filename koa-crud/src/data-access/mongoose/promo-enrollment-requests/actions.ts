@@ -21,10 +21,18 @@ const actions = ({
       .lean({ virtuals: true });
   }
 
+  async function selectAllPromoEnrollmentRequests() {
+    return PromoEnrollmentRequest.find()
+      .populate('member')
+      .populate('promo')
+      .lean({ virtuals: true });
+  }
+
   return {
     insertPromoEnrollment,
     promoEnrollmentExistsByFilter,
     selectOnePromoEnrollmentByFilters,
+    selectAllPromoEnrollmentRequests,
   };
 };
 
