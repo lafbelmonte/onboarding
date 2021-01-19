@@ -10,9 +10,9 @@ import { Chance } from 'chance';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollment } from '../../../src/lib/mongoose/models/promo-enrollment';
+import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
 
-import { promoEnrollmentsStore } from '../../../src/data-access/mongoose/promo-enrollments';
+import { promoEnrollmentRequestsStore } from '../../../src/data-access/mongoose/promo-enrollment-requests';
 
 import { initializeDatabase } from '../../../src/lib/mongoose';
 
@@ -20,10 +20,10 @@ import {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
-  PromoEnrollmentStatus,
+  PromoEnrollmentRequestStatus,
 } from '../../../src/types';
 
-const { insertPromoEnrollment } = promoEnrollmentsStore;
+const { insertPromoEnrollment } = promoEnrollmentRequestsStore;
 
 chai.use(chaiAsPromised);
 
@@ -85,11 +85,11 @@ describe('Promo Enrollment Data Access', function () {
     });
 
     afterEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     describe('Given promo and member with no status', () => {
@@ -103,7 +103,7 @@ describe('Promo Enrollment Data Access', function () {
           insertPromoEnrollment(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
-          PromoEnrollmentStatus.Pending,
+          PromoEnrollmentRequestStatus.Pending,
         );
       });
     });
@@ -113,14 +113,14 @@ describe('Promo Enrollment Data Access', function () {
         this.mock = {
           promo: this.depositMockId,
           member: this.member._id,
-          status: PromoEnrollmentStatus.Approved,
+          status: PromoEnrollmentRequestStatus.Approved,
         };
 
         await expect(
           insertPromoEnrollment(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
-          PromoEnrollmentStatus.Approved,
+          PromoEnrollmentRequestStatus.Approved,
         );
       });
     });

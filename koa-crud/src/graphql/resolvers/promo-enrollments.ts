@@ -1,4 +1,4 @@
-import { enrollToPromoUseCase } from '../../use-cases/promo-enrollments';
+import { enrollToPromoUseCase } from '../../use-cases/promo-enrollment-requests';
 
 const enrollToPromo = async (obj, args, ctx) => {
   if (!ctx.allowed) {

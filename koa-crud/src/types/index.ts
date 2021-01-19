@@ -132,38 +132,38 @@ type PromosStore = {
   deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
-enum PromoEnrollmentStatus {
+enum PromoEnrollmentRequestStatus {
   Pending = 'PENDING',
   Rejected = 'REJECTED',
   Processing = 'PROCESSING',
   Approved = 'APPROVED',
 }
 
-type PromoEnrollment = {
+type PromoEnrollmentRequest = {
   _id?: string;
   promo: string;
   member: string;
-  status?: PromoEnrollmentStatus;
+  status?: PromoEnrollmentRequestStatus;
 };
 
-type PromoEnrollmentFilters = {
+type PromoEnrollmentRequestFilters = {
   _id?: string | Record<string, any>;
   promo?: string;
   member?: string;
 };
 
-type PromoEnrollmentDocument = PromoEnrollment & Document;
+type PromoEnrollmentRequestDocument = PromoEnrollmentRequest & Document;
 
-type PromoEnrollmentsStore = {
+type PromoEnrollmentRequestsStore = {
   insertPromoEnrollment: (
-    info: PromoEnrollment,
-  ) => Promise<PromoEnrollmentDocument>;
+    info: PromoEnrollmentRequest,
+  ) => Promise<PromoEnrollmentRequestDocument>;
   promoEnrollmentExistsByFilter: (
-    filters: PromoEnrollmentFilters,
+    filters: PromoEnrollmentRequestFilters,
   ) => Promise<boolean>;
   selectOnePromoEnrollmentByFilters: (
-    filters: PromoEnrollmentFilters,
-  ) => Promise<PromoEnrollmentDocument>;
+    filters: PromoEnrollmentRequestFilters,
+  ) => Promise<PromoEnrollmentRequestDocument>;
 };
 
 export {
@@ -185,8 +185,8 @@ export {
   PromosStore,
   Promo,
   RequiredMemberFields,
-  PromoEnrollment,
-  PromoEnrollmentStatus,
-  PromoEnrollmentDocument,
-  PromoEnrollmentsStore,
+  PromoEnrollmentRequest,
+  PromoEnrollmentRequestStatus,
+  PromoEnrollmentRequestDocument,
+  PromoEnrollmentRequestsStore,
 };

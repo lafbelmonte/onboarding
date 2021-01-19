@@ -9,7 +9,7 @@ import server from '../../../src/index';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollment } from '../../../src/lib/mongoose/models/promo-enrollment';
+import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
 
 import {
   PromoTemplate,
@@ -85,11 +85,11 @@ describe('Promo Enrollment Queries', function () {
     });
 
     afterEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     describe('GIVEN no token', () => {
