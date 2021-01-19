@@ -12,18 +12,14 @@ const enrollToPromo = ({
   promosStore,
   R,
   promoEnrollmentsStore,
+  camelCase,
 }: {
   membersStore: MembersStore;
   promosStore: PromosStore;
   R;
   promoEnrollmentsStore: PromoEnrollmentsStore;
+  camelCase;
 }): UseCase<boolean> => {
-  const underscoreToCamelCase = (str) => {
-    return str.toLowerCase().replace(/_+(\w|$)/g, ($$, $1) => {
-      return $1.toUpperCase();
-    });
-  };
-
   return async function ({ id, info }) {
     if (!info.promo) {
       throw new Error(`Please input promo ID`);
@@ -59,7 +55,7 @@ const enrollToPromo = ({
 
     if (promo.template === PromoTemplate.SignUp) {
       R.map((requiredMemberField) => {
-        if (!member[underscoreToCamelCase(requiredMemberField)]) {
+        if (!member[camelCase(requiredMemberField)]) {
           throw new Error(
             `Required member field ${requiredMemberField} is missing`,
           );

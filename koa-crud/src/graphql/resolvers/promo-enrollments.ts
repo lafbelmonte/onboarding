@@ -7,7 +7,7 @@ const enrollToPromo = async (obj, args, ctx) => {
 
   return enrollToPromoUseCase({
     id: ctx.userId.data,
-    info: args.input,
+    info: args,
     source: null,
   });
 };
