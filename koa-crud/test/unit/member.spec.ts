@@ -32,6 +32,9 @@ describe('Member Entity', () => {
         'username',
         'password',
         'realName',
+        'email',
+        'balance',
+        'bankAccount',
       );
     });
   });
@@ -46,20 +49,6 @@ describe('Member Entity', () => {
 
       await expect(memberEntity(this.mock)).to.eventually.rejectedWith(
         'Please input username',
-      );
-    });
-  });
-
-  describe('Given no password', () => {
-    it('should throw an error', async function () {
-      this.mock = {
-        username: this.randomUsername(),
-        password: '',
-        realName: this.randomRealName(),
-      };
-
-      await expect(memberEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input password',
       );
     });
   });

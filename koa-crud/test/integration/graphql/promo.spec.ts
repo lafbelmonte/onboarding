@@ -370,8 +370,16 @@ describe('Promo Queries', function () {
             title: true,
             createdAt: true,
             updatedAt: true,
-            requiredMemberFields: true,
-            minimumBalance: true,
+            __on: [
+              {
+                __typeName: 'DepositPromo',
+                minimumBalance: true,
+              },
+              {
+                __typeName: 'SignUpPromo',
+                requiredMemberFields: true,
+              },
+            ],
             submitted: true,
             enabled: true,
           },
@@ -418,8 +426,16 @@ describe('Promo Queries', function () {
               title: true,
               createdAt: true,
               updatedAt: true,
-              requiredMemberFields: true,
-              minimumBalance: true,
+              __on: [
+                {
+                  __typeName: 'DepositPromo',
+                  minimumBalance: true,
+                },
+                {
+                  __typeName: 'SignUpPromo',
+                  requiredMemberFields: true,
+                },
+              ],
               submitted: true,
               enabled: true,
             },
@@ -448,8 +464,16 @@ describe('Promo Queries', function () {
               title: true,
               createdAt: true,
               updatedAt: true,
-              requiredMemberFields: true,
-              minimumBalance: true,
+              __on: [
+                {
+                  __typeName: 'DepositPromo',
+                  minimumBalance: true,
+                },
+                {
+                  __typeName: 'SignUpPromo',
+                  requiredMemberFields: true,
+                },
+              ],
               submitted: true,
               enabled: true,
             },
