@@ -7,7 +7,11 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { enrollToPromoUseCase } from '../../../src/use-cases/promo-enrollment-requests';
+import {
+  enrollToPromoUseCase,
+  selectAllPromoEnrollmentRequestsUseCase,
+  selectOnePromoEnrollmentRequestUseCase,
+} from '../../../src/use-cases/promo-enrollment-requests';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
@@ -352,6 +356,138 @@ describe('Promo Enrollment Use Cases', function () {
         await expect(
           enrollToPromoUseCase(this.mock),
         ).to.eventually.rejectedWith(`Minimum balance not set in the promo`);
+      });
+    });
+  });
+
+  describe(`Listing all Promo Enrollment Requests`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.depositMockId,
+      });
+
+      await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    it('should return list of all promo enrollment requests', async function () {
+      this.mock = {
+        id: null,
+        info: null,
+        source: null,
+      };
+
+      await expect(
+        selectAllPromoEnrollmentRequestsUseCase(this.mock),
+      ).to.eventually.fulfilled.and.have.length(2);
+    });
+  });
+
+  describe(`List one Promo Enrollment Request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.member._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given Existent Promo Enroll Request ID', () => {
+      it('should return the promo request with the given ID', async function () {
+        this.mock = {
+          id: this.promoEnrollmentRequestDepositId,
+          info: null,
+          source: null,
+        };
+        await expect(
+          selectOnePromoEnrollmentRequestUseCase(this.mock),
+        ).to.eventually.fulfilled.property(
+          '_id',
+          this.promoEnrollmentRequestDepositId,
+        );
+      });
+    });
+
+    describe('Given Non Existent Promo Enroll Request ID', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          id: this.randomString(),
+          info: null,
+          source: null,
+        };
+        await expect(
+          selectOnePromoEnrollmentRequestUseCase(this.mock),
+        ).to.eventually.rejectedWith('Promo enrollment not found');
       });
     });
   });
