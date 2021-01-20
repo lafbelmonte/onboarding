@@ -1,0 +1,29 @@
+- pipeline: "dev"
+  trigger_mode: "ON_EVERY_PUSH"
+  ref_name: "master"
+  ref_type: "BRANCH"
+  priority: "NORMAL"
+  fail_on_prepare_env_warning: true
+  trigger_condition: "ALWAYS"
+  actions:
+  - action: "Execute: npm test"
+    type: "BUILD"
+    working_directory: "/buddy/onboarding"
+    docker_image_name: "library/node"
+    docker_image_tag: "latest"
+    execute_commands:
+    - "# yarn install"
+    - "cd koa-crud"
+    - "npm install"
+    - "npm run test:unit"
+    - "npm run test:integration"
+    services:
+    - type: "MONGO_DB"
+      version: "3.2.4"
+      connection:
+        host: "mongo"
+        port: 27017
+    volume_mappings:
+    - "/:/buddy/onboarding"
+    trigger_condition: "ALWAYS"
+    shell: "BASH"
