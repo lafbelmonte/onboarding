@@ -1,4 +1,4 @@
-import chai, { expect } from 'chai';
+import chai, { expect, should } from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcrypt';
 import { Chance } from 'chance';
@@ -482,6 +482,251 @@ describe('Promo Enrollment Queries', function () {
         expect(main.body.errors[0].message).eqls(
           `Minimum balance not set in the promo`,
         );
+      });
+    });
+  });
+
+  describe(`Listing all Promo Enrollment Requests`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      await PromoEnrollmentRequest.create({
+        member: this.loggedInMember._id,
+        promo: this.depositMockId,
+      });
+
+      await PromoEnrollmentRequest.create({
+        member: this.loggedInMember._id,
+        promo: this.signUpMockId,
+      });
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    it('should return list of all promo enrollment requests', async function () {
+      this.mock = {
+        query: {
+          promoEnrollmentRequests: {
+            totalCount: true,
+            edges: {
+              node: {
+                member: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  email: true,
+                  bankAccount: true,
+                  balance: true,
+                },
+                promo: {
+                  id: true,
+                  name: true,
+                  status: true,
+                  template: true,
+                  title: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  __on: [
+                    {
+                      __typeName: 'DepositPromo',
+                      minimumBalance: true,
+                    },
+                    {
+                      __typeName: 'SignUpPromo',
+                      requiredMemberFields: true,
+                    },
+                  ],
+                  submitted: true,
+                  enabled: true,
+                },
+              },
+              cursor: true,
+            },
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: true,
+            },
+          },
+        },
+      };
+
+      const query = jsonToGraphQLQuery(this.mock);
+      const main = await this.request().post('/graphql').send({ query });
+      expect(main.statusCode).to.eqls(200);
+      expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
+      expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+    });
+  });
+
+  describe(`List one Promo Enrollment Request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.loggedInMember._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.loggedInMember._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given Existent Promo Enroll Request ID', () => {
+      it('should return the promo request with the given ID', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequest: {
+              __args: {
+                id: this.promoEnrollmentRequestDepositId,
+              },
+              id: true,
+              member: {
+                id: true,
+                username: true,
+                realName: true,
+                email: true,
+                bankAccount: true,
+                balance: true,
+              },
+              promo: {
+                id: true,
+                name: true,
+                status: true,
+                template: true,
+                title: true,
+                createdAt: true,
+                updatedAt: true,
+                __on: [
+                  {
+                    __typeName: 'DepositPromo',
+                    minimumBalance: true,
+                  },
+                  {
+                    __typeName: 'SignUpPromo',
+                    requiredMemberFields: true,
+                  },
+                ],
+                submitted: true,
+                enabled: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promoEnrollmentRequest.id).to.eqls(
+          this.promoEnrollmentRequestDepositId,
+        );
+      });
+    });
+
+    describe('Given Non Existent Promo Enroll Request ID', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequest: {
+              __args: {
+                id: this.randomString(),
+              },
+              id: true,
+              member: {
+                id: true,
+                username: true,
+                realName: true,
+                email: true,
+                bankAccount: true,
+                balance: true,
+              },
+              promo: {
+                id: true,
+                name: true,
+                status: true,
+                template: true,
+                title: true,
+                createdAt: true,
+                updatedAt: true,
+                __on: [
+                  {
+                    __typeName: 'DepositPromo',
+                    minimumBalance: true,
+                  },
+                  {
+                    __typeName: 'SignUpPromo',
+                    requiredMemberFields: true,
+                  },
+                ],
+                submitted: true,
+                enabled: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls('Promo enrollment not found');
       });
     });
   });

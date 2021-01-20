@@ -23,7 +23,11 @@ import {
   PromoEnrollmentRequestStatus,
 } from '../../../src/types';
 
-const { insertPromoEnrollment } = promoEnrollmentRequestsStore;
+const {
+  insertPromoEnrollment,
+  selectAllPromoEnrollmentRequests,
+  selectOnePromoEnrollmentByFilters,
+} = promoEnrollmentRequestsStore;
 
 chai.use(chaiAsPromised);
 
@@ -154,6 +158,124 @@ describe('Promo Enrollment Data Access', function () {
         };
 
         await expect(insertPromoEnrollment(this.mock)).to.eventually.rejected;
+      });
+    });
+  });
+
+  describe(`Listing all Promo Enrollment Requests`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.depositMockId,
+      });
+
+      await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    it('should return list of all promo enrollment requests', async function () {
+      await expect(
+        selectAllPromoEnrollmentRequests(),
+      ).to.eventually.fulfilled.and.have.length(2);
+    });
+  });
+
+  describe(`List one Promo Enrollment Request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.member._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given Existent Promo Enroll Request ID', () => {
+      it('should return the promo enrollment request', async function () {
+        await expect(
+          selectOnePromoEnrollmentByFilters({
+            _id: this.promoEnrollmentRequestDepositId,
+          }),
+        ).to.eventually.fulfilled.property(
+          '_id',
+          this.promoEnrollmentRequestDepositId,
+        );
+      });
+    });
+
+    describe('Given Non Existent Promo Enroll Request ID', () => {
+      it('should return null', async function () {
+        await expect(
+          selectOnePromoEnrollmentByFilters({ _id: this.randomString() }),
+        ).to.eventually.fulfilled.and.null;
       });
     });
   });
