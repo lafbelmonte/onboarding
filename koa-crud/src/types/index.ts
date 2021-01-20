@@ -29,7 +29,7 @@ enum VendorType {
 }
 
 type Vendor = {
-  _id?: string;
+  id?: string;
   name: string;
   type: VendorType;
 };
@@ -55,9 +55,9 @@ type VendorsStore = {
 };
 
 type Member = {
-  _id?: string;
+  id?: string;
   username: string;
-  password: string;
+  password: string | null;
   realName?: string | null;
   email?: string | null;
   bankAccount?: string | null;
@@ -102,7 +102,7 @@ enum RequiredMemberFields {
 }
 
 type Promo = {
-  _id?: string;
+  id?: string;
   name: string;
   template: PromoTemplate;
   title: string;
@@ -140,7 +140,7 @@ enum PromoEnrollmentRequestStatus {
 }
 
 type PromoEnrollmentRequest = {
-  _id?: string;
+  id?: string;
   promo: Promo | string;
   member: Member | string;
   status?: PromoEnrollmentRequestStatus;

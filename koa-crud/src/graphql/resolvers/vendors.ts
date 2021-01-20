@@ -6,27 +6,37 @@ import {
   deleteOneVendorUseCase,
 } from '../../use-cases/vendors';
 
-const vendors = async (obj, args, ctx) => {
+import { Vendor, VendorDocument } from '../../types';
+
+const vendors = async (obj, args: Vendor, ctx): Promise<VendorDocument[]> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }
   return selectAllVendorsUseCase({ id: null, info: null, source: null });
 };
-const vendor = async (obj, args, ctx) => {
+const vendor = async (obj, args: Vendor, ctx): Promise<VendorDocument> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }
   return selectOneVendorUseCase({ id: args.id, info: null, source: null });
 };
 
-const createVendor = async (obj, args, ctx) => {
+const createVendor = async (
+  obj,
+  args: { input: Vendor },
+  ctx,
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }
 
   return insertVendorUseCase({ id: null, info: args.input, source: null });
 };
-const updateVendor = async (obj, args, ctx) => {
+const updateVendor = async (
+  obj,
+  args: { input: Vendor },
+  ctx,
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }
@@ -37,7 +47,7 @@ const updateVendor = async (obj, args, ctx) => {
     source: null,
   });
 };
-const deleteVendor = async (obj, args, ctx) => {
+const deleteVendor = async (obj, args: Vendor, ctx): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }

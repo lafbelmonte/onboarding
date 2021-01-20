@@ -50,7 +50,7 @@ export default {
   Query,
   Mutation,
   Promo: {
-    __resolveType(parent: Promo) {
+    __resolveType(parent: Promo): string {
       if (parent.template === PromoTemplate.Deposit) {
         return 'DepositPromo';
       }

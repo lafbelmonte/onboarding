@@ -8,7 +8,11 @@ import {
 
 import { Connection, PromoEnrollmentRequest } from '../../types/index';
 
-const enrollToPromo = async (obj, args, ctx) => {
+const enrollToPromo = async (
+  obj,
+  args: PromoEnrollmentRequest,
+  ctx,
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new Error('Forbidden');
   }
@@ -20,25 +24,21 @@ const enrollToPromo = async (obj, args, ctx) => {
   });
 };
 
-const promoEnrollmentRequests = async (
-  obj,
-  args,
-  ctx,
-): Promise<Connection<PromoEnrollmentRequest>> => {
-  const promoEnrollmentRequests = await selectAllPromoEnrollmentRequestsUseCase(
-    {
-      id: null,
-      info: null,
-      source: null,
-    },
-  );
+const promoEnrollmentRequests = async (): Promise<
+  Connection<PromoEnrollmentRequest>
+> => {
+  const nodes = await selectAllPromoEnrollmentRequestsUseCase({
+    id: null,
+    info: null,
+    source: null,
+  });
 
-  const edges = R.map((promoEnrollmentRequest: PromoEnrollmentRequest) => {
+  const edges = R.map((node: PromoEnrollmentRequest) => {
     return {
-      node: promoEnrollmentRequest,
+      node,
       cursor: 'not implemented',
     };
-  })(promoEnrollmentRequests);
+  })(nodes);
 
   return {
     totalCount: 10,
@@ -50,11 +50,15 @@ const promoEnrollmentRequests = async (
   };
 };
 
-const promoEnrollmentRequest = async (obj, args) =>
-  selectOnePromoEnrollmentRequestUseCase({
+const promoEnrollmentRequest = async (
+  obj,
+  args: PromoEnrollmentRequest,
+): Promise<PromoEnrollmentRequest> => {
+  return selectOnePromoEnrollmentRequestUseCase({
     id: args.id,
     info: null,
     source: null,
   });
+};
 
 export { enrollToPromo, promoEnrollmentRequests, promoEnrollmentRequest };

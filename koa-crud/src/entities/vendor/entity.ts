@@ -1,7 +1,7 @@
 import { Vendor } from '../../types/index';
 
 const entity = () => {
-  return async function vendor({ name, type }): Promise<Vendor> {
+  return async function vendor({ name, type }: Vendor): Promise<Vendor> {
     if (!name) {
       throw new Error(`Please input name`);
     }
