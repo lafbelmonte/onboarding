@@ -41,7 +41,7 @@ const promoEnrollmentRequests = async (): Promise<
   })(nodes);
 
   return {
-    totalCount: 10,
+    totalCount: nodes.length,
     pageInfo: {
       endCursor: 'not implemented',
       hasNextPage: false,
