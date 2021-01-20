@@ -5,7 +5,7 @@ import R from 'ramda';
 import { ApolloServer } from 'apollo-server-koa';
 import serializer from './serializer';
 import { initializeDatabase } from '../mongoose';
-import typeDefs from '../../graphql/typeDefs';
+import typeDefs from '../../graphql/type-defs';
 import resolvers from '../../graphql/resolvers';
 import { verifyToken } from '../jwt/index';
 
