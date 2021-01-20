@@ -11,6 +11,9 @@ import {
   enrollToPromoUseCase,
   selectAllPromoEnrollmentRequestsUseCase,
   selectOnePromoEnrollmentRequestUseCase,
+  approveEnrollmentRequestUseCase,
+  processEnrollmentRequestUseCase,
+  rejectEnrollmentRequestUseCase,
 } from '../../../src/use-cases/promo-enrollment-requests';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
@@ -488,6 +491,129 @@ describe('Promo Enrollment Use Cases', function () {
         await expect(
           selectOnePromoEnrollmentRequestUseCase(this.mock),
         ).to.eventually.rejectedWith('Promo enrollment not found');
+      });
+    });
+  });
+
+  describe(`Updating status of enrollment request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.member._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given existent promo ID and approve request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.promoEnrollmentRequestDepositId,
+          info: null,
+          source: null,
+        };
+        await expect(approveEnrollmentRequestUseCase(this.mock)).to.eventually
+          .fulfilled.and.be.true;
+      });
+    });
+
+    describe('Given non existent promo ID and approve request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.randomString(),
+          info: null,
+          source: null,
+        };
+        await expect(
+          approveEnrollmentRequestUseCase(this.mock),
+        ).to.eventually.rejectedWith('Promo with the given ID not found');
+      });
+    });
+
+    describe('Given existent promo ID and reject request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.promoEnrollmentRequestDepositId,
+          info: null,
+          source: null,
+        };
+        await expect(rejectEnrollmentRequestUseCase(this.mock)).to.eventually
+          .fulfilled.and.be.true;
+      });
+    });
+
+    describe('Given non existent promo ID and reject request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.randomString(),
+          info: null,
+          source: null,
+        };
+        await expect(
+          rejectEnrollmentRequestUseCase(this.mock),
+        ).to.eventually.rejectedWith('Promo with the given ID not found');
+      });
+    });
+
+    describe('Given existent promo ID and reject request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.promoEnrollmentRequestDepositId,
+          info: null,
+          source: null,
+        };
+        await expect(processEnrollmentRequestUseCase(this.mock)).to.eventually
+          .fulfilled.and.be.true;
+      });
+    });
+
+    describe('Given non existent promo ID and process request use-case', () => {
+      it('should return true', async function () {
+        this.mock = {
+          id: this.randomString(),
+          info: null,
+          source: null,
+        };
+        await expect(
+          processEnrollmentRequestUseCase(this.mock),
+        ).to.eventually.rejectedWith('Promo with the given ID not found');
       });
     });
   });

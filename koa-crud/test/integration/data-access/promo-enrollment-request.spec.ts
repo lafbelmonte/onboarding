@@ -27,6 +27,7 @@ const {
   insertPromoEnrollment,
   selectAllPromoEnrollmentRequests,
   selectOnePromoEnrollmentByFilters,
+  updatePromoEnrollmentRequestStatusByFilters,
 } = promoEnrollmentRequestsStore;
 
 chai.use(chaiAsPromised);
@@ -276,6 +277,107 @@ describe('Promo Enrollment Data Access', function () {
         await expect(
           selectOnePromoEnrollmentByFilters({ _id: this.randomString() }),
         ).to.eventually.fulfilled.and.null;
+      });
+    });
+  });
+
+  describe(`Updating  Status of Promo Enrollment Request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.member._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.member._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given Approve Status', () => {
+      it('should return the promo enrollment request with approved status', async function () {
+        await expect(
+          updatePromoEnrollmentRequestStatusByFilters(
+            { _id: this.promoEnrollmentRequestDepositId },
+            { status: PromoEnrollmentRequestStatus.Approved },
+          ),
+        ).to.eventually.fulfilled.property(
+          'status',
+          PromoEnrollmentRequestStatus.Approved,
+        );
+      });
+    });
+
+    describe('Given Rejected Status', () => {
+      it('should return the promo enrollment request with approved status', async function () {
+        await expect(
+          updatePromoEnrollmentRequestStatusByFilters(
+            { _id: this.promoEnrollmentRequestDepositId },
+            { status: PromoEnrollmentRequestStatus.Rejected },
+          ),
+        ).to.eventually.fulfilled.property(
+          'status',
+          PromoEnrollmentRequestStatus.Rejected,
+        );
+      });
+    });
+
+    describe('Given Processing Status', () => {
+      it('should return the promo enrollment request with approved status', async function () {
+        await expect(
+          updatePromoEnrollmentRequestStatusByFilters(
+            { _id: this.promoEnrollmentRequestDepositId },
+            { status: PromoEnrollmentRequestStatus.Processing },
+          ),
+        ).to.eventually.fulfilled.property(
+          'status',
+          PromoEnrollmentRequestStatus.Processing,
+        );
+      });
+    });
+
+    describe('Given Invalid Status', () => {
+      it('should be rejected', async function () {
+        await expect(
+          updatePromoEnrollmentRequestStatusByFilters(
+            { _id: this.promoEnrollmentRequestDepositId },
+            { status: this.randomString() },
+          ),
+        ).to.eventually.rejected;
       });
     });
   });
