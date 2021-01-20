@@ -4,6 +4,9 @@ import {
   enrollToPromoUseCase,
   selectAllPromoEnrollmentRequestsUseCase,
   selectOnePromoEnrollmentRequestUseCase,
+  approveEnrollmentRequestUseCase,
+  rejectEnrollmentRequestUseCase,
+  processEnrollmentRequestUseCase,
 } from '../../use-cases/promo-enrollment-requests';
 
 import { Connection, PromoEnrollmentRequest } from '../../types/index';
@@ -61,4 +64,44 @@ const promoEnrollmentRequest = async (
   });
 };
 
-export { enrollToPromo, promoEnrollmentRequests, promoEnrollmentRequest };
+const processPromoEnrollmentRequest = async (
+  obj,
+  args: { id: string },
+): Promise<boolean> => {
+  return processEnrollmentRequestUseCase({
+    id: args.id,
+    info: null,
+    source: null,
+  });
+};
+
+const approvePromoEnrollmentRequest = async (
+  obj,
+  args: { id: string },
+): Promise<boolean> => {
+  return approveEnrollmentRequestUseCase({
+    id: args.id,
+    info: null,
+    source: null,
+  });
+};
+
+const rejectPromoEnrollmentRequest = async (
+  obj,
+  args: { id: string },
+): Promise<boolean> => {
+  return rejectEnrollmentRequestUseCase({
+    id: args.id,
+    info: null,
+    source: null,
+  });
+};
+
+export {
+  enrollToPromo,
+  promoEnrollmentRequests,
+  promoEnrollmentRequest,
+  processPromoEnrollmentRequest,
+  approvePromoEnrollmentRequest,
+  rejectPromoEnrollmentRequest,
+};

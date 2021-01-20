@@ -28,11 +28,18 @@ const actions = ({
       .lean({ virtuals: true });
   }
 
+  async function updatePromoEnrollmentRequestStatusByFilters(filters, info) {
+    return PromoEnrollmentRequest.findOneAndUpdate(filters, info, {
+      new: true,
+    });
+  }
+
   return {
     insertPromoEnrollment,
     promoEnrollmentExistsByFilter,
     selectOnePromoEnrollmentByFilters,
     selectAllPromoEnrollmentRequests,
+    updatePromoEnrollmentRequestStatusByFilters,
   };
 };
 
