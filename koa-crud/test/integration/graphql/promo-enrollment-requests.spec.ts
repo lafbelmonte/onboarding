@@ -730,4 +730,220 @@ describe('Promo Enrollment Queries', function () {
       });
     });
   });
+
+  describe(`Updating status of enrollment request`, () => {
+    before(async function () {
+      const depositMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.Deposit,
+        title: this.randomString(),
+        description: this.randomString(),
+        minimumBalance: 25,
+        status: PromoStatus.Active,
+      });
+
+      const signUpMock = await Promo.create({
+        name: this.randomString(),
+        template: PromoTemplate.SignUp,
+        title: this.randomString(),
+        description: this.randomString(),
+        requiredMemberFields: [
+          RequiredMemberFields.BankAccount,
+          RequiredMemberFields.Email,
+          RequiredMemberFields.Realname,
+        ],
+        status: PromoStatus.Active,
+      });
+      this.depositMockId = depositMock._id;
+      this.signUpMockId = signUpMock._id;
+
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+        {
+          member: this.loggedInMember._id,
+          promo: this.depositMockId,
+        },
+      );
+
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
+        member: this.loggedInMember._id,
+        promo: this.signUpMockId,
+      });
+
+      this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
+      this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
+    });
+
+    after(async () => {
+      await PromoEnrollmentRequest.deleteMany({});
+      return Promo.deleteMany({});
+    });
+
+    describe('Given existent promo ID and approve request mutation', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            approvePromoEnrollmentRequest: {
+              __args: {
+                id: this.promoEnrollmentRequestDepositId,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('approvePromoEnrollmentRequest', true);
+      });
+    });
+
+    describe('Given non existent promo ID and approve request mutation', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            approvePromoEnrollmentRequest: {
+              __args: {
+                id: this.randomString(),
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(
+          'Promo with the given ID not found',
+        );
+      });
+    });
+
+    describe('Given no ID field and approve request mutation', () => {
+      it('throw an error status code', async function () {
+        this.mock = {
+          mutation: {
+            approvePromoEnrollmentRequest: {
+              __args: {},
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(400);
+      });
+    });
+
+    describe('Given existent promo ID and reject request mutation', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            rejectPromoEnrollmentRequest: {
+              __args: {
+                id: this.promoEnrollmentRequestDepositId,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('rejectPromoEnrollmentRequest', true);
+      });
+    });
+
+    describe('Given non existent promo ID and reject request mutation', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            rejectPromoEnrollmentRequest: {
+              __args: {
+                id: this.randomString(),
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(
+          'Promo with the given ID not found',
+        );
+      });
+    });
+
+    describe('Given no ID field and reject request mutation', () => {
+      it('should return an error status code', async function () {
+        this.mock = {
+          mutation: {
+            rejectPromoEnrollmentRequest: {
+              __args: {},
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(400);
+      });
+    });
+
+    describe('Given existent promo ID and process request mutation', () => {
+      it('should return true', async function () {
+        this.mock = {
+          mutation: {
+            processPromoEnrollmentRequest: {
+              __args: {
+                id: this.promoEnrollmentRequestDepositId,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data).property('processPromoEnrollmentRequest', true);
+      });
+    });
+
+    describe('Given non existent promo ID and process request mutation', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          mutation: {
+            processPromoEnrollmentRequest: {
+              __args: {
+                id: this.randomString(),
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].message).eqls(
+          'Promo with the given ID not found',
+        );
+      });
+    });
+
+    describe('Given no ID field and process request mutation', () => {
+      it('should return an error status code', async function () {
+        this.mock = {
+          mutation: {
+            processPromoEnrollmentRequest: {
+              __args: {},
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(400);
+      });
+    });
+  });
 });
