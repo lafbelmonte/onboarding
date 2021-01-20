@@ -1,6 +1,7 @@
+import rType from 'ramda';
 import { PromoTemplate, Promo, RequiredMemberFields } from '../../types/index';
 
-const entity = ({ R }) => {
+const entity = ({ R }: { R: typeof rType }) => {
   return async function promo({
     name,
     template,
@@ -11,7 +12,7 @@ const entity = ({ R }) => {
     requiredMemberFields,
     submitted,
     enabled,
-  }): Promise<Promo> {
+  }: Promo): Promise<Promo> {
     if (!name) {
       throw new Error(`Please input name`);
     }
@@ -41,7 +42,7 @@ const entity = ({ R }) => {
         throw new Error(`Please input required member fields`);
       }
 
-      R.map((requiredMemberField) => {
+      R.map((requiredMemberField: RequiredMemberFields) => {
         if (
           !Object.values(RequiredMemberFields).includes(requiredMemberField)
         ) {

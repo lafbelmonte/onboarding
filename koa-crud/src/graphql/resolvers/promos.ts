@@ -6,23 +6,30 @@ import {
   deleteOnePromoUseCase,
 } from '../../use-cases/promos';
 
-const createPromo = async (obj, args) =>
-  insertPromoUseCase({ id: null, info: args.input, source: null });
+import { Promo, PromoDocument } from '../../types';
 
-const promos = async (obj, args, ctx) =>
-  selectAllPromosUseCase({ id: null, info: null, source: null });
+const createPromo = async (obj, args: { input: Promo }): Promise<boolean> => {
+  return insertPromoUseCase({ id: null, info: args.input, source: null });
+};
 
-const promo = async (obj, args) =>
-  selectOnePromoUseCase({ id: args.id, info: null, source: null });
+const promos = async (): Promise<PromoDocument[]> => {
+  return selectAllPromosUseCase({ id: null, info: null, source: null });
+};
 
-const updatePromo = async (obj, args) =>
-  updatePromoUseCase({
+const promo = async (obj, args: Promo): Promise<PromoDocument> => {
+  return selectOnePromoUseCase({ id: args.id, info: null, source: null });
+};
+
+const updatePromo = async (obj, args: { input: Promo }): Promise<boolean> => {
+  return updatePromoUseCase({
     id: args.input.id,
     info: args.input,
     source: null,
   });
+};
 
-const deletePromo = async (obj, args) =>
-  deleteOnePromoUseCase({ id: args.id, info: null, source: null });
+const deletePromo = async (obj, args: Promo): Promise<boolean> => {
+  return deleteOnePromoUseCase({ id: args.id, info: null, source: null });
+};
 
 export { createPromo, promos, promo, updatePromo, deletePromo };

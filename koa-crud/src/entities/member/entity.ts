@@ -1,6 +1,7 @@
+import bcryptType from 'bcrypt';
 import { Member } from '../../types/index';
 
-const entity = ({ bcrypt }) => {
+const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
   return async function member({
     username,
     password,
@@ -8,7 +9,7 @@ const entity = ({ bcrypt }) => {
     email,
     bankAccount,
     balance,
-  }): Promise<Member> {
+  }: Member): Promise<Member> {
     if (!username) {
       throw new Error(`Please input username`);
     }

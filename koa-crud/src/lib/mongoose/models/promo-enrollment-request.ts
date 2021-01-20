@@ -2,8 +2,8 @@ import { Schema, model } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 import {
-  PromoEnrollmentDocument,
-  PromoEnrollmentStatus,
+  PromoEnrollmentRequestDocument,
+  PromoEnrollmentRequestStatus,
 } from '../../../types/index';
 
 const schema = new Schema(
@@ -22,13 +22,13 @@ const schema = new Schema(
     status: {
       type: String,
       enum: [
-        PromoEnrollmentStatus.Approved,
-        PromoEnrollmentStatus.Pending,
-        PromoEnrollmentStatus.Processing,
-        PromoEnrollmentStatus.Rejected,
+        PromoEnrollmentRequestStatus.Approved,
+        PromoEnrollmentRequestStatus.Pending,
+        PromoEnrollmentRequestStatus.Processing,
+        PromoEnrollmentRequestStatus.Rejected,
       ],
       required: true,
-      default: PromoEnrollmentStatus.Pending,
+      default: PromoEnrollmentRequestStatus.Pending,
     },
     member: {
       type: String,
@@ -41,9 +41,9 @@ const schema = new Schema(
 
 schema.plugin(mongooseLeanVirtuals);
 
-const PromoEnrollment = model<PromoEnrollmentDocument>(
-  'PromoEnrollment',
+const PromoEnrollmentRequest = model<PromoEnrollmentRequestDocument>(
+  'PromoEnrollmentRequest',
   schema,
 );
 
-export { PromoEnrollment };
+export { PromoEnrollmentRequest };

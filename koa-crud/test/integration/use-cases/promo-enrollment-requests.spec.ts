@@ -7,11 +7,11 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { enrollToPromoUseCase } from '../../../src/use-cases/promo-enrollments';
+import { enrollToPromoUseCase } from '../../../src/use-cases/promo-enrollment-requests';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollment } from '../../../src/lib/mongoose/models/promo-enrollment';
+import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
 
 import { initializeDatabase } from '../../../src/lib/mongoose';
 
@@ -81,11 +81,11 @@ describe('Promo Enrollment Use Cases', function () {
     });
 
     afterEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     describe('Given valid member to enroll to a deposit promo', () => {

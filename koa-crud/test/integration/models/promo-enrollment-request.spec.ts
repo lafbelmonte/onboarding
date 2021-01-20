@@ -10,7 +10,7 @@ import { Chance } from 'chance';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollment } from '../../../src/lib/mongoose/models/promo-enrollment';
+import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
 
 import { initializeDatabase } from '../../../src/lib/mongoose';
 
@@ -18,7 +18,7 @@ import {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
-  PromoEnrollmentStatus,
+  PromoEnrollmentRequestStatus,
 } from '../../../src/types';
 
 chai.use(chaiAsPromised);
@@ -81,11 +81,11 @@ describe('Promo Enrollment Model', function () {
     });
 
     afterEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollment.deleteMany({});
+      return PromoEnrollmentRequest.deleteMany({});
     });
 
     describe('Given promo and member with no status', () => {
@@ -96,10 +96,10 @@ describe('Promo Enrollment Model', function () {
         };
 
         await expect(
-          PromoEnrollment.create(this.mock),
+          PromoEnrollmentRequest.create(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
-          PromoEnrollmentStatus.Pending,
+          PromoEnrollmentRequestStatus.Pending,
         );
       });
     });
@@ -109,14 +109,14 @@ describe('Promo Enrollment Model', function () {
         this.mock = {
           promo: this.depositMockId,
           member: this.member._id,
-          status: PromoEnrollmentStatus.Approved,
+          status: PromoEnrollmentRequestStatus.Approved,
         };
 
         await expect(
-          PromoEnrollment.create(this.mock),
+          PromoEnrollmentRequest.create(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
-          PromoEnrollmentStatus.Approved,
+          PromoEnrollmentRequestStatus.Approved,
         );
       });
     });
@@ -127,7 +127,8 @@ describe('Promo Enrollment Model', function () {
           member: this.member._id,
         };
 
-        await expect(PromoEnrollment.create(this.mock)).to.eventually.rejected;
+        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
+          .rejected;
       });
     });
 
@@ -137,7 +138,8 @@ describe('Promo Enrollment Model', function () {
           promo: this.depositMockId,
         };
 
-        await expect(PromoEnrollment.create(this.mock)).to.eventually.rejected;
+        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
+          .rejected;
       });
     });
 
@@ -149,7 +151,8 @@ describe('Promo Enrollment Model', function () {
           status: this.randomString(),
         };
 
-        await expect(PromoEnrollment.create(this.mock)).to.eventually.rejected;
+        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
+          .rejected;
       });
     });
   });

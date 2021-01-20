@@ -29,7 +29,7 @@ enum VendorType {
 }
 
 type Vendor = {
-  _id?: string;
+  id?: string;
   name: string;
   type: VendorType;
 };
@@ -55,9 +55,9 @@ type VendorsStore = {
 };
 
 type Member = {
-  _id?: string;
+  id?: string;
   username: string;
-  password: string;
+  password: string | null;
   realName?: string | null;
   email?: string | null;
   bankAccount?: string | null;
@@ -102,7 +102,7 @@ enum RequiredMemberFields {
 }
 
 type Promo = {
-  _id?: string;
+  id?: string;
   name: string;
   template: PromoTemplate;
   title: string;
@@ -132,38 +132,55 @@ type PromosStore = {
   deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
-enum PromoEnrollmentStatus {
+enum PromoEnrollmentRequestStatus {
   Pending = 'PENDING',
   Rejected = 'REJECTED',
   Processing = 'PROCESSING',
   Approved = 'APPROVED',
 }
 
-type PromoEnrollment = {
-  _id?: string;
-  promo: string;
-  member: string;
-  status?: PromoEnrollmentStatus;
+type PromoEnrollmentRequest = {
+  id?: string;
+  promo: Promo | string;
+  member: Member | string;
+  status?: PromoEnrollmentRequestStatus;
 };
 
-type PromoEnrollmentFilters = {
+type PromoEnrollmentRequestFilters = {
   _id?: string | Record<string, any>;
   promo?: string;
   member?: string;
 };
 
-type PromoEnrollmentDocument = PromoEnrollment & Document;
+type PromoEnrollmentRequestDocument = PromoEnrollmentRequest & Document;
 
-type PromoEnrollmentsStore = {
+type PromoEnrollmentRequestsStore = {
   insertPromoEnrollment: (
-    info: PromoEnrollment,
-  ) => Promise<PromoEnrollmentDocument>;
+    info: PromoEnrollmentRequest,
+  ) => Promise<PromoEnrollmentRequestDocument>;
   promoEnrollmentExistsByFilter: (
-    filters: PromoEnrollmentFilters,
+    filters: PromoEnrollmentRequestFilters,
   ) => Promise<boolean>;
   selectOnePromoEnrollmentByFilters: (
-    filters: PromoEnrollmentFilters,
-  ) => Promise<PromoEnrollmentDocument>;
+    filters: PromoEnrollmentRequestFilters,
+  ) => Promise<PromoEnrollmentRequestDocument>;
+  selectAllPromoEnrollmentRequests: () => Promise<
+    PromoEnrollmentRequestDocument[]
+  >;
+};
+
+type Edge<T> = {
+  node: T;
+  cursor: string;
+};
+
+type Connection<T> = {
+  totalCount: number;
+  pageInfo: {
+    endCursor: string;
+    hasNextPage: boolean;
+  };
+  edges: Edge<T>[];
 };
 
 export {
@@ -185,8 +202,10 @@ export {
   PromosStore,
   Promo,
   RequiredMemberFields,
-  PromoEnrollment,
-  PromoEnrollmentStatus,
-  PromoEnrollmentDocument,
-  PromoEnrollmentsStore,
+  PromoEnrollmentRequest,
+  PromoEnrollmentRequestStatus,
+  PromoEnrollmentRequestDocument,
+  PromoEnrollmentRequestsStore,
+  Connection,
+  Edge,
 };

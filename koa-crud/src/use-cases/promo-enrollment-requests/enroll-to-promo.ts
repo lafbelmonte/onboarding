@@ -4,20 +4,20 @@ import {
   PromosStore,
   PromoTemplate,
   PromoStatus,
-  PromoEnrollmentsStore,
+  PromoEnrollmentRequestsStore,
 } from '../../types';
 
 const enrollToPromo = ({
   membersStore,
   promosStore,
   R,
-  promoEnrollmentsStore,
+  promoEnrollmentRequestsStore,
   camelCase,
 }: {
   membersStore: MembersStore;
   promosStore: PromosStore;
   R;
-  promoEnrollmentsStore: PromoEnrollmentsStore;
+  promoEnrollmentRequestsStore: PromoEnrollmentRequestsStore;
   camelCase;
 }): UseCase<boolean> => {
   return async function ({ id, info }) {
@@ -45,7 +45,7 @@ const enrollToPromo = ({
       throw new Error(`Member not found`);
     }
 
-    const promoEnrollmentExists = await promoEnrollmentsStore.promoEnrollmentExistsByFilter(
+    const promoEnrollmentExists = await promoEnrollmentRequestsStore.promoEnrollmentExistsByFilter(
       { promo: promo._id, member: member._id },
     );
 
@@ -81,7 +81,7 @@ const enrollToPromo = ({
       }
     }
 
-    await promoEnrollmentsStore.insertPromoEnrollment({
+    await promoEnrollmentRequestsStore.insertPromoEnrollment({
       promo: promo._id,
       member: member._id,
     });
