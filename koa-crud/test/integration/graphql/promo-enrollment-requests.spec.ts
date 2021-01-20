@@ -1,4 +1,4 @@
-import chai, { expect, should } from 'chai';
+import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import bcrypt from 'bcrypt';
 import { Chance } from 'chance';

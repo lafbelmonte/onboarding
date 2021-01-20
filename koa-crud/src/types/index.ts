@@ -167,6 +167,10 @@ type PromoEnrollmentRequestsStore = {
   selectAllPromoEnrollmentRequests: () => Promise<
     PromoEnrollmentRequestDocument[]
   >;
+  updatePromoEnrollmentRequestStatusByFilters: (
+    filters: PromoEnrollmentRequestFilters,
+    info: { status: PromoEnrollmentRequestStatus },
+  ) => Promise<PromoEnrollmentRequestDocument>;
 };
 
 type Edge<T> = {

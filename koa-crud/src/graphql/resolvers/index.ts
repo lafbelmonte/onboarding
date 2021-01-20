@@ -21,6 +21,9 @@ import {
   enrollToPromo,
   promoEnrollmentRequests,
   promoEnrollmentRequest,
+  processPromoEnrollmentRequest,
+  rejectPromoEnrollmentRequest,
+  approvePromoEnrollmentRequest,
 } from './promo-enrollments';
 
 const Query = {
@@ -44,6 +47,9 @@ const Mutation = {
   updatePromo,
   deletePromo,
   enrollToPromo,
+  processPromoEnrollmentRequest,
+  rejectPromoEnrollmentRequest,
+  approvePromoEnrollmentRequest,
 };
 
 export default {

@@ -7,6 +7,9 @@ import { promoEnrollmentRequestsStore } from '../../data-access/mongoose/promo-e
 import enrollToPromo from './enroll-to-promo';
 import selectAllPromoEnrollmentRequests from './select-all-promo-enrollment-requests';
 import selectOnePromoEnrollmentRequest from './select-one-promo-enrollment-request';
+import approveEnrollmentRequest from './approve-enrollment-request';
+import processEnrollmentRequest from './process-enrollment-request';
+import rejectEnrollmentRequest from './reject-enrollment-request';
 
 const enrollToPromoUseCase = enrollToPromo({
   membersStore,
@@ -24,8 +27,22 @@ const selectOnePromoEnrollmentRequestUseCase = selectOnePromoEnrollmentRequest({
   promoEnrollmentRequestsStore,
 });
 
+const approveEnrollmentRequestUseCase = approveEnrollmentRequest({
+  promoEnrollmentRequestsStore,
+});
+
+const processEnrollmentRequestUseCase = processEnrollmentRequest({
+  promoEnrollmentRequestsStore,
+});
+
+const rejectEnrollmentRequestUseCase = rejectEnrollmentRequest({
+  promoEnrollmentRequestsStore,
+});
 export {
   enrollToPromoUseCase,
   selectAllPromoEnrollmentRequestsUseCase,
   selectOnePromoEnrollmentRequestUseCase,
+  approveEnrollmentRequestUseCase,
+  processEnrollmentRequestUseCase,
+  rejectEnrollmentRequestUseCase,
 };

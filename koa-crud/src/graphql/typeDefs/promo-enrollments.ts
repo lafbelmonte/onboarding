@@ -3,8 +3,8 @@ import { gql } from 'apollo-server-koa';
 export default gql`
   enum PromoEnrollmentRequestStatus {
     PENDING
-    ACTIVE
-    INACTIVE
+    REJECTED
+    APPROVED
     PROCESSING
   }
 
@@ -35,6 +35,9 @@ export default gql`
 
   extend type Mutation {
     enrollToPromo(promo: ID!): Boolean
+    processPromoEnrollmentRequest(id: ID!): Boolean!
+    approvePromoEnrollmentRequest(id: ID!): Boolean!
+    rejectPromoEnrollmentRequest(id: ID!): Boolean!
   }
 
   extend type Query {
