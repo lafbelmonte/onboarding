@@ -8,18 +8,28 @@ import server from '../../../src/index';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
+import {
+  closeTestDatabase,
+  initializeTestDatabase,
+} from '../../../src/lib/mongoose';
+
 chai.use(chaiHttp);
 
 const chance = new Chance();
 
 describe('Member Queries', function () {
-  before(function () {
+  before(async function () {
+    await initializeTestDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.randomRealName = () => chance.name({ middle: true });
     this.randomUsername = () => chance.word();
     this.randomPassword = () => chance.word();
     this.mock = null;
     this.request = () => chai.request(server.callback());
+  });
+
+  after(async function () {
+    await closeTestDatabase();
   });
 
   describe('Member Creation', () => {

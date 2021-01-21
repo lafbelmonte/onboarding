@@ -9,7 +9,10 @@ import { Promo } from '../../../src/lib/mongoose/models/promo';
 
 import { promosStore } from '../../../src/data-access/mongoose/promos';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import {
+  initializeTestDatabase,
+  closeTestDatabase,
+} from '../../../src/lib/mongoose';
 
 import {
   PromoTemplate,
@@ -37,7 +40,11 @@ describe('Promo Store', () => {
     this.randomDescription = () => chance.word();
     this.randomBalance = () => chance.floating();
     this.mockedId = mongoose.Types.ObjectId().toString();
-    await initializeDatabase();
+    await initializeTestDatabase();
+  });
+
+  after(async function () {
+    await closeTestDatabase();
   });
 
   describe('Insert one Promo', () => {

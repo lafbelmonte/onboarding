@@ -14,7 +14,10 @@ import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-e
 
 import { promoEnrollmentRequestsStore } from '../../../src/data-access/mongoose/promo-enrollment-requests';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import {
+  initializeTestDatabase,
+  closeTestDatabase,
+} from '../../../src/lib/mongoose';
 
 import {
   PromoTemplate,
@@ -36,7 +39,7 @@ const chance = new Chance();
 
 describe('Promo Enrollment Data Access', function () {
   before(async function () {
-    await initializeDatabase();
+    await initializeTestDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
 
@@ -54,8 +57,9 @@ describe('Promo Enrollment Data Access', function () {
     this.member = member;
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeTestDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {

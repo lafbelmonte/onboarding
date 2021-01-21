@@ -10,7 +10,10 @@ import { authenticateController } from '../../../src/controllers/auth';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import {
+  initializeTestDatabase,
+  closeTestDatabase,
+} from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -22,7 +25,7 @@ describe('Auth Controllers', () => {
     this.randomUsername = () => chance.word();
     this.randomPassword = () => chance.word();
     this.randomRealName = () => chance.name({ middle: true });
-    await initializeDatabase();
+    await initializeTestDatabase();
 
     this.validUsername = this.randomUsername();
     this.validPassword = this.randomPassword();
@@ -34,8 +37,9 @@ describe('Auth Controllers', () => {
     });
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeTestDatabase();
   });
 
   describe('Member Authentication', () => {

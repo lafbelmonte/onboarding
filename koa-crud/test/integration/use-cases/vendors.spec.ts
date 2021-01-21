@@ -17,7 +17,10 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { VendorType } from '../../../src/types';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import {
+  initializeTestDatabase,
+  closeTestDatabase,
+} from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -28,9 +31,12 @@ describe('Vendor Use Cases', () => {
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
     this.randomName = () => chance.name({ middle: true });
-    await initializeDatabase();
+    await initializeTestDatabase();
   });
 
+  after(async function () {
+    await closeTestDatabase();
+  });
   describe('Adding a Vendor', () => {
     afterEach(() => {
       return Vendor.deleteMany({});
