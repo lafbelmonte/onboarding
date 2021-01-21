@@ -10,6 +10,7 @@ import {
   RequiredMemberFields,
   PromoStatus,
 } from '../../../src/types';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 
@@ -18,7 +19,8 @@ chai.use(chaiHttp);
 const chance = new Chance();
 
 describe('Promo Queries', function () {
-  before(function () {
+  before(async function () {
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
 
     this.randomName = () => chance.name({ middle: true });
@@ -28,6 +30,10 @@ describe('Promo Queries', function () {
 
     this.mock = null;
     this.request = () => chai.request(server.callback());
+  });
+
+  after(async function () {
+    await closeDatabase();
   });
 
   describe('Promo Creation', () => {

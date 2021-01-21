@@ -10,18 +10,24 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { VendorType } from '../../../src/types';
 
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
+
 chai.use(chaiHttp);
 
 const chance = new Chance();
 
 describe('Vendor Endpoints', function () {
-  before(function () {
+  before(async function () {
+    await initializeDatabase();
     this.randomName = () => chance.name({ middle: true });
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
     this.request = () => chai.request(server.callback());
   });
 
+  after(async function () {
+    await closeDatabase();
+  });
   describe('POST /vendors', () => {
     afterEach(() => {
       return Vendor.deleteMany({});

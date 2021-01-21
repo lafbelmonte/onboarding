@@ -9,7 +9,7 @@ import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { membersStore } from '../../../src/data-access/mongoose/members';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -32,6 +32,10 @@ describe('Member Store', () => {
     this.randomPassword = () => chance.word();
     this.mockedId = mongoose.Types.ObjectId().toString();
     await initializeDatabase();
+  });
+
+  after(async function () {
+    await closeDatabase();
   });
 
   describe('Insert one Member', () => {

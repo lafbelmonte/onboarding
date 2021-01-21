@@ -15,7 +15,7 @@ import {
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -31,6 +31,9 @@ describe('Member Use Cases', () => {
     await initializeDatabase();
   });
 
+  after(async function () {
+    await closeDatabase();
+  });
   describe('Adding a Member', () => {
     afterEach(() => {
       return Member.deleteMany({});

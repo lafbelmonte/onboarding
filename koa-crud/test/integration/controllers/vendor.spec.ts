@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import { Chance } from 'chance';
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { VendorType } from '../../../src/types';
 
@@ -29,6 +29,10 @@ describe('Vendor Controller', () => {
     this.mock = null;
     this.randomName = () => chance.name({ middle: true });
     await initializeDatabase();
+  });
+
+  after(async function () {
+    await closeDatabase();
   });
 
   describe('Adding a vendor', () => {

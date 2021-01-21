@@ -12,7 +12,7 @@ import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import {
   PromoTemplate,
@@ -45,8 +45,9 @@ describe('Promo Enrollment Model', function () {
     this.member = member;
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {

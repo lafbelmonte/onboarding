@@ -10,7 +10,7 @@ import server from '../../../src/index';
 import { Member } from '../../../src/lib/mongoose/models/member';
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
-
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 import {
   PromoTemplate,
   PromoStatus,
@@ -23,6 +23,7 @@ const chance = new Chance();
 
 describe('Promo Enrollment Queries', function () {
   before(async function () {
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
     this.request = () => chai.request(server.callback());
@@ -49,8 +50,9 @@ describe('Promo Enrollment Queries', function () {
     this.token = account.body.token;
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {

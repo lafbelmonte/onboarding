@@ -17,7 +17,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { VendorType } from '../../../src/types';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -31,6 +31,9 @@ describe('Vendor Use Cases', () => {
     await initializeDatabase();
   });
 
+  after(async function () {
+    await closeDatabase();
+  });
   describe('Adding a Vendor', () => {
     afterEach(() => {
       return Vendor.deleteMany({});

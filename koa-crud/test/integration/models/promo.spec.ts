@@ -5,7 +5,7 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 
@@ -28,6 +28,10 @@ describe('Promo Models', () => {
     this.mock = null;
     this.mockedId = mongoose.Types.ObjectId().toString();
     await initializeDatabase();
+  });
+
+  after(async function () {
+    await closeDatabase();
   });
 
   describe('Creating a promo', () => {

@@ -14,7 +14,7 @@ import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-e
 
 import { promoEnrollmentRequestsStore } from '../../../src/data-access/mongoose/promo-enrollment-requests';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import {
   PromoTemplate,
@@ -54,8 +54,9 @@ describe('Promo Enrollment Data Access', function () {
     this.member = member;
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {

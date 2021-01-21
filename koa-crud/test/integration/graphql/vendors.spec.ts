@@ -11,6 +11,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { VendorType } from '../../../src/types';
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
 
@@ -18,6 +19,7 @@ const chance = new Chance();
 
 describe('Vendor Queries', function () {
   before(async function () {
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.randomName = () => chance.name({ middle: true });
     this.randomRealName = () => chance.name({ middle: true });
@@ -43,8 +45,9 @@ describe('Vendor Queries', function () {
     this.token = account.body.token;
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('Vendor Creation', () => {

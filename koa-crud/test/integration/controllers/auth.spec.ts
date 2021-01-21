@@ -10,7 +10,7 @@ import { authenticateController } from '../../../src/controllers/auth';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import { initializeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -34,8 +34,9 @@ describe('Auth Controllers', () => {
     });
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('Member Authentication', () => {

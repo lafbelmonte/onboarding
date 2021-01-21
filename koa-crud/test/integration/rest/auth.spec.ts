@@ -9,12 +9,15 @@ import server from '../../../src/index';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
+
 chai.use(chaiHttp);
 
 const chance = new Chance();
 
 describe('Auth Endpoints', () => {
   before(async function () {
+    await initializeDatabase();
     this.mock = null;
     this.randomUsername = () => chance.word();
     this.randomPassword = () => chance.word();
@@ -32,8 +35,9 @@ describe('Auth Endpoints', () => {
     this.request = () => chai.request(server.callback());
   });
 
-  after(() => {
-    return Member.deleteMany({});
+  after(async function () {
+    await Member.deleteMany({});
+    await closeDatabase();
   });
 
   describe('POST /auth', () => {
