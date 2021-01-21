@@ -7,6 +7,17 @@ import {
   PromoEnrollmentRequestsStore,
 } from '../../types';
 
+import {
+  MissingPromoEnrollmentRequestInformationError,
+  PromoNotFoundError,
+  InvalidPromoError,
+  MemberNotFoundError,
+  ExistingEnrollmentError,
+  RequiredMemberFieldsNotMetError,
+  NotEnoughBalanceError,
+  MissingPromoInformationError,
+} from '../../custom-errors';
+
 const enrollToPromo = ({
   membersStore,
   promosStore,
@@ -22,7 +33,9 @@ const enrollToPromo = ({
 }): UseCase<boolean> => {
   return async function ({ id, info }) {
     if (!info.promo) {
-      throw new Error(`Please input promo ID`);
+      throw new MissingPromoEnrollmentRequestInformationError(
+        `Please input promo ID`,
+      );
     }
 
     const promo = await promosStore.selectOnePromoByFilters({
@@ -30,11 +43,13 @@ const enrollToPromo = ({
     });
 
     if (!promo) {
-      throw new Error(`Promo not found`);
+      throw new PromoNotFoundError(
+        `Promo with ID: ${info.promo} doesn't exists`,
+      );
     }
 
     if (promo.status !== PromoStatus.Active) {
-      throw new Error(`Promo is not active`);
+      throw new InvalidPromoError(`Promo with ID: ${info.promo} not active`);
     }
 
     const member = await membersStore.selectOneMemberByFilters({
@@ -42,7 +57,7 @@ const enrollToPromo = ({
     });
 
     if (!member) {
-      throw new Error(`Member not found`);
+      throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
     const promoEnrollmentExists = await promoEnrollmentRequestsStore.promoEnrollmentExistsByFilter(
@@ -50,14 +65,16 @@ const enrollToPromo = ({
     );
 
     if (promoEnrollmentExists) {
-      throw new Error(`You are already enrolled in this promo`);
+      throw new ExistingEnrollmentError(
+        `Member is already enrolled in this promo`,
+      );
     }
 
     if (promo.template === PromoTemplate.SignUp) {
       R.map((requiredMemberField) => {
         if (!member[camelCase(requiredMemberField)]) {
-          throw new Error(
-            `Required member field ${requiredMemberField} is missing`,
+          throw new RequiredMemberFieldsNotMetError(
+            `Required member field ${requiredMemberField} is missing from member`,
           );
         }
 
@@ -65,18 +82,20 @@ const enrollToPromo = ({
       })(promo.requiredMemberFields);
     } else if (promo.template === PromoTemplate.Deposit) {
       if (!member.balance) {
-        throw new Error(
-          `You don't have enough balance to enroll in this promo`,
+        throw new NotEnoughBalanceError(
+          `Member doesn't enough balance to enroll in this promo`,
         );
       }
 
       if (!promo.minimumBalance) {
-        throw new Error(`Minimum balance not set in the promo`);
+        throw new MissingPromoInformationError(
+          `Minimum balance not set in the promo`,
+        );
       }
 
       if (member.balance < promo.minimumBalance) {
-        throw new Error(
-          `You don't have enough balance to enroll in this promo`,
+        throw new NotEnoughBalanceError(
+          `Member doesn't have enough balance to enroll in this promo`,
         );
       }
     }

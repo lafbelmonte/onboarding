@@ -1,5 +1,8 @@
 import { UseCase, MembersStore } from '../../types';
-
+import {
+  MissingCredentialsError,
+  InvalidCredentialsError,
+} from '../../custom-errors';
 const authenticate = ({
   membersStore,
   bcrypt,
@@ -11,11 +14,11 @@ const authenticate = ({
 }): UseCase<string> => {
   return async function ({ info }) {
     if (!info.username) {
-      throw new Error(`Please input username`);
+      throw new MissingCredentialsError(`Please input username`);
     }
 
     if (!info.password) {
-      throw new Error(`Please input password`);
+      throw new MissingCredentialsError(`Please input password`);
     }
 
     const usernameExists = await membersStore.selectOneMemberByFilters({
@@ -23,7 +26,9 @@ const authenticate = ({
     });
 
     if (!usernameExists) {
-      throw new Error(`Invalid credentials`);
+      throw new InvalidCredentialsError(
+        `Username: ${info.username} doesn't exists`,
+      );
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -32,7 +37,7 @@ const authenticate = ({
     );
 
     if (!passwordMatch) {
-      throw new Error(`Invalid credentials`);
+      throw new InvalidCredentialsError(`Incorrect password`);
     }
 
     const token = generateToken(usernameExists._id);

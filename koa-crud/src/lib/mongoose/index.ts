@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { DatabaseError } from '../../custom-errors';
 
 const mongod = new MongoMemoryServer();
 
@@ -26,7 +27,7 @@ async function initializeDatabase(): Promise<void> {
 
     mongoose.set('runValidators', true);
   } catch (e) {
-    throw new Error(e);
+    throw new DatabaseError(e);
   }
 }
 
@@ -37,7 +38,7 @@ async function closeDatabase(): Promise<void> {
       await mongod.stop();
     }
   } catch (e) {
-    throw new Error(e);
+    throw new DatabaseError(e);
   }
 }
 

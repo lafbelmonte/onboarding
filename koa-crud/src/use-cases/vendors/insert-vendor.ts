@@ -1,5 +1,5 @@
 import { UseCase, VendorsStore } from '../../types';
-
+import { ExistingVendorError } from '../../custom-errors';
 const insertVendor = ({
   vendorsStore,
   vendorEntity,
@@ -15,7 +15,7 @@ const insertVendor = ({
     });
 
     if (vendorExists) {
-      throw new Error(`Vendor already exists`);
+      throw new ExistingVendorError(`Vendor already exists`);
     }
 
     await vendorsStore.insertOneVendor(vendor);

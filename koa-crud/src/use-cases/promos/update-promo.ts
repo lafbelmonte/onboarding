@@ -1,5 +1,5 @@
 import { UseCase, PromosStore } from '../../types';
-
+import { PromoNotFoundError } from '../../custom-errors';
 const updatePromo = ({
   promoEntity,
   promosStore,
@@ -15,7 +15,7 @@ const updatePromo = ({
     });
 
     if (!promoExists) {
-      throw new Error(`Promo ID doesn't exist`);
+      throw new PromoNotFoundError(`Promo with ID: ${id} doesn't exists`);
     }
 
     const promo = await promoEntity(info);

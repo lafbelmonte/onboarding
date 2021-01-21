@@ -1,5 +1,5 @@
 import { UseCase, VendorsStore, VendorDocument } from '../../types';
-
+import { VendorNotFoundError } from '../../custom-errors';
 const selectOneVendor = ({
   vendorsStore,
 }: {
@@ -11,7 +11,7 @@ const selectOneVendor = ({
     });
 
     if (!vendorExists) {
-      throw new Error(`Vendor doesn't exist`);
+      throw new VendorNotFoundError(`Vendor with ID: ${id} doesn't exists`);
     }
 
     const vendor = await vendorsStore.selectOneVendorByFilters({ _id: id });

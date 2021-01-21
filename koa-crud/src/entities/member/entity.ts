@@ -1,5 +1,6 @@
 import bcryptType from 'bcrypt';
 import { Member } from '../../types/index';
+import { MissingMemberInformationError } from '../../custom-errors';
 
 const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
   return async function member({
@@ -11,7 +12,7 @@ const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
     balance,
   }: Member): Promise<Member> {
     if (!username) {
-      throw new Error(`Please input username`);
+      throw new MissingMemberInformationError(`Please input username`);
     }
 
     return {

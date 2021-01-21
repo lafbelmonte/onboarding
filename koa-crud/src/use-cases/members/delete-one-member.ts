@@ -1,5 +1,5 @@
 import { UseCase, MembersStore } from '../../types';
-
+import { MemberNotFoundError } from '../../custom-errors';
 const deleteOneMember = ({
   membersStore,
 }: {
@@ -11,7 +11,7 @@ const deleteOneMember = ({
     });
 
     if (!memberExists) {
-      throw new Error(`Member doesn't exist`);
+      throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
     await membersStore.deleteOneMember({ _id: id });

@@ -1,5 +1,5 @@
 import { UseCase, MembersStore, MemberDocument } from '../../types';
-
+import { MemberNotFoundError } from '../../custom-errors';
 const selectOneMember = ({
   membersStore,
 }: {
@@ -11,7 +11,7 @@ const selectOneMember = ({
     });
 
     if (!memberExists) {
-      throw new Error(`Member doesn't exist`);
+      throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
     const member = await membersStore.selectOneMemberByFilters({ _id: id });

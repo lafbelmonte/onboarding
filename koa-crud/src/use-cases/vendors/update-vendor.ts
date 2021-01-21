@@ -1,5 +1,5 @@
 import { UseCase, VendorsStore } from '../../types';
-
+import { VendorNotFoundError } from '../../custom-errors';
 const updateVendor = ({
   vendorsStore,
   vendorEntity,
@@ -15,7 +15,7 @@ const updateVendor = ({
     });
 
     if (!vendorExists) {
-      throw new Error(`Vendor ID doesn't exist`);
+      throw new VendorNotFoundError(`Vendor with ID: ${id} doesn't exists`);
     }
 
     const vendor = await vendorEntity(info);

@@ -1,5 +1,5 @@
 import { UseCase, PromosStore, PromoStatus } from '../../types';
-
+import { PromoNotFoundError, ActivePromoError } from '../../custom-errors';
 const deleteOnePromo = ({
   promosStore,
 }: {
@@ -9,11 +9,11 @@ const deleteOnePromo = ({
     const promo = await promosStore.selectOnePromoByFilters({ _id: id });
 
     if (!promo) {
-      throw new Error(`Promo not found`);
+      throw new PromoNotFoundError(`Promo with ID: ${id} doesn't exists`);
     }
 
     if (promo.status === PromoStatus.Active) {
-      throw new Error(`Active promos can't be deleted`);
+      throw new ActivePromoError(`Active promos can't be deleted`);
     }
 
     await promosStore.deleteOnePromo({ _id: id });
