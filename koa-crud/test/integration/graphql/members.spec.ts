@@ -8,10 +8,7 @@ import server from '../../../src/index';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import {
-  closeTestDatabase,
-  initializeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
 
@@ -19,7 +16,7 @@ const chance = new Chance();
 
 describe('Member Queries', function () {
   before(async function () {
-    await initializeTestDatabase();
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.randomRealName = () => chance.name({ middle: true });
     this.randomUsername = () => chance.word();
@@ -29,7 +26,7 @@ describe('Member Queries', function () {
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Member Creation', () => {

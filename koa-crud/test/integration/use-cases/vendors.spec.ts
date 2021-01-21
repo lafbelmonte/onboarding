@@ -17,10 +17,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { VendorType } from '../../../src/types';
 
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -31,11 +28,11 @@ describe('Vendor Use Cases', () => {
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
     this.randomName = () => chance.name({ middle: true });
-    await initializeTestDatabase();
+    await initializeDatabase();
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
   describe('Adding a Vendor', () => {
     afterEach(() => {

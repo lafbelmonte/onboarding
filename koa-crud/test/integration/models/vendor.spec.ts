@@ -5,10 +5,7 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
@@ -23,11 +20,11 @@ describe('Vendor Models', () => {
     this.randomName = () => chance.name({ middle: true });
     this.mock = null;
     this.mockedId = mongoose.Types.ObjectId().toString();
-    await initializeTestDatabase();
+    await initializeDatabase();
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Creating a vendor', () => {

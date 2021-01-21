@@ -10,10 +10,7 @@ import {
   RequiredMemberFields,
   PromoStatus,
 } from '../../../src/types';
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 
@@ -23,7 +20,7 @@ const chance = new Chance();
 
 describe('Promo Queries', function () {
   before(async function () {
-    await initializeTestDatabase();
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
 
     this.randomName = () => chance.name({ middle: true });
@@ -36,7 +33,7 @@ describe('Promo Queries', function () {
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Promo Creation', () => {

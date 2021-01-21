@@ -10,10 +10,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { VendorType } from '../../../src/types';
 
-import {
-  closeTestDatabase,
-  initializeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
 
@@ -21,7 +18,7 @@ const chance = new Chance();
 
 describe('Vendor Endpoints', function () {
   before(async function () {
-    await initializeTestDatabase();
+    await initializeDatabase();
     this.randomName = () => chance.name({ middle: true });
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.mock = null;
@@ -29,7 +26,7 @@ describe('Vendor Endpoints', function () {
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
   describe('POST /vendors', () => {
     afterEach(() => {

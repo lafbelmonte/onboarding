@@ -15,10 +15,7 @@ import {
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -31,11 +28,11 @@ describe('Member Use Cases', () => {
     this.randomRealName = () => chance.name({ middle: true });
     this.randomUsername = () => chance.word();
     this.randomPassword = () => chance.word();
-    await initializeTestDatabase();
+    await initializeDatabase();
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
   describe('Adding a Member', () => {
     afterEach(() => {

@@ -16,10 +16,7 @@ import {
 
 import { Promo } from '../../../src/lib/mongoose/models/promo';
 
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import {
   PromoTemplate,
@@ -41,11 +38,11 @@ describe('Promo Use Cases', () => {
     this.randomDescription = () => chance.word();
     this.randomBalance = () => chance.floating();
 
-    await initializeTestDatabase();
+    await initializeDatabase();
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Adding a Promo', () => {

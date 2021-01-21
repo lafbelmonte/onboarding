@@ -11,10 +11,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { VendorType } from '../../../src/types';
-import {
-  closeTestDatabase,
-  initializeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
 
@@ -22,7 +19,7 @@ const chance = new Chance();
 
 describe('Vendor Queries', function () {
   before(async function () {
-    await initializeTestDatabase();
+    await initializeDatabase();
     this.mockedId = mongoose.Types.ObjectId().toString();
     this.randomName = () => chance.name({ middle: true });
     this.randomRealName = () => chance.name({ middle: true });
@@ -50,7 +47,7 @@ describe('Vendor Queries', function () {
 
   after(async function () {
     await Member.deleteMany({});
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Vendor Creation', () => {

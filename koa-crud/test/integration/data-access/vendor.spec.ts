@@ -9,10 +9,7 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 
 import { vendorsStore } from '../../../src/data-access/mongoose/vendors';
 
-import {
-  initializeTestDatabase,
-  closeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import { VendorType } from '../../../src/types';
 
@@ -34,11 +31,11 @@ describe('Vendor Store', () => {
     this.mock = null;
     this.randomName = () => chance.name({ middle: true });
     this.mockedId = mongoose.Types.ObjectId().toString();
-    await initializeTestDatabase();
+    await initializeDatabase();
   });
 
   after(async function () {
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('Insert one Vendor', () => {

@@ -9,10 +9,7 @@ import server from '../../../src/index';
 
 import { Member } from '../../../src/lib/mongoose/models/member';
 
-import {
-  closeTestDatabase,
-  initializeTestDatabase,
-} from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
 
@@ -20,7 +17,7 @@ const chance = new Chance();
 
 describe('Auth Endpoints', () => {
   before(async function () {
-    await initializeTestDatabase();
+    await initializeDatabase();
     this.mock = null;
     this.randomUsername = () => chance.word();
     this.randomPassword = () => chance.word();
@@ -40,7 +37,7 @@ describe('Auth Endpoints', () => {
 
   after(async function () {
     await Member.deleteMany({});
-    await closeTestDatabase();
+    await closeDatabase();
   });
 
   describe('POST /auth', () => {
