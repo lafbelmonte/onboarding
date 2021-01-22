@@ -1,154 +1,134 @@
-class MissingMemberInformationError extends Error {
+import { ApolloError } from 'apollo-server-koa';
+
+class MissingMemberInformationError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MISSING_MEMBER_INFORMATION';
+    super(message, 'MISSING_MEMBER_INFORMATION');
   }
 }
 
-class ExistingMemberError extends Error {
+class ExistingMemberError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'EXISTING_MEMBER';
+    super(message, 'EXISTING_MEMBER');
   }
 }
 
-class MemberNotFoundError extends Error {
+class MemberNotFoundError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MEMBER_NOT_FOUND';
+    super(message, 'MEMBER_NOT_FOUND');
   }
 }
 
-class MissingVendorInformationError extends Error {
+class MissingVendorInformationError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MISSING_VENDOR_INFORMATION';
+    super(message, 'MISSING_VENDOR_INFORMATION');
   }
 }
 
-class ExistingVendorError extends Error {
+class ExistingVendorError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'EXISTING_VENDOR';
+    super(message, 'EXISTING_VENDOR');
   }
 }
 
-class VendorNotFoundError extends Error {
+class VendorNotFoundError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'VENDOR_NOT_FOUND';
+    super(message, 'VENDOR_NOT_FOUND');
   }
 }
 
-class MissingPromoInformationError extends Error {
+class MissingPromoInformationError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MISSING_PROMO_INFORMATION';
+    super(message, 'MISSING_PROMO_INFORMATION');
   }
 }
 
-class InvalidPromoTemplateError extends Error {
+class InvalidPromoTemplateError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'INVALID_PROMO_TEMPLATE';
+    super(message, 'INVALID_PROMO_TEMPLATE');
   }
 }
 
-class InvalidPromoRequiredMemberFieldError extends Error {
+class InvalidPromoRequiredMemberFieldError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'INVALID_PROMO_REQUIRED_MEMBER_FIELD';
+    super(message, 'INVALID_PROMO_REQUIRED_MEMBER_FIELD');
   }
 }
 
-class InvalidPromoInformationGivenError extends Error {
+class InvalidPromoInformationGivenError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'INVALID_PROMO_INFORMATION_GIVEN';
+    super(message, 'INVALID_PROMO_INFORMATION_GIVEN');
   }
 }
 
-class PromoNotFoundError extends Error {
+class PromoNotFoundError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'PROMO_NOT_FOUND';
+    super(message, 'PROMO_NOT_FOUND');
   }
 }
 
-class ActivePromoError extends Error {
+class ActivePromoError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'ACTIVE_PROMO';
+    super(message, 'ACTIVE_PROMO');
   }
 }
 
-class InvalidPromoError extends Error {
+class InvalidPromoError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'INVALID_PROMO';
+    super(message, 'INVALID_PROMO');
   }
 }
 
-class ExistingEnrollmentError extends Error {
+class ExistingEnrollmentError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'EXISTING_ENROLLMENT';
+    super(message, 'EXISTING_ENROLLMENT');
   }
 }
 
-class RequiredMemberFieldsNotMetError extends Error {
+class RequiredMemberFieldsNotMetError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'REQUIRED_MEMBER_FIELDS_NOT_MET';
+    super(message, 'REQUIRED_MEMBER_FIELDS_NOT_MET');
   }
 }
 
-class NotEnoughBalanceError extends Error {
+class NotEnoughBalanceError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'NOT_ENOUGH_BALANCE';
+    super(message, 'NOT_ENOUGH_BALANCE');
   }
 }
 
-class PromoEnrollmentRequestNotFoundError extends Error {
+class PromoEnrollmentRequestNotFoundError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'PROMO_ENROLLMENT_REQUEST_NOT_FOUND';
+    super(message, 'PROMO_ENROLLMENT_REQUEST_NOT_FOUND');
   }
 }
 
-class MissingCredentialsError extends Error {
+class MissingCredentialsError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MISSING_CREDENTIALS';
+    super(message, 'MISSING_CREDENTIALS');
   }
 }
 
-class InvalidCredentialsError extends Error {
+class InvalidCredentialsError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'INVALID_CREDENTIALS';
+    super(message, 'INVALID_CREDENTIALS');
   }
 }
 
-class MissingPromoEnrollmentRequestInformationError extends Error {
+class MissingPromoEnrollmentRequestInformationError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MISSING_PROMO_ENROLLMENT_REQUEST_INFORMATION_ERROR';
+    super(message, 'MISSING_PROMO_ENROLLMENT_REQUEST_INFORMATION_ERROR');
   }
 }
 
-class NotAllowedError extends Error {
+class NotAllowedError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'NOT_ALLOWED_ERROR';
+    super(message, 'NOT_ALLOWED_ERROR');
   }
 }
 
-class DatabaseError extends Error {
+class DatabaseError extends ApolloError {
   constructor(message: string) {
-    super(message);
-    this.name = 'DATABASE_ERROR';
+    super(message, 'DATABASE_ERROR');
   }
 }
 
