@@ -67,9 +67,10 @@ describe('Auth Controllers', () => {
 
     describe('GIVEN incorrect username', () => {
       it('should return error status code', async function () {
+        const username = this.randomUsername();
         this.mock = {
           body: {
-            username: this.randomUsername(),
+            username,
             password: this.validPassword,
           },
           query: null,
@@ -86,7 +87,14 @@ describe('Auth Controllers', () => {
 
         await expect(
           authenticateController(this.mock),
-        ).to.eventually.fulfilled.property('statusCode', 400);
+        ).to.eventually.fulfilled.eqls({
+          headers: { 'Content-Type': 'application/json' },
+          statusCode: 400,
+          body: {
+            code: 'INVALID_CREDENTIALS',
+            error: `Username: ${username} doesn't exists`,
+          },
+        });
       });
     });
 
@@ -111,7 +119,14 @@ describe('Auth Controllers', () => {
 
         await expect(
           authenticateController(this.mock),
-        ).to.eventually.fulfilled.property('statusCode', 400);
+        ).to.eventually.fulfilled.eqls({
+          headers: { 'Content-Type': 'application/json' },
+          statusCode: 400,
+          body: {
+            code: 'INVALID_CREDENTIALS',
+            error: `Incorrect password`,
+          },
+        });
       });
     });
 
@@ -136,7 +151,14 @@ describe('Auth Controllers', () => {
 
         await expect(
           authenticateController(this.mock),
-        ).to.eventually.fulfilled.property('statusCode', 400);
+        ).to.eventually.fulfilled.eqls({
+          headers: { 'Content-Type': 'application/json' },
+          statusCode: 400,
+          body: {
+            code: 'MISSING_CREDENTIALS',
+            error: `Please input username`,
+          },
+        });
       });
     });
 
@@ -161,7 +183,14 @@ describe('Auth Controllers', () => {
 
         await expect(
           authenticateController(this.mock),
-        ).to.eventually.fulfilled.property('statusCode', 400);
+        ).to.eventually.fulfilled.eqls({
+          headers: { 'Content-Type': 'application/json' },
+          statusCode: 400,
+          body: {
+            code: 'MISSING_CREDENTIALS',
+            error: `Please input password`,
+          },
+        });
       });
     });
   });

@@ -28,6 +28,15 @@ chai.use(chaiAsPromised);
 
 const chance = new Chance();
 
+import {
+  MissingPromoInformationError,
+  InvalidPromoTemplateError,
+  InvalidPromoInformationGivenError,
+  InvalidPromoRequiredMemberFieldError,
+  PromoNotFoundError,
+  ActivePromoError,
+} from '../../../src/custom-errors';
+
 describe('Promo Use Cases', () => {
   before(async function () {
     this.mockedId = mongoose.Types.ObjectId().toString();
@@ -108,9 +117,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input name',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input name')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -128,28 +137,29 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input template',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input template')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
     describe('Given invalid template', () => {
       it('should throw an error and be rejected', async function () {
+        const template = this.randomTitle();
         this.mock = {
           id: null,
           info: {
             name: this.randomName(),
-            template: this.randomTitle(),
+            template,
             title: this.randomTitle(),
             description: this.randomDescription(),
             minimumBalance: this.randomBalance(),
           },
           source: null,
         };
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid template',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Template: ${template} is invalid`)
+          .and.be.an.instanceOf(InvalidPromoTemplateError);
       });
     });
 
@@ -166,9 +176,9 @@ describe('Promo Use Cases', () => {
           },
           source: null,
         };
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input title',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input title')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -185,9 +195,9 @@ describe('Promo Use Cases', () => {
           },
           source: null,
         };
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input description',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input description')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -204,9 +214,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input minimum balance',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input minimum balance')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -228,9 +238,11 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid input field: requiredMemberFields for deposit',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            'Invalid input field: requiredMemberFields for deposit',
+          )
+          .and.be.an.instanceOf(InvalidPromoInformationGivenError);
       });
     });
 
@@ -247,14 +259,15 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input required member fields',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input required member fields')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
     describe('Given erroneous required member fields and sign up template', () => {
       it('should throw an error and be rejected', async function () {
+        const randomField = this.randomDescription();
         this.mock = {
           id: null,
           info: {
@@ -262,14 +275,16 @@ describe('Promo Use Cases', () => {
             template: PromoTemplate.SignUp,
             title: this.randomTitle(),
             description: this.randomDescription(),
-            requiredMemberFields: [this.randomDescription()],
+            requiredMemberFields: [randomField],
           },
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid member field',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Required member field: ${randomField} is invalid`,
+          )
+          .and.be.an.instanceOf(InvalidPromoRequiredMemberFieldError);
       });
     });
 
@@ -287,9 +302,11 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(insertPromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid input field: minimumBalance for sign up',
-        );
+        await expect(insertPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            'Invalid input field: minimumBalance for sign up',
+          )
+          .and.be.an.instanceOf(InvalidPromoInformationGivenError);
       });
     });
   });
@@ -353,7 +370,9 @@ describe('Promo Use Cases', () => {
             info: null,
             source: null,
           }),
-        ).to.eventually.rejectedWith('Promo not found');
+        ).to.eventually.rejectedWith(
+          `Promo with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });
@@ -475,9 +494,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input name',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input name')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -499,19 +518,20 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input template',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input template')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
     describe('Given invalid template', () => {
       it('should throw an error', async function () {
+        const template = this.randomTitle();
         this.mock = {
           id: this.mock2,
           info: {
             name: this.randomName(),
-            template: this.randomTitle(),
+            template,
             title: this.randomTitle(),
             description: this.randomDescription(),
             requiredMemberFields: [
@@ -523,9 +543,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid template',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Template: ${template} is invalid`)
+          .and.be.an.instanceOf(InvalidPromoTemplateError);
       });
     });
 
@@ -547,9 +567,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input title',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input title')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -571,9 +591,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input description',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input description')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -590,9 +610,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input minimum balance',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input minimum balance')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
@@ -614,9 +634,11 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid input field: requiredMemberFields for deposit',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            'Invalid input field: requiredMemberFields for deposit',
+          )
+          .and.be.an.instanceOf(InvalidPromoInformationGivenError);
       });
     });
 
@@ -632,14 +654,15 @@ describe('Promo Use Cases', () => {
           },
           source: null,
         };
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input required member fields',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input required member fields')
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
 
     describe('Given erroneous required member fields and sign up template', () => {
       it('should return an error status code', async function () {
+        const randomField = this.randomDescription();
         this.mock = {
           id: this.mock2,
           info: {
@@ -647,13 +670,15 @@ describe('Promo Use Cases', () => {
             template: PromoTemplate.SignUp,
             title: this.randomTitle(),
             description: this.randomDescription(),
-            requiredMemberFields: [this.randomDescription()],
+            requiredMemberFields: [randomField],
           },
           source: null,
         };
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid member field',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Required member field: ${randomField} is invalid`,
+          )
+          .and.be.an.instanceOf(InvalidPromoRequiredMemberFieldError);
       });
     });
 
@@ -670,9 +695,11 @@ describe('Promo Use Cases', () => {
           },
           source: null,
         };
-        await expect(updatePromoUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid input field: minimumBalance for sign up',
-        );
+        await expect(updatePromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            'Invalid input field: minimumBalance for sign up',
+          )
+          .and.be.an.instanceOf(InvalidPromoInformationGivenError);
       });
     });
   });
@@ -731,9 +758,11 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(
-          deleteOnePromoUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo not found');
+        await expect(deleteOnePromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(PromoNotFoundError);
       });
     });
 
@@ -745,9 +774,9 @@ describe('Promo Use Cases', () => {
           source: null,
         };
 
-        await expect(
-          deleteOnePromoUseCase(this.mock),
-        ).to.eventually.rejectedWith("Active promos can't be deleted");
+        await expect(deleteOnePromoUseCase(this.mock))
+          .to.eventually.rejectedWith("Active promos can't be deleted")
+          .and.be.an.instanceOf(ActivePromoError);
       });
     });
   });

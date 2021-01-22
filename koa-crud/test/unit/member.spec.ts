@@ -6,6 +6,8 @@ import { Chance } from 'chance';
 
 import { memberEntity } from '../../src/entities/member';
 
+import { MissingMemberInformationError } from '../../src/custom-errors';
+
 const chance = new Chance();
 
 chai.use(chaiAsPromised);
@@ -47,9 +49,9 @@ describe('Member Entity', () => {
         realName: this.randomRealName(),
       };
 
-      await expect(memberEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input username',
-      );
+      await expect(memberEntity(this.mock))
+        .to.eventually.rejectedWith('Please input username')
+        .and.be.an.instanceOf(MissingMemberInformationError);
     });
   });
 });

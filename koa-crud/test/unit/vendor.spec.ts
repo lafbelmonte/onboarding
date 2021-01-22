@@ -10,6 +10,8 @@ const chance = new Chance();
 
 chai.use(chaiAsPromised);
 
+import { MissingVendorInformationError } from '../../src/custom-errors';
+
 describe('Vendor Entity', () => {
   describe('Given expected input', () => {
     it('should return the expected output', async () => {
@@ -32,9 +34,9 @@ describe('Vendor Entity', () => {
         type: VendorType.Seamless,
       };
 
-      await expect(vendorEntity(mock)).to.eventually.rejectedWith(
-        'Please input name',
-      );
+      await expect(vendorEntity(mock))
+        .to.eventually.rejectedWith('Please input name')
+        .and.be.an.instanceOf(MissingVendorInformationError);
     });
   });
 
@@ -45,9 +47,9 @@ describe('Vendor Entity', () => {
         type: '',
       };
 
-      await expect(vendorEntity(mock)).to.eventually.rejectedWith(
-        'Please input type',
-      );
+      await expect(vendorEntity(mock))
+        .to.eventually.rejectedWith('Please input type')
+        .and.be.an.instanceOf(MissingVendorInformationError);
     });
   });
 });
