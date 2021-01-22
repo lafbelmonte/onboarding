@@ -3,6 +3,7 @@ import {
   PromoEnrollmentRequestsStore,
   PromoEnrollmentRequestStatus,
 } from '../../types';
+import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
 
 const rejectEnrollmentRequest = ({
   promoEnrollmentRequestsStore,
@@ -15,7 +16,9 @@ const rejectEnrollmentRequest = ({
     );
 
     if (!promoEnrollmentExists) {
-      throw new Error(`Promo with the given ID not found`);
+      throw new PromoEnrollmentRequestNotFoundError(
+        `Promo enrollment request with ID: ${id} doesn't exists`,
+      );
     }
 
     await promoEnrollmentRequestsStore.updatePromoEnrollmentRequestStatusByFilters(

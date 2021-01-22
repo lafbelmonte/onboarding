@@ -3,6 +3,7 @@ import {
   PromoEnrollmentRequestsStore,
   PromoEnrollmentRequestDocument,
 } from '../../types';
+import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
 
 const selectOnePromoEnrollmentRequest = ({
   promoEnrollmentRequestsStore,
@@ -15,7 +16,9 @@ const selectOnePromoEnrollmentRequest = ({
     );
 
     if (!promoEnrollmentRequest) {
-      throw new Error(`Promo enrollment not found`);
+      throw new PromoEnrollmentRequestNotFoundError(
+        `Promo enrollment request with ID: ${id} doesn't exists`,
+      );
     }
     return promoEnrollmentRequest;
   };

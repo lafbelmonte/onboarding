@@ -121,6 +121,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input name');
       });
     });
@@ -145,6 +148,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -168,6 +174,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -191,6 +200,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input title');
       });
     });
@@ -215,6 +227,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input description');
       });
     });
@@ -238,6 +253,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls(
           'Please input minimum balance',
         );
@@ -268,6 +286,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'INVALID_PROMO_INFORMATION_GIVEN',
+        );
         expect(main.body.errors[0].message).eqls(
           'Invalid input field: requiredMemberFields for deposit',
         );
@@ -293,6 +314,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls(
           'Please input required member fields',
         );
@@ -342,6 +366,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'INVALID_PROMO_INFORMATION_GIVEN',
+        );
         expect(main.body.errors[0].message).eqls(
           'Invalid input field: minimumBalance for sign up',
         );
@@ -489,7 +516,10 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Promo not found`);
+        expect(main.body.errors[0].extensions.code).eqls('PROMO_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Promo with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });
@@ -608,6 +638,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -636,6 +669,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input name');
       });
     });
@@ -665,6 +701,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -693,6 +732,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -721,6 +763,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input title');
       });
     });
@@ -750,6 +795,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input description');
       });
     });
@@ -774,6 +822,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls(
           'Please input minimum balance',
         );
@@ -805,6 +856,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'INVALID_PROMO_INFORMATION_GIVEN',
+        );
         expect(main.body.errors[0].message).eqls(
           'Invalid input field: requiredMemberFields for deposit',
         );
@@ -831,6 +885,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls(
           'Please input required member fields',
         );
@@ -858,6 +915,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -882,6 +942,9 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'INVALID_PROMO_INFORMATION_GIVEN',
+        );
         expect(main.body.errors[0].message).eqls(
           'Invalid input field: minimumBalance for sign up',
         );
@@ -956,8 +1019,10 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Promo not found');
+        expect(main.body.errors[0].extensions.code).eqls('PROMO_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Promo with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
 
@@ -976,7 +1041,7 @@ describe('Promo Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls('ACTIVE_PROMO');
         expect(main.body.errors[0].message).eqls(
           `Active promos can't be deleted`,
         );

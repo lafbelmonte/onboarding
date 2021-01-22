@@ -32,6 +32,7 @@ const authenticate = ({
         },
         statusCode: 400,
         body: {
+          code: e.extensions.code,
           error: e.message,
         },
       };

@@ -1,4 +1,8 @@
 import { UseCase, MembersStore } from '../../types';
+import {
+  MissingMemberInformationError,
+  ExistingMemberError,
+} from '../../custom-errors';
 
 const insertMember = ({
   memberEntity,
@@ -9,7 +13,7 @@ const insertMember = ({
 }): UseCase<boolean> => {
   return async function ({ info }) {
     if (!info.password) {
-      throw new Error(`Please input password`);
+      throw new MissingMemberInformationError(`Please input password`);
     }
 
     const member = await memberEntity(info);
@@ -19,7 +23,9 @@ const insertMember = ({
     });
 
     if (usernameExists) {
-      throw new Error(`Username already exists`);
+      throw new ExistingMemberError(
+        `Username: ${member.username} already exists`,
+      );
     }
 
     await membersStore.insertOneMember(member);

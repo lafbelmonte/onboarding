@@ -1,4 +1,5 @@
 import { UseCase, PromoDocument, PromosStore } from '../../types';
+import { PromoNotFoundError } from '../../custom-errors';
 
 const selectOnePromo = ({
   promosStore,
@@ -9,7 +10,7 @@ const selectOnePromo = ({
     const promo = await promosStore.selectOnePromoByFilters({ _id: id });
 
     if (!promo) {
-      throw new Error(`Promo not found`);
+      throw new PromoNotFoundError(`Promo with ID: ${id} doesn't exists`);
     }
     return promo;
   };

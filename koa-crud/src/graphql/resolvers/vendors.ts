@@ -8,15 +8,17 @@ import {
 
 import { Vendor, VendorDocument } from '../../types';
 
+import { NotAllowedError } from '../../custom-errors';
+
 const vendors = async (obj, args: Vendor, ctx): Promise<VendorDocument[]> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
   return selectAllVendorsUseCase({ id: null, info: null, source: null });
 };
 const vendor = async (obj, args: Vendor, ctx): Promise<VendorDocument> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
   return selectOneVendorUseCase({ id: args.id, info: null, source: null });
 };
@@ -27,7 +29,7 @@ const createVendor = async (
   ctx,
 ): Promise<boolean> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
 
   return insertVendorUseCase({ id: null, info: args.input, source: null });
@@ -38,7 +40,7 @@ const updateVendor = async (
   ctx,
 ): Promise<boolean> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
 
   return updateVendorUseCase({
@@ -49,7 +51,7 @@ const updateVendor = async (
 };
 const deleteVendor = async (obj, args: Vendor, ctx): Promise<boolean> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
   return deleteOneVendorUseCase({ id: args.id, info: null, source: null });
 };

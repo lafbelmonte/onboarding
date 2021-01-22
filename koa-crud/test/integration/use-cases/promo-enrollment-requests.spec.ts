@@ -28,6 +28,17 @@ import {
   RequiredMemberFields,
 } from '../../../src/types';
 
+import {
+  MissingPromoEnrollmentRequestInformationError,
+  PromoNotFoundError,
+  ExistingEnrollmentError,
+  NotEnoughBalanceError,
+  RequiredMemberFieldsNotMetError,
+  InvalidPromoError,
+  MissingPromoInformationError,
+  PromoEnrollmentRequestNotFoundError,
+} from '../../../src/custom-errors';
+
 chai.use(chaiAsPromised);
 
 const chance = new Chance();
@@ -136,41 +147,43 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith('Please input promo ID');
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input promo ID')
+          .and.be.an.instanceOf(MissingPromoEnrollmentRequestInformationError);
       });
     });
 
     describe('Given non existent promo', () => {
       it('should throw an error', async function () {
+        const promo = this.randomString();
         this.mock = {
           id: this.member._id,
           info: {
-            promo: this.randomString(),
+            promo,
           },
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo not found');
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Promo with ID: ${promo} doesn't exists`)
+          .and.be.an.instanceOf(PromoNotFoundError);
       });
     });
 
     describe('Given non existent promo', () => {
       it('should throw an error', async function () {
+        const promo = this.randomString();
         this.mock = {
           id: this.member._id,
           info: {
-            promo: this.randomString(),
+            promo,
           },
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo not found');
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Promo with ID: ${promo} doesn't exists`)
+          .and.be.an.instanceOf(PromoNotFoundError);
       });
     });
 
@@ -186,12 +199,13 @@ describe('Promo Enrollment Use Cases', function () {
 
         await enrollToPromoUseCase(this.mock);
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith('You are already enrolled in this promo');
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            'Member is already enrolled in this promo',
+          )
+          .and.be.an.instanceOf(ExistingEnrollmentError);
       });
     });
-
     describe('Given member with not enough balance to enroll to a deposit promo', () => {
       it('should throw an error', async function () {
         await Member.findOneAndUpdate(
@@ -207,11 +221,11 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(
-          `You don't have enough balance to enroll in this promo`,
-        );
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Member doesn't have enough balance to enroll in this promo`,
+          )
+          .and.be.an.instanceOf(NotEnoughBalanceError);
       });
     });
 
@@ -234,9 +248,9 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(`Required member field EMAIL is missing`);
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Required member field EMAIL is missing`)
+          .and.be.an.instanceOf(RequiredMemberFieldsNotMetError);
       });
     });
 
@@ -259,11 +273,11 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(
-          `Required member field REAL_NAME is missing`,
-        );
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Required member field REAL_NAME is missing`,
+          )
+          .and.be.an.instanceOf(RequiredMemberFieldsNotMetError);
       });
     });
 
@@ -286,11 +300,11 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(
-          `Required member field BANK_ACCOUNT is missing`,
-        );
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Required member field BANK_ACCOUNT is missing`,
+          )
+          .and.be.an.instanceOf(RequiredMemberFieldsNotMetError);
       });
     });
 
@@ -311,9 +325,11 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(`Promo is not active`);
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo with ID: ${this.signUpMockId} not active`,
+          )
+          .and.be.an.instanceOf(InvalidPromoError);
       });
     });
 
@@ -334,9 +350,11 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(`Promo is not active`);
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo with ID: ${this.signUpMockId} not active`,
+          )
+          .and.be.an.instanceOf(InvalidPromoError);
       });
     });
 
@@ -357,9 +375,9 @@ describe('Promo Enrollment Use Cases', function () {
           source: null,
         };
 
-        await expect(
-          enrollToPromoUseCase(this.mock),
-        ).to.eventually.rejectedWith(`Minimum balance not set in the promo`);
+        await expect(enrollToPromoUseCase(this.mock))
+          .to.eventually.rejectedWith(`Minimum balance not set in the promo`)
+          .and.be.an.instanceOf(MissingPromoInformationError);
       });
     });
   });
@@ -484,14 +502,17 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given Non Existent Promo Enroll Request ID', () => {
       it('should throw an error', async function () {
+        const id = this.randomString();
         this.mock = {
-          id: this.randomString(),
+          id,
           info: null,
           source: null,
         };
-        await expect(
-          selectOnePromoEnrollmentRequestUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo enrollment not found');
+        await expect(selectOnePromoEnrollmentRequestUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo enrollment request with ID: ${id} doesn't exists`,
+          )
+          .and.be.an.instanceOf(PromoEnrollmentRequestNotFoundError);
       });
     });
   });
@@ -557,14 +578,17 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given non existent promo ID and approve request use-case', () => {
       it('should return true', async function () {
+        const id = this.randomString();
         this.mock = {
-          id: this.randomString(),
+          id,
           info: null,
           source: null,
         };
-        await expect(
-          approveEnrollmentRequestUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo with the given ID not found');
+        await expect(approveEnrollmentRequestUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo enrollment request with ID: ${id} doesn't exists`,
+          )
+          .and.be.an.instanceOf(PromoEnrollmentRequestNotFoundError);
       });
     });
 
@@ -582,14 +606,17 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given non existent promo ID and reject request use-case', () => {
       it('should return true', async function () {
+        const id = this.randomString();
         this.mock = {
-          id: this.randomString(),
+          id,
           info: null,
           source: null,
         };
-        await expect(
-          rejectEnrollmentRequestUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo with the given ID not found');
+        await expect(approveEnrollmentRequestUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo enrollment request with ID: ${id} doesn't exists`,
+          )
+          .and.be.an.instanceOf(PromoEnrollmentRequestNotFoundError);
       });
     });
 
@@ -607,14 +634,17 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given non existent promo ID and process request use-case', () => {
       it('should return true', async function () {
+        const id = this.randomString();
         this.mock = {
-          id: this.randomString(),
+          id,
           info: null,
           source: null,
         };
-        await expect(
-          processEnrollmentRequestUseCase(this.mock),
-        ).to.eventually.rejectedWith('Promo with the given ID not found');
+        await expect(approveEnrollmentRequestUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Promo enrollment request with ID: ${id} doesn't exists`,
+          )
+          .and.be.an.instanceOf(PromoEnrollmentRequestNotFoundError);
       });
     });
   });

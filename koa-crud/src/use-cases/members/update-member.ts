@@ -1,4 +1,5 @@
 import { UseCase, MembersStore } from '../../types';
+import { MemberNotFoundError, ExistingMemberError } from '../../custom-errors';
 
 const updateMember = ({
   memberEntity,
@@ -15,7 +16,7 @@ const updateMember = ({
     });
 
     if (!memberExists) {
-      throw new Error(`Member ID doesn't exist`);
+      throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
     const member = await memberEntity(info);
@@ -26,7 +27,9 @@ const updateMember = ({
     });
 
     if (usernameExists) {
-      throw new Error(`Username already exists`);
+      throw new ExistingMemberError(
+        `Username: ${member.username} already exists`,
+      );
     }
 
     await membersStore.updateMemberByFilters(

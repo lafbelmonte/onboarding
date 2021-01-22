@@ -75,9 +75,13 @@ describe('Member Queries', function () {
             },
           },
         };
+
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_MEMBER_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input username');
       });
     });
@@ -100,18 +104,22 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_MEMBER_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input password');
       });
     });
 
     describe('Given existing username', () => {
       it('should return error', async function () {
+        const username = this.randomUsername();
         this.mock = {
           mutation: {
             createMember: {
               __args: {
                 input: {
-                  username: this.randomUsername(),
+                  username,
                   password: this.randomPassword(),
                   realName: this.randomRealName(),
                 },
@@ -123,7 +131,10 @@ describe('Member Queries', function () {
         await this.request().post('/graphql').send({ query });
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Username already exists');
+        expect(main.body.errors[0].extensions.code).eqls('EXISTING_MEMBER');
+        expect(main.body.errors[0].message).eqls(
+          `Username: ${username} already exists`,
+        );
       });
     });
   });
@@ -222,7 +233,10 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Member doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('MEMBER_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Member with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });
@@ -283,6 +297,9 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_MEMBER_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input username');
       });
     });
@@ -305,7 +322,10 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Member ID doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('MEMBER_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Member with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
 
@@ -333,7 +353,10 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Username already exists`);
+        expect(main.body.errors[0].extensions.code).eqls('EXISTING_MEMBER');
+        expect(main.body.errors[0].message).eqls(
+          `Username: ${data.username} already exists`,
+        );
       });
     });
   });
@@ -385,7 +408,10 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Member doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('MEMBER_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Member with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });

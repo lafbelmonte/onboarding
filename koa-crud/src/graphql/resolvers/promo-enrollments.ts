@@ -9,6 +9,7 @@ import {
   processEnrollmentRequestUseCase,
 } from '../../use-cases/promo-enrollment-requests';
 
+import { NotAllowedError } from '../../custom-errors';
 import { Connection, PromoEnrollmentRequest } from '../../types/index';
 
 const enrollToPromo = async (
@@ -17,7 +18,7 @@ const enrollToPromo = async (
   ctx,
 ): Promise<boolean> => {
   if (!ctx.allowed) {
-    throw new Error('Forbidden');
+    throw new NotAllowedError('You are not allowed to access this resource');
   }
 
   return enrollToPromoUseCase({

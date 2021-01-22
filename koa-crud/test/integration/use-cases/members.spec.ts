@@ -17,6 +17,12 @@ import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
+import {
+  MissingMemberInformationError,
+  ExistingMemberError,
+  MemberNotFoundError,
+} from '../../../src/custom-errors';
+
 chai.use(chaiAsPromised);
 
 const chance = new Chance();
@@ -72,9 +78,9 @@ describe('Member Use Cases', () => {
           source: null,
         };
 
-        await expect(insertMemberUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input username',
-        );
+        await expect(insertMemberUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input username')
+          .and.be.an.instanceOf(MissingMemberInformationError);
       });
     });
 
@@ -90,9 +96,9 @@ describe('Member Use Cases', () => {
           source: null,
         };
 
-        await expect(insertMemberUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input password',
-        );
+        await expect(insertMemberUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input password')
+          .and.be.an.instanceOf(MissingMemberInformationError);
       });
     });
 
@@ -110,9 +116,11 @@ describe('Member Use Cases', () => {
 
         await expect(insertMemberUseCase(this.mock)).to.eventually.fulfilled.and
           .be.true;
-        await expect(insertMemberUseCase(this.mock)).to.eventually.rejectedWith(
-          'Username already exists',
-        );
+        await expect(insertMemberUseCase(this.mock))
+          .to.eventually.rejectedWith(
+            `Username: ${this.mock.info.username} already exists`,
+          )
+          .and.be.an.instanceOf(ExistingMemberError);
       });
     });
   });
@@ -173,7 +181,11 @@ describe('Member Use Cases', () => {
             info: null,
             source: null,
           }),
-        ).to.eventually.rejectedWith("Member doesn't exist");
+        )
+          .to.eventually.rejectedWith(
+            `Member with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(MemberNotFoundError);
       });
     });
   });
@@ -220,7 +232,9 @@ describe('Member Use Cases', () => {
             },
             source: null,
           }),
-        ).to.eventually.rejectedWith('Please input username');
+        )
+          .to.eventually.rejectedWith('Please input username')
+          .and.be.an.instanceOf(MissingMemberInformationError);
       });
     });
 
@@ -236,7 +250,11 @@ describe('Member Use Cases', () => {
             },
             source: null,
           }),
-        ).to.eventually.rejectedWith(`Member ID doesn't exist`);
+        )
+          .to.eventually.rejectedWith(
+            `Member with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(MemberNotFoundError);
       });
     });
 
@@ -258,7 +276,11 @@ describe('Member Use Cases', () => {
             },
             source: null,
           }),
-        ).to.eventually.rejectedWith(`Username already exists`);
+        )
+          .to.eventually.rejectedWith(
+            `Username: ${data.username} already exists`,
+          )
+          .and.be.an.instanceOf(ExistingMemberError);
       });
     });
   });
@@ -293,11 +315,15 @@ describe('Member Use Cases', () => {
       it('should throw an error', async function () {
         await expect(
           deleteOneMemberUseCase({
-            id: this.mock._id,
+            id: this.mockedId,
             source: null,
             info: null,
           }),
-        ).to.eventually.rejectedWith("Member doesn't exist");
+        )
+          .to.eventually.rejectedWith(
+            `Member with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(MemberNotFoundError);
       });
     });
   });

@@ -6,6 +6,8 @@ import { Chance } from 'chance';
 import { vendorEntity } from '../../src/entities/vendor';
 import { VendorType } from '../../src/types';
 
+import { MissingVendorInformationError } from '../../src/custom-errors';
+
 const chance = new Chance();
 
 chai.use(chaiAsPromised);
@@ -32,9 +34,9 @@ describe('Vendor Entity', () => {
         type: VendorType.Seamless,
       };
 
-      await expect(vendorEntity(mock)).to.eventually.rejectedWith(
-        'Please input name',
-      );
+      await expect(vendorEntity(mock))
+        .to.eventually.rejectedWith('Please input name')
+        .and.be.an.instanceOf(MissingVendorInformationError);
     });
   });
 
@@ -45,9 +47,9 @@ describe('Vendor Entity', () => {
         type: '',
       };
 
-      await expect(vendorEntity(mock)).to.eventually.rejectedWith(
-        'Please input type',
-      );
+      await expect(vendorEntity(mock))
+        .to.eventually.rejectedWith('Please input type')
+        .and.be.an.instanceOf(MissingVendorInformationError);
     });
   });
 });

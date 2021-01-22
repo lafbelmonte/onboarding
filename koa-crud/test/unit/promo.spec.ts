@@ -8,6 +8,13 @@ import { promoEntity } from '../../src/entities/promo';
 
 import { PromoTemplate, RequiredMemberFields } from '../../src/types';
 
+import {
+  MissingPromoInformationError,
+  InvalidPromoTemplateError,
+  InvalidPromoInformationGivenError,
+  InvalidPromoRequiredMemberFieldError,
+} from '../../src/custom-errors';
+
 const chance = new Chance();
 
 chai.use(chaiAsPromised);
@@ -60,9 +67,9 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input name',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input name')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -75,9 +82,9 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input template',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input template')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -90,9 +97,11 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Invalid template',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith(
+          `Template: ${this.mock.template} is invalid`,
+        )
+        .and.be.an.instanceOf(InvalidPromoTemplateError);
     });
   });
 
@@ -105,9 +114,9 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input title',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input title')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -120,9 +129,9 @@ describe('Promo Entity', () => {
         description: '',
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input description',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input description')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -134,9 +143,9 @@ describe('Promo Entity', () => {
         title: this.randomTitle(),
         description: this.randomDescription(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input minimum balance',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input minimum balance')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -153,9 +162,11 @@ describe('Promo Entity', () => {
           RequiredMemberFields.Realname,
         ],
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Invalid input field: requiredMemberFields for deposit',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith(
+          'Invalid input field: requiredMemberFields for deposit',
+        )
+        .and.be.an.instanceOf(InvalidPromoInformationGivenError);
     });
   });
 
@@ -167,9 +178,9 @@ describe('Promo Entity', () => {
         title: this.randomTitle(),
         description: this.randomDescription(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Please input required member fields',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith('Please input required member fields')
+        .and.be.an.instanceOf(MissingPromoInformationError);
     });
   });
 
@@ -182,9 +193,11 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         requiredMemberFields: [this.randomDescription()],
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Invalid member field',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith(
+          `Required member field: ${this.mock.requiredMemberFields} is invalid`,
+        )
+        .and.be.an.instanceOf(InvalidPromoRequiredMemberFieldError);
     });
   });
 
@@ -197,9 +210,11 @@ describe('Promo Entity', () => {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       };
-      await expect(promoEntity(this.mock)).to.eventually.rejectedWith(
-        'Invalid input field: minimumBalance for sign up',
-      );
+      await expect(promoEntity(this.mock))
+        .to.eventually.rejectedWith(
+          'Invalid input field: minimumBalance for sign up',
+        )
+        .and.be.an.instanceOf(InvalidPromoInformationGivenError);
     });
   });
 });

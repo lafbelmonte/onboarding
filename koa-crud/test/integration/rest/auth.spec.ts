@@ -60,6 +60,7 @@ describe('Auth Endpoints', () => {
         });
 
         expect(main.status).to.eqls(400);
+        expect(main.body.code).eqls('INVALID_CREDENTIALS');
       });
     });
 
@@ -71,6 +72,7 @@ describe('Auth Endpoints', () => {
         });
 
         expect(main.status).to.eqls(400);
+        expect(main.body.code).eqls('INVALID_CREDENTIALS');
       });
     });
 
@@ -82,6 +84,7 @@ describe('Auth Endpoints', () => {
         });
 
         expect(main.status).to.eqls(400);
+        expect(main.body.code).eqls('MISSING_CREDENTIALS');
       });
     });
 
@@ -93,6 +96,7 @@ describe('Auth Endpoints', () => {
         });
 
         expect(main.status).to.eqls(400);
+        expect(main.body.code).eqls('MISSING_CREDENTIALS');
       });
     });
   });
