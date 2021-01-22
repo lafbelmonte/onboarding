@@ -14,6 +14,11 @@ import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
+import {
+  MissingCredentialsError,
+  InvalidCredentialsError,
+} from '../../../src/custom-errors';
+
 const chance = new Chance();
 
 describe('Auth Use Cases', () => {
@@ -55,20 +60,21 @@ describe('Auth Use Cases', () => {
       });
     });
 
-    describe('GIVEN incorrect username', () => {
+    describe('GIVEN non existent username', () => {
       it('should throw an error and be rejected', async function () {
+        const username = this.randomUsername();
         this.mock = {
           id: null,
           info: {
-            username: this.randomUsername(),
+            username,
             password: this.validPassword,
           },
           source: null,
         };
 
-        await expect(authenticateUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid credentials',
-        );
+        await expect(authenticateUseCase(this.mock))
+          .to.eventually.rejectedWith(`Username: ${username} doesn't exists`)
+          .and.be.an.instanceOf(InvalidCredentialsError);
       });
     });
 
@@ -83,9 +89,9 @@ describe('Auth Use Cases', () => {
           source: null,
         };
 
-        await expect(authenticateUseCase(this.mock)).to.eventually.rejectedWith(
-          'Invalid credentials',
-        );
+        await expect(authenticateUseCase(this.mock))
+          .to.eventually.rejectedWith('Incorrect password')
+          .and.be.an.instanceOf(InvalidCredentialsError);
       });
     });
 
@@ -100,9 +106,9 @@ describe('Auth Use Cases', () => {
           source: null,
         };
 
-        await expect(authenticateUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input username',
-        );
+        await expect(authenticateUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input username')
+          .and.be.an.instanceOf(MissingCredentialsError);
       });
     });
 
@@ -117,9 +123,9 @@ describe('Auth Use Cases', () => {
           source: null,
         };
 
-        await expect(authenticateUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input password',
-        );
+        await expect(authenticateUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input password')
+          .and.be.an.instanceOf(MissingCredentialsError);
       });
     });
   });

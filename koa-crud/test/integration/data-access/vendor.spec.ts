@@ -91,7 +91,7 @@ describe('Vendor Store', () => {
       it('should throw an error', async function () {
         this.mock = {
           name: this.randomName(),
-          type: 'qwe',
+          type: this.randomName(),
         };
         await expect(insertOneVendor(this.mock)).to.eventually.rejected;
       });
@@ -220,7 +220,7 @@ describe('Vendor Store', () => {
             { _id: this.mock._id },
             {
               name: this.randomName(),
-              type: 'qwe',
+              type: this.randomName(),
             },
           ),
         ).to.eventually.rejected;

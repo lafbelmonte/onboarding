@@ -76,7 +76,10 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -97,10 +100,13 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request()
           .post('/graphql')
-          .set('Authorization', `Bearer qwe`)
+          .set('Authorization', `Bearer ${this.randomName()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -172,6 +178,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_VENDOR_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input name');
       });
     });
@@ -184,7 +193,7 @@ describe('Vendor Queries', function () {
               __args: {
                 input: {
                   name: this.randomName(),
-                  type: 'qwe',
+                  type: `${this.randomName()}`,
                 },
               },
             },
@@ -196,6 +205,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -219,6 +231,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -247,6 +262,7 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls('EXISTING_VENDOR');
         expect(main.body.errors[0].message).eqls('Vendor already exists');
       });
     });
@@ -281,7 +297,10 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -301,10 +320,13 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request()
           .post('/graphql')
-          .set('Authorization', `Bearer qwe`)
+          .set('Authorization', `Bearer ${this.randomName()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -365,7 +387,10 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -388,10 +413,13 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request()
           .post('/graphql')
-          .set('Authorization', `Bearer qwe`)
+          .set('Authorization', `Bearer ${this.randomName()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -445,7 +473,10 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Vendor doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('VENDOR_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Vendor with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });
@@ -483,7 +514,9 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -505,10 +538,13 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request()
           .post('/graphql')
-          .set('Authorization', `Bearer qwe`)
+          .set('Authorization', `Bearer ${this.randomName()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -586,6 +622,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_VENDOR_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls('Please input name');
       });
     });
@@ -612,6 +651,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -624,7 +666,7 @@ describe('Vendor Queries', function () {
                 input: {
                   id: this.baseId,
                   name: this.randomName(),
-                  type: 'qwe',
+                  type: '${this.randomName()}',
                 },
               },
             },
@@ -637,6 +679,9 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_VALIDATION_FAILED',
+        );
       });
     });
 
@@ -662,7 +707,10 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Vendor ID doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('VENDOR_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Vendor with ID: ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });
@@ -695,7 +743,10 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -718,10 +769,13 @@ describe('Vendor Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request()
           .post('/graphql')
-          .set('Authorization', `Bearer qwe`)
+          .set('Authorization', `Bearer ${this.randomName()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -775,7 +829,10 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Vendor doesn't exist`);
+        expect(main.body.errors[0].extensions.code).eqls('VENDOR_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Vendor with ID ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });

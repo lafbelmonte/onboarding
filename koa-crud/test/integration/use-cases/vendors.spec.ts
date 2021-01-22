@@ -22,6 +22,11 @@ import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 chai.use(chaiAsPromised);
 
 const chance = new Chance();
+import {
+  MissingVendorInformationError,
+  ExistingVendorError,
+  VendorNotFoundError,
+} from '../../../src/custom-errors';
 
 describe('Vendor Use Cases', () => {
   before(async function () {
@@ -70,9 +75,9 @@ describe('Vendor Use Cases', () => {
           source: null,
         };
 
-        await expect(insertVendorUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input name',
-        );
+        await expect(insertVendorUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input name')
+          .and.be.an.instanceOf(MissingVendorInformationError);
       });
     });
 
@@ -87,9 +92,9 @@ describe('Vendor Use Cases', () => {
           source: null,
         };
 
-        await expect(insertVendorUseCase(this.mock)).to.eventually.rejectedWith(
-          'Please input type',
-        );
+        await expect(insertVendorUseCase(this.mock))
+          .to.eventually.rejectedWith('Please input type')
+          .and.be.an.instanceOf(MissingVendorInformationError);
       });
     });
 
@@ -99,7 +104,7 @@ describe('Vendor Use Cases', () => {
           id: null,
           info: {
             name: this.randomName(),
-            type: 'qwe',
+            type: this.randomName(),
           },
           source: null,
         };
@@ -122,9 +127,9 @@ describe('Vendor Use Cases', () => {
         await expect(insertVendorUseCase(this.mock)).to.eventually.fulfilled.and
           .be.true;
 
-        await expect(insertVendorUseCase(this.mock)).to.eventually.rejectedWith(
-          'Vendor already exists',
-        );
+        await expect(insertVendorUseCase(this.mock))
+          .to.eventually.rejectedWith('Vendor already exists')
+          .and.be.an.instanceOf(ExistingVendorError);
       });
     });
   });
@@ -183,7 +188,11 @@ describe('Vendor Use Cases', () => {
             info: null,
             source: null,
           }),
-        ).to.eventually.rejectedWith("Vendor doesn't exist");
+        )
+          .to.eventually.rejectedWith(
+            `Vendor with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(VendorNotFoundError);
       });
     });
   });
@@ -233,7 +242,11 @@ describe('Vendor Use Cases', () => {
             info: { name: this.randomName(), type: VendorType.Seamless },
             source: null,
           }),
-        ).to.eventually.rejectedWith("Vendor ID doesn't exist");
+        )
+          .to.eventually.rejectedWith(
+            `Vendor with ID: ${this.mockedId} doesn't exists`,
+          )
+          .and.be.an.instanceOf(VendorNotFoundError);
       });
     });
 
@@ -245,7 +258,9 @@ describe('Vendor Use Cases', () => {
             info: { name: null, type: VendorType.Seamless },
             source: null,
           }),
-        ).to.eventually.rejectedWith('Please input name');
+        )
+          .to.eventually.rejectedWith('Please input name')
+          .and.be.an.instanceOf(MissingVendorInformationError);
       });
     });
 
@@ -254,10 +269,12 @@ describe('Vendor Use Cases', () => {
         await expect(
           updateVendorUseCase({
             id: this.mock._id,
-            info: { name: 'Luis Angelo Belmonte', type: null },
+            info: { name: this.randomName(), type: null },
             source: null,
           }),
-        ).to.eventually.rejectedWith('Please input type');
+        )
+          .to.eventually.rejectedWith('Please input type')
+          .and.be.an.instanceOf(MissingVendorInformationError);
       });
     });
 
@@ -266,7 +283,7 @@ describe('Vendor Use Cases', () => {
         await expect(
           updateVendorUseCase({
             id: this.mock._id,
-            info: { name: 'Luis Angelo Belmonte', type: 'qwe' },
+            info: { name: this.randomName(), type: this.randomName() },
             source: null,
           }),
         ).to.eventually.rejected;
@@ -306,7 +323,9 @@ describe('Vendor Use Cases', () => {
             source: null,
             info: null,
           }),
-        ).to.eventually.rejectedWith("Vendor doesn't exist");
+        ).to.eventually.rejectedWith(
+          `Vendor with ID ${this.mockedId} doesn't exists`,
+        );
       });
     });
   });

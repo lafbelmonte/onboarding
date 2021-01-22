@@ -109,7 +109,10 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -131,7 +134,10 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.randomString()}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Forbidden');
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ALLOWED_ERROR');
+        expect(main.body.errors[0].message).eqls(
+          'You are not allowed to access this resource',
+        );
       });
     });
 
@@ -197,6 +203,9 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_ENROLLMENT_REQUEST_INFORMATION_ERROR',
+        );
         expect(main.body.errors[0].message).eqls('Please input promo ID');
       });
     });
@@ -217,16 +226,21 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_PARSE_FAILED',
+        );
       });
     });
 
     describe('Given non existent promo', () => {
       it('should throw an error', async function () {
+        const promo = this.randomString();
+
         this.mock = {
           mutation: {
             enrollToPromo: {
               __args: {
-                promo: `${this.randomString()}`,
+                promo,
               },
             },
           },
@@ -238,7 +252,10 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Promo not found');
+        expect(main.body.errors[0].extensions.code).eqls('PROMO_NOT_FOUND');
+        expect(main.body.errors[0].message).eqls(
+          `Promo with ID: ${promo} doesn't exists`,
+        );
       });
     });
 
@@ -264,8 +281,9 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls('EXISTING_ENROLLMENT');
         expect(main.body.errors[0].message).eqls(
-          'You are already enrolled in this promo',
+          'Member is already enrolled in this promo',
         );
       });
     });
@@ -293,8 +311,9 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls('NOT_ENOUGH_BALANCE');
         expect(main.body.errors[0].message).eqls(
-          `You don't have enough balance to enroll in this promo`,
+          `Member doesn't have enough balance to enroll in this promo`,
         );
       });
     });
@@ -326,8 +345,11 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'REQUIRED_MEMBER_FIELDS_NOT_MET',
+        );
         expect(main.body.errors[0].message).eqls(
-          `Required member field EMAIL is missing`,
+          `Required member field EMAIL is missing from member`,
         );
       });
     });
@@ -359,8 +381,11 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'REQUIRED_MEMBER_FIELDS_NOT_MET',
+        );
         expect(main.body.errors[0].message).eqls(
-          `Required member field REAL_NAME is missing`,
+          `Required member field REAL_NAME is missing from member`,
         );
       });
     });
@@ -392,8 +417,11 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'REQUIRED_MEMBER_FIELDS_NOT_MET',
+        );
         expect(main.body.errors[0].message).eqls(
-          `Required member field BANK_ACCOUNT is missing`,
+          `Required member field BANK_ACCOUNT is missing from member`,
         );
       });
     });
@@ -423,7 +451,10 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Promo is not active`);
+        expect(main.body.errors[0].extensions.code).eqls('INVALID_PROMO');
+        expect(main.body.errors[0].message).eqls(
+          `Promo with ID: ${this.signUpMockId} not active`,
+        );
       });
     });
 
@@ -452,7 +483,10 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls(`Promo is not active`);
+        expect(main.body.errors[0].extensions.code).eqls('INVALID_PROMO');
+        expect(main.body.errors[0].message).eqls(
+          `Promo with ID: ${this.signUpMockId} not active`,
+        );
       });
     });
 
@@ -481,6 +515,9 @@ describe('Promo Enrollment Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'MISSING_PROMO_INFORMATION',
+        );
         expect(main.body.errors[0].message).eqls(
           `Minimum balance not set in the promo`,
         );
@@ -685,11 +722,12 @@ describe('Promo Enrollment Queries', function () {
 
     describe('Given Non Existent Promo Enroll Request ID', () => {
       it('should throw an error', async function () {
+        const promoEnrollmentRequestId = this.randomString();
         this.mock = {
           query: {
             promoEnrollmentRequest: {
               __args: {
-                id: this.randomString(),
+                id: promoEnrollmentRequestId,
               },
               id: true,
               member: {
@@ -728,7 +766,12 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
-        expect(main.body.errors[0].message).eqls('Promo enrollment not found');
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PROMO_ENROLLMENT_REQUEST_NOT_FOUND',
+        );
+        expect(main.body.errors[0].message).eqls(
+          `Promo enrollment request with ID: ${promoEnrollmentRequestId} doesn't exists`,
+        );
       });
     });
   });
@@ -801,11 +844,13 @@ describe('Promo Enrollment Queries', function () {
 
     describe('Given non existent promo ID and approve request mutation', () => {
       it('should throw an error', async function () {
+        const promoEnrollmentRequestId = this.randomString();
+
         this.mock = {
           mutation: {
             approvePromoEnrollmentRequest: {
               __args: {
-                id: this.randomString(),
+                id: promoEnrollmentRequestId,
               },
             },
           },
@@ -814,8 +859,11 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PROMO_ENROLLMENT_REQUEST_NOT_FOUND',
+        );
         expect(main.body.errors[0].message).eqls(
-          'Promo with the given ID not found',
+          `Promo enrollment request with ID: ${promoEnrollmentRequestId} doesn't exists`,
         );
       });
     });
@@ -833,6 +881,9 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_PARSE_FAILED',
+        );
       });
     });
 
@@ -857,11 +908,13 @@ describe('Promo Enrollment Queries', function () {
 
     describe('Given non existent promo ID and reject request mutation', () => {
       it('should throw an error', async function () {
+        const promoEnrollmentRequestId = this.randomString();
+
         this.mock = {
           mutation: {
             rejectPromoEnrollmentRequest: {
               __args: {
-                id: this.randomString(),
+                id: promoEnrollmentRequestId,
               },
             },
           },
@@ -870,8 +923,11 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PROMO_ENROLLMENT_REQUEST_NOT_FOUND',
+        );
         expect(main.body.errors[0].message).eqls(
-          'Promo with the given ID not found',
+          `Promo enrollment request with ID: ${promoEnrollmentRequestId} doesn't exists`,
         );
       });
     });
@@ -889,6 +945,9 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_PARSE_FAILED',
+        );
       });
     });
 
@@ -913,11 +972,12 @@ describe('Promo Enrollment Queries', function () {
 
     describe('Given non existent promo ID and process request mutation', () => {
       it('should throw an error', async function () {
+        const promoEnrollmentRequestId = this.randomString();
         this.mock = {
           mutation: {
             processPromoEnrollmentRequest: {
               __args: {
-                id: this.randomString(),
+                id: promoEnrollmentRequestId,
               },
             },
           },
@@ -926,8 +986,11 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PROMO_ENROLLMENT_REQUEST_NOT_FOUND',
+        );
         expect(main.body.errors[0].message).eqls(
-          'Promo with the given ID not found',
+          `Promo enrollment request with ID: ${promoEnrollmentRequestId} doesn't exists`,
         );
       });
     });
@@ -945,6 +1008,9 @@ describe('Promo Enrollment Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(400);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'GRAPHQL_PARSE_FAILED',
+        );
       });
     });
   });
