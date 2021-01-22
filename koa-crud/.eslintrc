@@ -1,9 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
+  "plugins": ["@typescript-eslint", "import"],
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
@@ -21,10 +18,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [
-          "**/*.test.ts",
-          "**/*.spec.ts"
-        ]
+        "devDependencies": true
       }
     ],
     "no-useless-constructor": "off",
@@ -42,13 +36,8 @@
     "no-underscore-dangle": "off",
     "func-names": "off",
     "max-classes-per-file": "off",
-    "max-len": [
-      "error",
-      140
-    ],
-    "linebreak-style": [
-      "error"
-    ],
+    "max-len": ["error", 140],
+    "linebreak-style": ["error"],
     "import/prefer-default-export": "off",
     "prettier/prettier": "error"
   },
