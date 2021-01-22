@@ -12,12 +12,12 @@ import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
-chai.use(chaiAsPromised);
-
 import {
   MissingCredentialsError,
   InvalidCredentialsError,
 } from '../../../src/custom-errors';
+
+chai.use(chaiAsPromised);
 
 const chance = new Chance();
 

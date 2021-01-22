@@ -1,5 +1,6 @@
 import { UseCase, VendorsStore } from '../../types';
 import { VendorNotFoundError } from '../../custom-errors';
+
 const updateVendor = ({
   vendorsStore,
   vendorEntity,

@@ -6,11 +6,11 @@ import { Chance } from 'chance';
 import { vendorEntity } from '../../src/entities/vendor';
 import { VendorType } from '../../src/types';
 
+import { MissingVendorInformationError } from '../../src/custom-errors';
+
 const chance = new Chance();
 
 chai.use(chaiAsPromised);
-
-import { MissingVendorInformationError } from '../../src/custom-errors';
 
 describe('Vendor Entity', () => {
   describe('Given expected input', () => {

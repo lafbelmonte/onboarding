@@ -4,6 +4,7 @@ import {
   PromoEnrollmentRequestStatus,
 } from '../../types';
 import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
+
 const rejectEnrollmentRequest = ({
   promoEnrollmentRequestsStore,
 }: {

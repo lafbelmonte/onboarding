@@ -18,15 +18,15 @@ import { Vendor } from '../../../src/lib/mongoose/models/vendor';
 import { VendorType } from '../../../src/types';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-chai.use(chaiAsPromised);
-
-const chance = new Chance();
 import {
   MissingVendorInformationError,
   ExistingVendorError,
   VendorNotFoundError,
 } from '../../../src/custom-errors';
+
+chai.use(chaiAsPromised);
+
+const chance = new Chance();
 
 describe('Vendor Use Cases', () => {
   before(async function () {

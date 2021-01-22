@@ -28,10 +28,6 @@ import {
   RequiredMemberFields,
 } from '../../../src/types';
 
-chai.use(chaiAsPromised);
-
-const chance = new Chance();
-
 import {
   MissingPromoEnrollmentRequestInformationError,
   PromoNotFoundError,
@@ -42,6 +38,10 @@ import {
   MissingPromoInformationError,
   PromoEnrollmentRequestNotFoundError,
 } from '../../../src/custom-errors';
+
+chai.use(chaiAsPromised);
+
+const chance = new Chance();
 
 describe('Promo Enrollment Use Cases', function () {
   before(async function () {

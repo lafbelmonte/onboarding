@@ -3,6 +3,7 @@ import {
   MissingCredentialsError,
   InvalidCredentialsError,
 } from '../../custom-errors';
+
 const authenticate = ({
   membersStore,
   bcrypt,

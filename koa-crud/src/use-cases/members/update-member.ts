@@ -1,5 +1,6 @@
 import { UseCase, MembersStore } from '../../types';
 import { MemberNotFoundError, ExistingMemberError } from '../../custom-errors';
+
 const updateMember = ({
   memberEntity,
   membersStore,

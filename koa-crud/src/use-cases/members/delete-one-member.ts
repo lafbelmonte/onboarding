@@ -1,5 +1,6 @@
 import { UseCase, MembersStore } from '../../types';
 import { MemberNotFoundError } from '../../custom-errors';
+
 const deleteOneMember = ({
   membersStore,
 }: {

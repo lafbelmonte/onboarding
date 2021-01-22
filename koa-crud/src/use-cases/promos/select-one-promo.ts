@@ -1,5 +1,6 @@
 import { UseCase, PromoDocument, PromosStore } from '../../types';
 import { PromoNotFoundError } from '../../custom-errors';
+
 const selectOnePromo = ({
   promosStore,
 }: {

@@ -1,5 +1,6 @@
 import { UseCase, MembersStore, MemberDocument } from '../../types';
 import { MemberNotFoundError } from '../../custom-errors';
+
 const selectOneMember = ({
   membersStore,
 }: {

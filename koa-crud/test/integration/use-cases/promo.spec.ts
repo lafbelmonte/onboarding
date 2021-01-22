@@ -24,10 +24,6 @@ import {
   PromoStatus,
 } from '../../../src/types';
 
-chai.use(chaiAsPromised);
-
-const chance = new Chance();
-
 import {
   MissingPromoInformationError,
   InvalidPromoTemplateError,
@@ -36,6 +32,10 @@ import {
   PromoNotFoundError,
   ActivePromoError,
 } from '../../../src/custom-errors';
+
+chai.use(chaiAsPromised);
+
+const chance = new Chance();
 
 describe('Promo Use Cases', () => {
   before(async function () {

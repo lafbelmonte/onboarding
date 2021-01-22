@@ -1,5 +1,6 @@
 import { UseCase, VendorsStore, VendorDocument } from '../../types';
 import { VendorNotFoundError } from '../../custom-errors';
+
 const selectOneVendor = ({
   vendorsStore,
 }: {

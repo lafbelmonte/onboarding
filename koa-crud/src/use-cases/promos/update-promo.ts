@@ -1,5 +1,6 @@
 import { UseCase, PromosStore } from '../../types';
 import { PromoNotFoundError } from '../../custom-errors';
+
 const updatePromo = ({
   promoEntity,
   promosStore,

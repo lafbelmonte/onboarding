@@ -1,5 +1,6 @@
 import { UseCase, PromosStore, PromoStatus } from '../../types';
 import { PromoNotFoundError, ActivePromoError } from '../../custom-errors';
+
 const deleteOnePromo = ({
   promosStore,
 }: {

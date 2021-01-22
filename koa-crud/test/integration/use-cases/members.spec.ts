@@ -17,15 +17,15 @@ import { Member } from '../../../src/lib/mongoose/models/member';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
-chai.use(chaiAsPromised);
-
-const chance = new Chance();
-
 import {
   MissingMemberInformationError,
   ExistingMemberError,
   MemberNotFoundError,
 } from '../../../src/custom-errors';
+
+chai.use(chaiAsPromised);
+
+const chance = new Chance();
 
 describe('Member Use Cases', () => {
   before(async function () {

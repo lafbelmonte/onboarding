@@ -666,7 +666,7 @@ describe('Vendor Queries', function () {
                 input: {
                   id: this.baseId,
                   name: this.randomName(),
-                  type: '${this.randomName()}',
+                  type: `${this.randomName()}`,
                 },
               },
             },
