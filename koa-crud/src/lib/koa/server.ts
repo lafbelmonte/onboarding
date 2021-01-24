@@ -3,11 +3,13 @@ import Router from 'koa-router';
 import bodyParser from 'koa-body';
 import R from 'ramda';
 import { ApolloServer } from 'apollo-server-koa';
+import koaPinoLogger from 'koa-pino-logger';
 import serializer from './serializer';
 import { initializeDatabase } from '../mongoose';
 import typeDefs from '../../graphql/type-defs';
 import resolvers from '../../graphql/resolvers';
 import { verifyToken } from '../jwt/index';
+import { pinoLogger } from '../../logger';
 
 class KoaApp {
   private app: Koa;
@@ -27,6 +29,7 @@ class KoaApp {
 
   private initializeMiddlewares(): void {
     this.app.use(bodyParser());
+    this.app.use(koaPinoLogger({ logger: pinoLogger }));
   }
 
   private initializeGraphQl(): void {
@@ -34,6 +37,10 @@ class KoaApp {
       typeDefs,
       resolvers,
       context: verifyToken,
+      formatError: (error) => {
+        pinoLogger.error(error);
+        return error;
+      },
     });
     graphQlserver.applyMiddleware({ app: this.app, path: '/graphql' });
   }
