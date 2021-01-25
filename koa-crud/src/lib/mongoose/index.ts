@@ -20,7 +20,7 @@ async function initializeDatabase(): Promise<void> {
       await mongoose.connect(uri, mongooseOpts);
     } else {
       await mongoose.connect(
-        `mongodb://mongo:27017/onboarding?authSource=admin`,
+        `mongodb://root:lostintheabyss@localhost:27017/onboarding?authSource=admin`,
         { useNewUrlParser: true },
       );
     }
