@@ -29,11 +29,22 @@ const schema = new Schema(
       type: String,
     },
     realName: String,
+    dateTimeCreated: { type: Date, default: Date.now },
+    cursor: {
+      type: Buffer,
+      default(this) {
+        return Buffer.from(this.dateTimeCreated);
+      },
+    },
   },
   { timestamps: true },
 );
 
 schema.plugin(mongooseLeanVirtuals);
+
+schema.virtual('cursorBuffer').get(function () {
+  return this.cursor.buffer;
+});
 
 const Member = model<MemberDocument>('Member', schema);
 

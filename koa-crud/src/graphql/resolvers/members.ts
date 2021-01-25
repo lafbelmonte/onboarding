@@ -1,4 +1,4 @@
-import { MemberDocument, Member } from '../../types';
+import { MemberDocument, Member, Connection } from '../../types';
 import {
   selectAllMembersUseCase,
   insertMemberUseCase,
@@ -7,8 +7,20 @@ import {
   deleteOneMemberUseCase,
 } from '../../use-cases/members';
 
-const members = async (): Promise<MemberDocument[]> => {
-  return selectAllMembersUseCase({ id: null, info: null, source: null });
+import paginate from '../../pagination';
+
+const members = async (obj, args): Promise<Connection<MemberDocument>> => {
+  const data = await selectAllMembersUseCase({
+    id: null,
+    info: null,
+    source: null,
+  });
+
+  return paginate<MemberDocument>({
+    data,
+    first: args.first,
+    after: args.after,
+  });
 };
 
 const member = async (obj, args: Member): Promise<MemberDocument> => {

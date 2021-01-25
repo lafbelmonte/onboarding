@@ -10,7 +10,7 @@ const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
     email,
     bankAccount,
     balance,
-  }: Member): Promise<Member> {
+  }: Member): Promise<Omit<Member, 'cursorBuffer'>> {
     if (!username) {
       throw new MissingMemberInformationError(`Please input username`);
     }

@@ -18,7 +18,7 @@ const entity = ({ R }: { R: typeof rType }) => {
     requiredMemberFields,
     submitted,
     enabled,
-  }: Promo): Promise<Promo> {
+  }: Promo): Promise<Omit<Promo, 'cursorBuffer'>> {
     if (!name) {
       throw new MissingPromoInformationError(`Please input name`);
     }

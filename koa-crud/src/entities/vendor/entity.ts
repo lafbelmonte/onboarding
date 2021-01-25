@@ -2,7 +2,10 @@ import { Vendor } from '../../types/index';
 import { MissingVendorInformationError } from '../../custom-errors';
 
 const entity = () => {
-  return async function vendor({ name, type }: Vendor): Promise<Vendor> {
+  return async function vendor({
+    name,
+    type,
+  }: Vendor): Promise<Omit<Vendor, 'cursorBuffer'>> {
     if (!name) {
       throw new MissingVendorInformationError(`Please input name`);
     }

@@ -390,31 +390,47 @@ describe('Promo Queries', function () {
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
       });
+
+      this.startBuffer = this.mock.cursor.toString('base64');
     });
 
     it('should return list of promos', async function () {
       this.mock = {
         query: {
           promos: {
-            id: true,
-            name: true,
-            status: true,
-            template: true,
-            title: true,
-            createdAt: true,
-            updatedAt: true,
-            __on: [
-              {
-                __typeName: 'DepositPromo',
-                minimumBalance: true,
+            __args: {
+              first: 2,
+              after: this.startBuffer,
+            },
+            totalCount: true,
+            edges: {
+              node: {
+                id: true,
+                name: true,
+                status: true,
+                template: true,
+                title: true,
+                createdAt: true,
+                updatedAt: true,
+                __on: [
+                  {
+                    __typeName: 'DepositPromo',
+                    minimumBalance: true,
+                  },
+                  {
+                    __typeName: 'SignUpPromo',
+                    requiredMemberFields: true,
+                  },
+                ],
+                submitted: true,
+                enabled: true,
               },
-              {
-                __typeName: 'SignUpPromo',
-                requiredMemberFields: true,
-              },
-            ],
-            submitted: true,
-            enabled: true,
+              cursor: true,
+            },
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: true,
+            },
           },
         },
       };
@@ -422,7 +438,9 @@ describe('Promo Queries', function () {
       const query = jsonToGraphQLQuery(this.mock);
       const main = await this.request().post('/graphql').send({ query });
       expect(main.statusCode).to.eqls(200);
-      expect(main.body.data.promos).have.length(1);
+
+      expect(main.body.data.promos.totalCount).eqls(1);
+      expect(main.body.data.promos.edges).have.length(1);
     });
   });
 

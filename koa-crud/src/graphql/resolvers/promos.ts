@@ -6,14 +6,25 @@ import {
   deleteOnePromoUseCase,
 } from '../../use-cases/promos';
 
-import { Promo, PromoDocument } from '../../types';
+import { Promo, PromoDocument, Connection } from '../../types';
+
+import paginate from '../../pagination';
 
 const createPromo = async (obj, args: { input: Promo }): Promise<boolean> => {
   return insertPromoUseCase({ id: null, info: args.input, source: null });
 };
 
-const promos = async (): Promise<PromoDocument[]> => {
-  return selectAllPromosUseCase({ id: null, info: null, source: null });
+const promos = async (obj, args): Promise<Connection<PromoDocument>> => {
+  const data = await selectAllPromosUseCase({
+    id: null,
+    info: null,
+    source: null,
+  });
+  return paginate<PromoDocument>({
+    data,
+    first: args.first,
+    after: args.after,
+  });
 };
 
 const promo = async (obj, args: Promo): Promise<PromoDocument> => {

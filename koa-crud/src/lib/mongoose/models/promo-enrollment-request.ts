@@ -48,6 +48,10 @@ const schema = new Schema(
 
 schema.plugin(mongooseLeanVirtuals);
 
+schema.virtual('cursorBuffer').get(function () {
+  return this.cursor.buffer;
+});
+
 const PromoEnrollmentRequest = model<PromoEnrollmentRequestDocument>(
   'PromoEnrollmentRequest',
   schema,

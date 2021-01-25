@@ -555,7 +555,6 @@ describe('Promo Enrollment Queries', function () {
         member: this.loggedInMember._id,
         promo: this.depositMockId,
       });
-
       await PromoEnrollmentRequest.create({
         member: this.loggedInMember._id,
         promo: this.signUpMockId,

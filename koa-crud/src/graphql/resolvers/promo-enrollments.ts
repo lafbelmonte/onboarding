@@ -9,7 +9,7 @@ import {
 
 import { NotAllowedError } from '../../custom-errors';
 import { Connection, PromoEnrollmentRequest } from '../../types/index';
-import { paginate } from '../../pagination';
+import paginate from '../../pagination';
 
 const enrollToPromo = async (
   obj,
@@ -37,7 +37,11 @@ const promoEnrollmentRequests = async (
     source: null,
   });
 
-  return paginate(data, args.first, args.after);
+  return paginate<PromoEnrollmentRequest>({
+    data,
+    first: args.first,
+    after: args.after,
+  });
 };
 
 const promoEnrollmentRequest = async (

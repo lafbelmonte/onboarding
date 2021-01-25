@@ -32,6 +32,8 @@ type Vendor = {
   id?: string;
   name: string;
   type: VendorType;
+  cursorBuffer: Buffer;
+  cursor?: Buffer;
 };
 
 type VendorDocument = Vendor & Document;
@@ -62,6 +64,8 @@ type Member = {
   email?: string | null;
   bankAccount?: string | null;
   balance?: number | null;
+  cursorBuffer: Buffer;
+  cursor?: Buffer;
 };
 
 type MemberFilters = {
@@ -112,6 +116,8 @@ type Promo = {
   requiredMemberFields?: RequiredMemberFields[];
   submitted: boolean;
   enabled: boolean;
+  cursorBuffer: Buffer;
+  cursor?: Buffer;
 };
 
 type PromoDocument = Promo & Document;
@@ -146,7 +152,8 @@ type PromoEnrollmentRequest = {
   status?: PromoEnrollmentRequestStatus;
   createdAt?: string;
   updatedAt?: string;
-  cursor: Buffer;
+  cursorBuffer: Buffer;
+  cursor?: Buffer;
 };
 
 type PromoEnrollmentRequestFilters = {
@@ -185,7 +192,7 @@ type Edge<T> = {
 type Connection<T> = {
   totalCount: number;
   pageInfo: {
-    endCursor: string;
+    endCursor: Buffer;
     hasNextPage: boolean;
   };
   edges: Edge<T>[];

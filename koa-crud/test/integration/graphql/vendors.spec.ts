@@ -279,6 +279,7 @@ describe('Vendor Queries', function () {
         name: this.randomName(),
         type: VendorType.Seamless,
       });
+      this.startBuffer = this.mock.cursor.toString('base64');
     });
 
     describe('Given no token', () => {
@@ -286,11 +287,25 @@ describe('Vendor Queries', function () {
         this.mock = {
           query: {
             vendors: {
-              id: true,
-              name: true,
-              type: true,
-              createdAt: true,
-              updatedAt: true,
+              __args: {
+                first: 2,
+                after: this.startBuffer,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  name: true,
+                  type: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
             },
           },
         };
@@ -309,11 +324,25 @@ describe('Vendor Queries', function () {
         this.mock = {
           query: {
             vendors: {
-              id: true,
-              name: true,
-              type: true,
-              createdAt: true,
-              updatedAt: true,
+              __args: {
+                first: 2,
+                after: this.startBuffer,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  name: true,
+                  type: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
             },
           },
         };
@@ -334,11 +363,25 @@ describe('Vendor Queries', function () {
       this.mock = {
         query: {
           vendors: {
-            id: true,
-            name: true,
-            type: true,
-            createdAt: true,
-            updatedAt: true,
+            __args: {
+              first: 2,
+              after: this.startBuffer,
+            },
+            totalCount: true,
+            edges: {
+              node: {
+                id: true,
+                name: true,
+                type: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+              cursor: true,
+            },
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: true,
+            },
           },
         },
       };
@@ -349,7 +392,8 @@ describe('Vendor Queries', function () {
         .set('Authorization', `Bearer ${this.token}`)
         .send({ query });
       expect(main.statusCode).to.eqls(200);
-      expect(main.body.data.vendors).have.length(1);
+      expect(main.body.data.vendors.totalCount).eqls(1);
+      expect(main.body.data.vendors.edges).have.length(1);
     });
   });
 

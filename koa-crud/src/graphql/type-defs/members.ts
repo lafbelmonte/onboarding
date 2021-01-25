@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   extend type Query {
-    members: [Member]
+    members(first: Int!, after: String!): MemberConnection
     member(id: ID!): Member
   }
 
@@ -10,6 +10,17 @@ export default gql`
     createMember(input: CreateMemberInput!): Boolean!
     updateMember(input: UpdateMemberInput!): Boolean!
     deleteMember(id: ID!): Boolean!
+  }
+
+  type MemberConnectionEdge {
+    node: Member
+    cursor: String
+  }
+
+  type MemberConnection {
+    totalCount: Int
+    edges: [MemberConnectionEdge]
+    pageInfo: PageInfo
   }
 
   input UpdateMemberInput {

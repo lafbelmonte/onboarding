@@ -6,15 +6,28 @@ import {
   deleteOneVendorUseCase,
 } from '../../use-cases/vendors';
 
-import { Vendor, VendorDocument } from '../../types';
+import { Vendor, VendorDocument, Connection } from '../../types';
 
 import { NotAllowedError } from '../../custom-errors';
 
-const vendors = async (obj, args: Vendor, ctx): Promise<VendorDocument[]> => {
+import paginate from '../../pagination';
+
+const vendors = async (obj, args, ctx): Promise<Connection<VendorDocument>> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
-  return selectAllVendorsUseCase({ id: null, info: null, source: null });
+
+  const data = await selectAllVendorsUseCase({
+    id: null,
+    info: null,
+    source: null,
+  });
+
+  return paginate<VendorDocument>({
+    data,
+    first: args.first,
+    after: args.after,
+  });
 };
 const vendor = async (obj, args: Vendor, ctx): Promise<VendorDocument> => {
   if (!ctx.allowed) {

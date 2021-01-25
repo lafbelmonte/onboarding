@@ -151,17 +151,33 @@ describe('Member Queries', function () {
         password: this.randomPassword(),
         realName: this.randomRealName(),
       });
+
+      this.startBuffer = this.mock.cursor.toString('base64');
     });
 
     it('should return list of members', async function () {
       this.mock = {
         query: {
           members: {
-            id: true,
-            username: true,
-            realName: true,
-            createdAt: true,
-            updatedAt: true,
+            __args: {
+              first: 2,
+              after: this.startBuffer,
+            },
+            totalCount: true,
+            edges: {
+              node: {
+                id: true,
+                username: true,
+                realName: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+              cursor: true,
+            },
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: true,
+            },
           },
         },
       };
@@ -169,7 +185,8 @@ describe('Member Queries', function () {
       const query = jsonToGraphQLQuery(this.mock);
       const main = await this.request().post('/graphql').send({ query });
       expect(main.statusCode).to.eqls(200);
-      expect(main.body.data.members).have.length(1);
+      expect(main.body.data.members.totalCount).eqls(1);
+      expect(main.body.data.members.edges).have.length(1);
     });
   });
 

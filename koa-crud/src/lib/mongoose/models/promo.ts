@@ -54,11 +54,22 @@ const schema = new Schema(
       enum: RequiredMemberFields,
       default: [],
     },
+    dateTimeCreated: { type: Date, default: Date.now },
+    cursor: {
+      type: Buffer,
+      default(this) {
+        return Buffer.from(this.dateTimeCreated);
+      },
+    },
   },
   { timestamps: true },
 );
 
 schema.plugin(mongooseLeanVirtuals);
+
+schema.virtual('cursorBuffer').get(function () {
+  return this.cursor.buffer;
+});
 
 const Promo = model<PromoDocument>('Promo', schema);
 
