@@ -144,6 +144,9 @@ type PromoEnrollmentRequest = {
   promo: Promo | string;
   member: Member | string;
   status?: PromoEnrollmentRequestStatus;
+  createdAt?: string;
+  updatedAt?: string;
+  cursor: Buffer;
 };
 
 type PromoEnrollmentRequestFilters = {
@@ -155,9 +158,10 @@ type PromoEnrollmentRequestFilters = {
 type PromoEnrollmentRequestDocument = PromoEnrollmentRequest & Document;
 
 type PromoEnrollmentRequestsStore = {
-  insertPromoEnrollment: (
-    info: PromoEnrollmentRequest,
-  ) => Promise<PromoEnrollmentRequestDocument>;
+  insertPromoEnrollment: (info: {
+    promo: Promo | string;
+    member: Member | string;
+  }) => Promise<PromoEnrollmentRequestDocument>;
   promoEnrollmentExistsByFilter: (
     filters: PromoEnrollmentRequestFilters,
   ) => Promise<boolean>;
@@ -175,7 +179,7 @@ type PromoEnrollmentRequestsStore = {
 
 type Edge<T> = {
   node: T;
-  cursor: string;
+  cursor: Buffer;
 };
 
 type Connection<T> = {

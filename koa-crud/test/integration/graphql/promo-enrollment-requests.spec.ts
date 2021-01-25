@@ -551,7 +551,7 @@ describe('Promo Enrollment Queries', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      await PromoEnrollmentRequest.create({
+      const start = await PromoEnrollmentRequest.create({
         member: this.loggedInMember._id,
         promo: this.depositMockId,
       });
@@ -560,6 +560,8 @@ describe('Promo Enrollment Queries', function () {
         member: this.loggedInMember._id,
         promo: this.signUpMockId,
       });
+
+      this.startBuffer = start.cursor.toString('base64');
     });
 
     after(async () => {
@@ -571,6 +573,10 @@ describe('Promo Enrollment Queries', function () {
       this.mock = {
         query: {
           promoEnrollmentRequests: {
+            __args: {
+              first: 2,
+              after: this.startBuffer,
+            },
             totalCount: true,
             edges: {
               node: {

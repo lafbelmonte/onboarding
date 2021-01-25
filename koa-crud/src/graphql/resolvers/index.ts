@@ -26,6 +26,9 @@ import {
   approvePromoEnrollmentRequest,
 } from './promo-enrollments';
 
+import { selectOneMemberUseCase } from '../../use-cases/members';
+import { selectOnePromoUseCase } from '../../use-cases/promos';
+
 const Query = {
   members,
   member,
@@ -61,6 +64,23 @@ export default {
         return 'DepositPromo';
       }
       return 'SignUpPromo';
+    },
+  },
+  PromoEnrollmentRequest: {
+    async member(parent) {
+      return selectOneMemberUseCase({
+        id: parent.member,
+        info: null,
+        source: null,
+      });
+    },
+
+    async promo(parent) {
+      return selectOnePromoUseCase({
+        id: parent.promo,
+        info: null,
+        source: null,
+      });
     },
   },
 };

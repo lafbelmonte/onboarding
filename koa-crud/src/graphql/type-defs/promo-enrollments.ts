@@ -42,6 +42,9 @@ export default gql`
 
   extend type Query {
     promoEnrollmentRequest(id: ID!): PromoEnrollmentRequest
-    promoEnrollmentRequests: PromoEnrollmentRequestsConnection
+    promoEnrollmentRequests(
+      first: Int!
+      after: String!
+    ): PromoEnrollmentRequestsConnection
   }
 `;

@@ -1,5 +1,3 @@
-import R from 'ramda';
-
 import {
   enrollToPromoUseCase,
   selectAllPromoEnrollmentRequestsUseCase,
@@ -11,6 +9,7 @@ import {
 
 import { NotAllowedError } from '../../custom-errors';
 import { Connection, PromoEnrollmentRequest } from '../../types/index';
+import { paginate } from '../../pagination';
 
 const enrollToPromo = async (
   obj,
@@ -28,30 +27,17 @@ const enrollToPromo = async (
   });
 };
 
-const promoEnrollmentRequests = async (): Promise<
-  Connection<PromoEnrollmentRequest>
-> => {
-  const nodes = await selectAllPromoEnrollmentRequestsUseCase({
+const promoEnrollmentRequests = async (
+  obj,
+  args,
+): Promise<Connection<PromoEnrollmentRequest>> => {
+  const data = await selectAllPromoEnrollmentRequestsUseCase({
     id: null,
     info: null,
     source: null,
   });
 
-  const edges = R.map((node: PromoEnrollmentRequest) => {
-    return {
-      node,
-      cursor: 'not implemented',
-    };
-  })(nodes);
-
-  return {
-    totalCount: nodes.length,
-    pageInfo: {
-      endCursor: 'not implemented',
-      hasNextPage: false,
-    },
-    edges,
-  };
+  return paginate(data, args.first, args.after);
 };
 
 const promoEnrollmentRequest = async (

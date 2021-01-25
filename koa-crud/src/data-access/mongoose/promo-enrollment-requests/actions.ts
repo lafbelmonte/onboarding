@@ -15,17 +15,11 @@ const actions = ({
   }
 
   async function selectOnePromoEnrollmentByFilters(filters) {
-    return PromoEnrollmentRequest.findOne(filters)
-      .populate('member')
-      .populate('promo')
-      .lean({ virtuals: true });
+    return PromoEnrollmentRequest.findOne(filters).lean({ virtuals: true });
   }
 
   async function selectAllPromoEnrollmentRequests() {
-    return PromoEnrollmentRequest.find()
-      .populate('member')
-      .populate('promo')
-      .lean({ virtuals: true });
+    return PromoEnrollmentRequest.find().lean({ virtuals: true });
   }
 
   async function updatePromoEnrollmentRequestStatusByFilters(filters, info) {
