@@ -1,4 +1,10 @@
-import { PromoTemplate, Promo } from '../../types';
+import {
+  PromoTemplate,
+  Promo,
+  PromoDocument,
+} from '../../lib/mongoose/models/promo';
+import { MemberDocument } from '../../lib/mongoose/models/member';
+import { PromoEnrollmentRequest } from '../../lib/mongoose/models/promo-enrollment-request';
 
 import {
   members,
@@ -67,19 +73,15 @@ export default {
     },
   },
   PromoEnrollmentRequest: {
-    async member(parent) {
+    async member(parent: PromoEnrollmentRequest): Promise<MemberDocument> {
       return selectOneMemberUseCase({
         id: parent.member,
-        info: null,
-        source: null,
       });
     },
 
-    async promo(parent) {
+    async promo(parent: PromoEnrollmentRequest): Promise<PromoDocument> {
       return selectOnePromoUseCase({
         id: parent.promo,
-        info: null,
-        source: null,
       });
     },
   },

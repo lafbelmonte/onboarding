@@ -1,17 +1,35 @@
-import { UseCase, MembersStore } from '../../types';
+import { Member } from '../../lib/mongoose/models/member';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError, ExistingMemberError } from '../../custom-errors';
+import { MemberEntity } from '../../entities/member/entity';
+
+type Input = {
+  id: string;
+  info: {
+    username: Member[`username`];
+    realName?: Member[`realName`];
+    email?: Member[`email`];
+    bankAccount?: Member[`bankAccount`];
+    balance?: Member[`balance`];
+  };
+  source?;
+};
+
+type Output = boolean;
+
+export type UpdateMemberUseCase = (input: Input) => Promise<Output>;
 
 const updateMember = ({
   memberEntity,
-  membersStore,
+  memberStore,
   R,
 }: {
-  membersStore: MembersStore;
-  memberEntity;
+  memberStore: MemberStore;
+  memberEntity: MemberEntity;
   R;
-}): UseCase<boolean> => {
+}): UpdateMemberUseCase => {
   return async function ({ id, info }) {
-    const memberExists = await membersStore.memberExistsByFilter({
+    const memberExists = await memberStore.memberExistsByFilter({
       _id: id,
     });
 
@@ -21,7 +39,7 @@ const updateMember = ({
 
     const member = await memberEntity(info);
 
-    const usernameExists = await membersStore.selectOneMemberByFilters({
+    const usernameExists = await memberStore.selectOneMemberByFilters({
       username: member.username,
       _id: { $ne: id },
     });
@@ -32,7 +50,7 @@ const updateMember = ({
       );
     }
 
-    await membersStore.updateMemberByFilters(
+    await memberStore.updateMemberByFilters(
       { _id: id },
       R.omit(['password'], member),
     );

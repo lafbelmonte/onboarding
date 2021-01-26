@@ -1,17 +1,26 @@
-import {
-  UseCase,
-  PromoEnrollmentRequestsStore,
-  PromoEnrollmentRequestDocument,
-} from '../../types';
+import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
+import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
 import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = PromoEnrollmentRequestDocument;
+
+export type SelectOnePromoEnrollmentRequestUseCase = (
+  input: Input,
+) => Promise<Output>;
+
 const selectOnePromoEnrollmentRequest = ({
-  promoEnrollmentRequestsStore,
+  promoEnrollmentRequestStore,
 }: {
-  promoEnrollmentRequestsStore: PromoEnrollmentRequestsStore;
-}): UseCase<PromoEnrollmentRequestDocument> => {
+  promoEnrollmentRequestStore: PromoEnrollmentRequestStore;
+}): SelectOnePromoEnrollmentRequestUseCase => {
   return async function useCase({ id }) {
-    const promoEnrollmentRequest = await promoEnrollmentRequestsStore.selectOnePromoEnrollmentByFilters(
+    const promoEnrollmentRequest = await promoEnrollmentRequestStore.selectOnePromoEnrollmentByFilters(
       { _id: id },
     );
 

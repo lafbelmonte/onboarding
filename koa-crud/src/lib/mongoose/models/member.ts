@@ -1,9 +1,22 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { MemberDocument } from '../../../types/index';
 
-const schema = new Schema(
+export type Member = {
+  _id: string;
+  username: string;
+  password: string;
+  realName?: string;
+  email?: string;
+  bankAccount?: string;
+  balance?: number;
+  cursor: Buffer;
+  cursorBuffer: Buffer;
+};
+
+export type MemberDocument = Member & Document;
+
+const schema: Schema = new Schema(
   {
     _id: {
       type: String,
@@ -29,11 +42,10 @@ const schema = new Schema(
       type: String,
     },
     realName: String,
-    dateTimeCreated: { type: Date, default: Date.now },
     cursor: {
       type: Buffer,
       default(this) {
-        return Buffer.from(this.dateTimeCreated);
+        return Buffer.from(new Date());
       },
     },
   },
@@ -48,4 +60,4 @@ schema.virtual('cursorBuffer').get(function () {
 
 const Member = model<MemberDocument>('Member', schema);
 
-export { Member };
+export default Member;

@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 
 import { authenticateUseCase } from '../../../src/use-cases/auth';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
@@ -32,7 +32,7 @@ describe('Auth Use Cases', () => {
     this.validUsername = this.randomUsername();
     this.validPassword = this.randomPassword();
 
-    await Member.create({
+    await MemberModel.create({
       username: this.validUsername,
       password: await bcrypt.hash(this.validPassword, 10),
       realName: this.randomRealName(),
@@ -40,7 +40,7 @@ describe('Auth Use Cases', () => {
   });
 
   after(async function () {
-    await Member.deleteMany({});
+    await MemberModel.deleteMany({});
     await closeDatabase();
   });
 

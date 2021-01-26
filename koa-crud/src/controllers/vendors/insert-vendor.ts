@@ -1,9 +1,10 @@
-import { UseCase, Controller } from '../../types';
+import { Controller } from '../../types';
+import { InsertVendorUseCase } from '../../use-cases/vendors/insert-vendor';
 
 const insertVendor = ({
   insertVendorUseCase,
 }: {
-  insertVendorUseCase: UseCase<boolean>;
+  insertVendorUseCase: InsertVendorUseCase;
 }): Controller => {
   return async function controller(httpRequest) {
     try {
@@ -14,9 +15,7 @@ const insertVendor = ({
         source.referrer = httpRequest.headers.Referer;
       }
       const posted = await insertVendorUseCase({
-        id: null,
         info,
-        source,
       });
       return {
         headers: {

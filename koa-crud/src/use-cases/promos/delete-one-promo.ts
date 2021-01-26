@@ -1,13 +1,25 @@
-import { UseCase, PromosStore, PromoStatus } from '../../types';
+import { PromoStore } from '../../data-access/mongoose/promos/actions';
+import { PromoStatus } from '../../lib/mongoose/models/promo';
+
 import { PromoNotFoundError, ActivePromoError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = boolean;
+
+export type DeleteOnePromoUseCase = (input: Input) => Promise<Output>;
+
 const deleteOnePromo = ({
-  promosStore,
+  promoStore,
 }: {
-  promosStore: PromosStore;
-}): UseCase<boolean> => {
+  promoStore: PromoStore;
+}): DeleteOnePromoUseCase => {
   return async function useCase({ id }) {
-    const promo = await promosStore.selectOnePromoByFilters({ _id: id });
+    const promo = await promoStore.selectOnePromoByFilters({ _id: id });
 
     if (!promo) {
       throw new PromoNotFoundError(`Promo with ID: ${id} doesn't exists`);
@@ -17,7 +29,7 @@ const deleteOnePromo = ({
       throw new ActivePromoError(`Active promos can't be deleted`);
     }
 
-    await promosStore.deleteOnePromo({ _id: id });
+    await promoStore.deleteOnePromo({ _id: id });
 
     return true;
   };

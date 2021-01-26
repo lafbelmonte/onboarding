@@ -7,10 +7,11 @@ import { Chance } from 'chance';
 import { jsonToGraphQLQuery, EnumType } from 'json-to-graphql-query';
 import server from '../../../src/index';
 
-import { Vendor } from '../../../src/lib/mongoose/models/vendor';
-import { Member } from '../../../src/lib/mongoose/models/member';
+import VendorModel, {
+  VendorType,
+} from '../../../src/lib/mongoose/models/vendor';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
-import { VendorType } from '../../../src/types';
 import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiHttp);
@@ -31,7 +32,7 @@ describe('Vendor Queries', function () {
     const username = this.randomUsername();
     const password = this.randomPassword();
 
-    await Member.create({
+    await MemberModel.create({
       username,
       password: await bcrypt.hash(password, 10),
       realName: this.randomRealName(),
@@ -46,17 +47,17 @@ describe('Vendor Queries', function () {
   });
 
   after(async function () {
-    await Member.deleteMany({});
+    await MemberModel.deleteMany({});
     await closeDatabase();
   });
 
   describe('Vendor Creation', () => {
     afterEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     describe('Given no token', () => {
@@ -239,7 +240,7 @@ describe('Vendor Queries', function () {
 
     describe('Given an existing vendor name', () => {
       it('should throw an error', async function () {
-        const data = await Vendor.create({
+        const data = await VendorModel.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });
@@ -270,12 +271,12 @@ describe('Vendor Queries', function () {
 
   describe('List all vendors', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -399,12 +400,12 @@ describe('Vendor Queries', function () {
 
   describe('List vendor by ID', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -527,12 +528,12 @@ describe('Vendor Queries', function () {
 
   describe('Updating a vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -761,16 +762,16 @@ describe('Vendor Queries', function () {
 
   describe('Deleting a vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
+      await VendorModel.deleteMany({});
     });
 
     describe('Given no token', () => {
       it('should throw an error', async function () {
-        const data = await Vendor.create({
+        const data = await VendorModel.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });
@@ -796,7 +797,7 @@ describe('Vendor Queries', function () {
 
     describe('Given erroneous token', () => {
       it('should throw an error', async function () {
-        const data = await Vendor.create({
+        const data = await VendorModel.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });
@@ -825,7 +826,7 @@ describe('Vendor Queries', function () {
 
     describe('GIVEN an existent ID', () => {
       it('should return true', async function () {
-        const data = await Vendor.create({
+        const data = await VendorModel.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });
@@ -852,7 +853,7 @@ describe('Vendor Queries', function () {
 
     describe('GIVEN a non existent ID', () => {
       it('should throw an error', async function () {
-        await Vendor.create({
+        await VendorModel.create({
           name: this.randomName(),
           type: VendorType.Seamless,
         });

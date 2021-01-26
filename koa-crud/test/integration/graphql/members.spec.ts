@@ -6,7 +6,7 @@ import { Chance } from 'chance';
 import { jsonToGraphQLQuery } from 'json-to-graphql-query';
 import server from '../../../src/index';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
 import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
@@ -31,11 +31,11 @@ describe('Member Queries', function () {
 
   describe('Member Creation', () => {
     afterEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     describe('Given correct inputs', () => {
@@ -141,12 +141,12 @@ describe('Member Queries', function () {
 
   describe('List all members', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -192,12 +192,12 @@ describe('Member Queries', function () {
 
   describe('List member by ID', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -260,12 +260,12 @@ describe('Member Queries', function () {
 
   describe('Updating a member', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -348,7 +348,7 @@ describe('Member Queries', function () {
 
     describe('Given existing username', () => {
       it('should throw an error', async function () {
-        const data = await Member.create({
+        const data = await MemberModel.create({
           username: this.randomUsername(),
           password: this.randomPassword(),
           realName: this.randomRealName(),
@@ -380,16 +380,16 @@ describe('Member Queries', function () {
 
   describe('Member Deletion', () => {
     afterEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     describe('Given an existent ID', () => {
       it('should return true', async function () {
-        const data = await Member.create({
+        const data = await MemberModel.create({
           username: this.randomUsername(),
           password: this.randomPassword(),
           realName: this.randomRealName(),

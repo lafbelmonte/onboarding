@@ -1,9 +1,10 @@
-import { Controller, UseCase, VendorDocument } from '../../types';
+import { Controller } from '../../types';
+import { SelectAllVendorsUseCase } from '../../use-cases/vendors/select-all-vendors';
 
 const selectAllVendors = ({
   selectAllVendorsUseCase,
 }: {
-  selectAllVendorsUseCase: UseCase<VendorDocument[]>;
+  selectAllVendorsUseCase: SelectAllVendorsUseCase;
 }): Controller => {
   return async function controller() {
     const headers = {
@@ -11,11 +12,7 @@ const selectAllVendors = ({
     };
 
     try {
-      const view = await selectAllVendorsUseCase({
-        id: null,
-        info: null,
-        source: null,
-      });
+      const view = await selectAllVendorsUseCase({});
 
       return {
         headers,

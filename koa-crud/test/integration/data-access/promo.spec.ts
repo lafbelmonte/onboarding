@@ -5,17 +5,15 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { Promo } from '../../../src/lib/mongoose/models/promo';
-
-import { promosStore } from '../../../src/data-access/mongoose/promos';
-
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-import {
+import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/types';
+} from '../../../src/lib/mongoose/models/promo';
+
+import { promoStore } from '../../../src/data-access/mongoose/promos';
+
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -27,7 +25,7 @@ const {
   selectOnePromoByFilters,
   updatePromoByFilters,
   deleteOnePromo,
-} = promosStore;
+} = promoStore;
 
 describe('Promo Store', () => {
   before(async function () {
@@ -46,11 +44,11 @@ describe('Promo Store', () => {
 
   describe('Insert one Promo', () => {
     afterEach(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     describe('GIVEN correct inputs and deposit template', () => {
@@ -142,12 +140,12 @@ describe('Promo Store', () => {
 
   describe('Select All Promos', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
-      this.mock = await Promo.create({
+      await PromoModel.deleteMany({});
+      this.mock = await PromoModel.create({
         name: this.randomName(),
         template: PromoTemplate.Deposit,
         title: this.randomTitle(),
@@ -163,12 +161,12 @@ describe('Promo Store', () => {
 
   describe('Select One Promo', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
-      this.mock = await Promo.create({
+      await PromoModel.deleteMany({});
+      this.mock = await PromoModel.create({
         name: this.randomName(),
         template: PromoTemplate.Deposit,
         title: this.randomTitle(),
@@ -195,12 +193,12 @@ describe('Promo Store', () => {
 
   describe('Updating a Promo', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
-      this.mock = await Promo.create({
+      await PromoModel.deleteMany({});
+      this.mock = await PromoModel.create({
         name: this.randomName(),
         template: PromoTemplate.Deposit,
         title: this.randomTitle(),
@@ -380,16 +378,16 @@ describe('Promo Store', () => {
 
   describe('Deleting a promo', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
+      await PromoModel.deleteMany({});
     });
 
     describe('GIVEN valid and existent vendor ID', () => {
       it('should return true', async function () {
-        this.mock = await Promo.create({
+        this.mock = await PromoModel.create({
           name: this.randomName(),
           template: PromoTemplate.Deposit,
           title: this.randomTitle(),
@@ -404,7 +402,7 @@ describe('Promo Store', () => {
 
     describe('GIVEN non existent vendor ID', () => {
       it('should return false', async function () {
-        await Promo.create({
+        await PromoModel.create({
           name: this.randomName(),
           template: PromoTemplate.Deposit,
           title: this.randomTitle(),

@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import { Chance } from 'chance';
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
 chai.use(chaiAsPromised);
 
@@ -28,11 +28,11 @@ describe('Member Models', () => {
 
   describe('Creating a member', () => {
     afterEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     describe('GIVEN correct inputs', () => {
@@ -42,7 +42,7 @@ describe('Member Models', () => {
           password: this.randomPassword(),
           realName: this.randomRealName(),
         };
-        await expect(Member.create(this.mock)).to.eventually.fulfilled;
+        await expect(MemberModel.create(this.mock)).to.eventually.fulfilled;
       });
     });
 
@@ -53,7 +53,7 @@ describe('Member Models', () => {
           password: this.randomPassword(),
           realName: this.randomRealName(),
         };
-        await expect(Member.create(this.mock)).to.eventually.rejected;
+        await expect(MemberModel.create(this.mock)).to.eventually.rejected;
       });
     });
 
@@ -64,19 +64,19 @@ describe('Member Models', () => {
           password: '',
           realName: this.randomRealName(),
         };
-        await expect(Member.create(this.mock)).to.eventually.rejected;
+        await expect(MemberModel.create(this.mock)).to.eventually.rejected;
       });
     });
   });
 
   describe('Updating a member', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -93,7 +93,7 @@ describe('Member Models', () => {
           realName: this.randomRealName(),
         };
         await expect(
-          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          MemberModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.fulfilled;
@@ -108,7 +108,7 @@ describe('Member Models', () => {
           realName: this.randomRealName(),
         };
         await expect(
-          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          MemberModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -123,7 +123,7 @@ describe('Member Models', () => {
           realName: this.randomRealName(),
         };
         await expect(
-          Member.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          MemberModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -133,11 +133,11 @@ describe('Member Models', () => {
 
   describe('Delete One Member', () => {
     afterEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     describe('GIVEN existent vendor ID', () => {
@@ -147,11 +147,11 @@ describe('Member Models', () => {
           password: this.randomPassword(),
           realName: this.randomRealName(),
         };
-        const main = await expect(Member.create(this.mock)).to.eventually
+        const main = await expect(MemberModel.create(this.mock)).to.eventually
           .fulfilled;
 
         await expect(
-          Member.deleteOne({ _id: main._id }),
+          MemberModel.deleteOne({ _id: main._id }),
         ).to.eventually.fulfilled.property('deletedCount', 1);
       });
     });
@@ -163,10 +163,10 @@ describe('Member Models', () => {
           password: this.randomPassword(),
           realName: this.randomRealName(),
         };
-        await expect(Member.create(this.mock)).to.eventually.fulfilled;
+        await expect(MemberModel.create(this.mock)).to.eventually.fulfilled;
 
         await expect(
-          Member.deleteOne({ _id: this.mockedId }),
+          MemberModel.deleteOne({ _id: this.mockedId }),
         ).to.eventually.fulfilled.property('deletedCount', 0);
       });
     });

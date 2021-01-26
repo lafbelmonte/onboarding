@@ -1,4 +1,3 @@
-import { MemberDocument, Member, Connection } from '../../types';
 import {
   selectAllMembersUseCase,
   insertMemberUseCase,
@@ -7,14 +6,16 @@ import {
   deleteOneMemberUseCase,
 } from '../../use-cases/members';
 
+import { MemberDocument } from '../../lib/mongoose/models/member';
+import { Connection } from '../../types';
+
 import paginate from '../../pagination';
 
-const members = async (obj, args): Promise<Connection<MemberDocument>> => {
-  const data = await selectAllMembersUseCase({
-    id: null,
-    info: null,
-    source: null,
-  });
+const members = async (
+  obj,
+  args: { first: number; after: string },
+): Promise<Connection<MemberDocument>> => {
+  const data = await selectAllMembersUseCase({});
 
   return paginate<MemberDocument>({
     data,
@@ -23,24 +24,23 @@ const members = async (obj, args): Promise<Connection<MemberDocument>> => {
   });
 };
 
-const member = async (obj, args: Member): Promise<MemberDocument> => {
-  return selectOneMemberUseCase({ id: args.id, info: null, source: null });
+const member = async (obj, args: { id: string }): Promise<MemberDocument> => {
+  return selectOneMemberUseCase({ id: args.id });
 };
 
-const createMember = async (obj, args: { input: Member }): Promise<boolean> => {
-  return insertMemberUseCase({ id: null, info: args.input, source: null });
+const createMember = async (obj, args): Promise<boolean> => {
+  return insertMemberUseCase({ info: args.input });
 };
 
-const updateMember = async (obj, args: { input: Member }): Promise<boolean> => {
+const updateMember = async (obj, args): Promise<boolean> => {
   return updateMemberUseCase({
     id: args.input.id,
     info: args.input,
-    source: null,
   });
 };
 
-const deleteMember = async (obj, args: Member): Promise<boolean> => {
-  return deleteOneMemberUseCase({ id: args.id, info: null, source: null });
+const deleteMember = async (obj, args): Promise<boolean> => {
+  return deleteOneMemberUseCase({ id: args.id });
 };
 
 export { members, member, createMember, updateMember, deleteMember };

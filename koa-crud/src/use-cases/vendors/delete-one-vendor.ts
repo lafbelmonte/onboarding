@@ -1,13 +1,23 @@
-import { UseCase, VendorsStore } from '../../types';
 import { VendorNotFoundError } from '../../custom-errors';
+import { VendorStore } from '../../data-access/mongoose/vendors/actions';
+
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = boolean;
+
+export type DeleteOneVendorUseCase = (input: Input) => Promise<Output>;
 
 const deleteOneVendor = ({
-  vendorsStore,
+  vendorStore,
 }: {
-  vendorsStore: VendorsStore;
-}): UseCase<boolean> => {
+  vendorStore: VendorStore;
+}): DeleteOneVendorUseCase => {
   return async function useCase({ id }) {
-    const vendorExists = await vendorsStore.vendorExistsByFilter({
+    const vendorExists = await vendorStore.vendorExistsByFilter({
       _id: id,
     });
 
@@ -15,7 +25,7 @@ const deleteOneVendor = ({
       throw new VendorNotFoundError(`Vendor with ID ${id} doesn't exists`);
     }
 
-    await vendorsStore.deleteOneVendor({ _id: id });
+    await vendorStore.deleteOneVendor({ _id: id });
 
     return true;
   };

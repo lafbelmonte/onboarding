@@ -6,41 +6,37 @@ import {
   deleteOnePromoUseCase,
 } from '../../use-cases/promos';
 
-import { Promo, PromoDocument, Connection } from '../../types';
-
 import paginate from '../../pagination';
 
-const createPromo = async (obj, args: { input: Promo }): Promise<boolean> => {
-  return insertPromoUseCase({ id: null, info: args.input, source: null });
+import { PromoDocument } from '../../lib/mongoose/models/promo';
+import { Connection } from '../../types';
+
+const createPromo = async (obj, args): Promise<boolean> => {
+  return insertPromoUseCase({ info: args.input });
 };
 
 const promos = async (obj, args): Promise<Connection<PromoDocument>> => {
-  const data = await selectAllPromosUseCase({
-    id: null,
-    info: null,
-    source: null,
-  });
-  return paginate<PromoDocument>({
+  const data = await selectAllPromosUseCase({});
+  return paginate({
     data,
     first: args.first,
     after: args.after,
   });
 };
 
-const promo = async (obj, args: Promo): Promise<PromoDocument> => {
-  return selectOnePromoUseCase({ id: args.id, info: null, source: null });
+const promo = async (obj, args): Promise<PromoDocument> => {
+  return selectOnePromoUseCase({ id: args.id });
 };
 
-const updatePromo = async (obj, args: { input: Promo }): Promise<boolean> => {
+const updatePromo = async (obj, args): Promise<boolean> => {
   return updatePromoUseCase({
     id: args.input.id,
     info: args.input,
-    source: null,
   });
 };
 
-const deletePromo = async (obj, args: Promo): Promise<boolean> => {
-  return deleteOnePromoUseCase({ id: args.id, info: null, source: null });
+const deletePromo = async (obj, args): Promise<boolean> => {
+  return deleteOnePromoUseCase({ id: args.id });
 };
 
 export { createPromo, promos, promo, updatePromo, deletePromo };

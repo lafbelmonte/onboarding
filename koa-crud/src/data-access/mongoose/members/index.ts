@@ -1,7 +1,7 @@
-import { Member } from '../../../lib/mongoose/models/member';
+import MemberModel from '../../../lib/mongoose/models/member';
 
 import actions from './actions';
 
-const membersStore = actions({ Member });
+const memberStore = actions({ MemberModel });
 
-export { membersStore };
+export { memberStore };

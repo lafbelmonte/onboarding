@@ -1,29 +1,57 @@
-import { PromoEnrollmentRequest as PromoEnrollmentRequestModel } from '../../../lib/mongoose/models/promo-enrollment-request';
-import { PromoEnrollmentRequestsStore } from '../../../types/index';
-
-const actions = ({
+import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequest,
+  PromoEnrollmentRequestDocument,
+} from '../../../lib/mongoose/models/promo-enrollment-request';
+
+type Filters = {
+  _id?: string | Record<string, any>;
+  promo?: string;
+  member?: string;
+};
+
+export type PromoEnrollmentRequestStore = {
+  insertPromoEnrollment: (info: {
+    promo: string;
+    member: string;
+  }) => Promise<PromoEnrollmentRequestDocument>;
+  promoEnrollmentExistsByFilter: (filters: Filters) => Promise<boolean>;
+  selectOnePromoEnrollmentByFilters: (
+    filters: Filters,
+  ) => Promise<PromoEnrollmentRequestDocument>;
+  selectAllPromoEnrollmentRequests: () => Promise<
+    PromoEnrollmentRequestDocument[]
+  >;
+  updatePromoEnrollmentRequestStatusByFilters: (
+    filters: Filters,
+    info: { status: PromoEnrollmentRequest['status'] },
+  ) => Promise<PromoEnrollmentRequestDocument>;
+};
+
+export default ({
+  PromoEnrollmentRequestModel,
 }: {
-  PromoEnrollmentRequest: typeof PromoEnrollmentRequestModel;
-}): PromoEnrollmentRequestsStore => {
+  PromoEnrollmentRequestModel: typeof PromoEnrollmentRequestModelType;
+}): PromoEnrollmentRequestStore => {
   async function insertPromoEnrollment(info) {
-    return PromoEnrollmentRequest.create(info);
+    return PromoEnrollmentRequestModel.create(info);
   }
 
   async function promoEnrollmentExistsByFilter(filters) {
-    return PromoEnrollmentRequest.exists(filters);
+    return PromoEnrollmentRequestModel.exists(filters);
   }
 
   async function selectOnePromoEnrollmentByFilters(filters) {
-    return PromoEnrollmentRequest.findOne(filters).lean({ virtuals: true });
+    return PromoEnrollmentRequestModel.findOne(filters).lean({
+      virtuals: true,
+    });
   }
 
   async function selectAllPromoEnrollmentRequests() {
-    return PromoEnrollmentRequest.find().lean({ virtuals: true });
+    return PromoEnrollmentRequestModel.find().lean({ virtuals: true });
   }
 
   async function updatePromoEnrollmentRequestStatusByFilters(filters, info) {
-    return PromoEnrollmentRequest.findOneAndUpdate(filters, info, {
+    return PromoEnrollmentRequestModel.findOneAndUpdate(filters, info, {
       new: true,
     });
   }
@@ -36,5 +64,3 @@ const actions = ({
     updatePromoEnrollmentRequestStatusByFilters,
   };
 };
-
-export default actions;

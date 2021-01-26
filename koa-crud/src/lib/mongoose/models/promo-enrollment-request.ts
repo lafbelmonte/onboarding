@@ -1,12 +1,26 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import {
-  PromoEnrollmentRequestDocument,
-  PromoEnrollmentRequestStatus,
-} from '../../../types/index';
 
-const schema = new Schema(
+export enum PromoEnrollmentRequestStatus {
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  Processing = 'PROCESSING',
+  Approved = 'APPROVED',
+}
+
+export type PromoEnrollmentRequest = {
+  _id: string;
+  promo: string;
+  member: string;
+  status: PromoEnrollmentRequestStatus;
+  cursorBuffer: Buffer;
+  cursor: Buffer;
+};
+
+export type PromoEnrollmentRequestDocument = PromoEnrollmentRequest & Document;
+
+const schema: Schema = new Schema(
   {
     _id: {
       type: String,
@@ -57,4 +71,4 @@ const PromoEnrollmentRequest = model<PromoEnrollmentRequestDocument>(
   schema,
 );
 
-export { PromoEnrollmentRequest };
+export default PromoEnrollmentRequest;

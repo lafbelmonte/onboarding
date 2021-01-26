@@ -1,12 +1,23 @@
-import { UseCase, MembersStore, MemberDocument } from '../../types';
+import { MemberDocument } from '../../lib/mongoose/models/member';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
+
+type Input = {
+  id?: string;
+  info?;
+  source?;
+};
+
+type Output = MemberDocument[];
+
+export type SelectAllMembersUseCase = (input: Input) => Promise<Output>;
 
 const selectAllMembers = ({
-  membersStore,
+  memberStore,
 }: {
-  membersStore: MembersStore;
-}): UseCase<MemberDocument[]> => {
+  memberStore: MemberStore;
+}): SelectAllMembersUseCase => {
   return async function useCase() {
-    const members = await membersStore.selectAllMembers();
+    const members = await memberStore.selectAllMembers();
     return members;
   };
 };

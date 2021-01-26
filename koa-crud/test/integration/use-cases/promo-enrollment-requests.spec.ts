@@ -16,17 +16,15 @@ import {
   rejectEnrollmentRequestUseCase,
 } from '../../../src/use-cases/promo-enrollment-requests';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
-import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
-
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-import {
+import MemberModel from '../../../src/lib/mongoose/models/member';
+import PromoModel, {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
-} from '../../../src/types';
+} from '../../../src/lib/mongoose/models/promo';
+import PromoEnrollmentRequestModel from '../../../src/lib/mongoose/models/promo-enrollment-request';
+
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 import {
   MissingPromoEnrollmentRequestInformationError,
@@ -51,7 +49,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     this.randomString = () => chance.word();
 
-    const member = await Member.create({
+    const member = await MemberModel.create({
       username: this.randomString(),
       password: await bcrypt.hash(this.randomString(), 10),
       realName: this.randomString(),
@@ -64,13 +62,13 @@ describe('Promo Enrollment Use Cases', function () {
   });
 
   after(async function () {
-    await Member.deleteMany({});
+    await MemberModel.deleteMany({});
     await closeDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -79,7 +77,7 @@ describe('Promo Enrollment Use Cases', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -96,22 +94,23 @@ describe('Promo Enrollment Use Cases', function () {
     });
 
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     afterEach(() => {
-      return PromoEnrollmentRequest.deleteMany({});
+      return PromoEnrollmentRequestModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollmentRequest.deleteMany({});
+      return PromoEnrollmentRequestModel.deleteMany({});
     });
 
     describe('Given valid member to enroll to a deposit promo', () => {
       it('should return true', async function () {
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.depositMockId,
           },
           source: null,
@@ -125,8 +124,9 @@ describe('Promo Enrollment Use Cases', function () {
     describe('Given valid member to enroll to a sign promo', () => {
       it('should return true', async function () {
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -140,8 +140,9 @@ describe('Promo Enrollment Use Cases', function () {
     describe('Given no promo', () => {
       it('should throw an error', async function () {
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: '',
           },
           source: null,
@@ -157,8 +158,9 @@ describe('Promo Enrollment Use Cases', function () {
       it('should throw an error', async function () {
         const promo = this.randomString();
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo,
           },
           source: null,
@@ -174,8 +176,9 @@ describe('Promo Enrollment Use Cases', function () {
       it('should throw an error', async function () {
         const promo = this.randomString();
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo,
           },
           source: null,
@@ -190,8 +193,9 @@ describe('Promo Enrollment Use Cases', function () {
     describe('Given enrolled already promo', () => {
       it('should throw an error', async function () {
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.depositMockId,
           },
           source: null,
@@ -208,14 +212,15 @@ describe('Promo Enrollment Use Cases', function () {
     });
     describe('Given member with not enough balance to enroll to a deposit promo', () => {
       it('should throw an error', async function () {
-        await Member.findOneAndUpdate(
+        await MemberModel.findOneAndUpdate(
           { _id: this.member._id },
           { balance: 24 },
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.depositMockId,
           },
           source: null,
@@ -231,7 +236,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given member with no email to enroll to a sign up promo', () => {
       it('should throw an error', async function () {
-        await Member.findOneAndUpdate(
+        await MemberModel.findOneAndUpdate(
           { _id: this.member._id },
           {
             realName: this.randomString(),
@@ -241,8 +246,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -256,7 +262,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given member with no real name to enroll to a sign up promo', () => {
       it('should throw an error', async function () {
-        await Member.findOneAndUpdate(
+        await MemberModel.findOneAndUpdate(
           { _id: this.member._id },
           {
             realName: null,
@@ -266,8 +272,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -283,7 +290,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given member with no bank account to enroll to a sign up promo', () => {
       it('should throw an error', async function () {
-        await Member.findOneAndUpdate(
+        await MemberModel.findOneAndUpdate(
           { _id: this.member._id },
           {
             realName: this.randomString(),
@@ -293,8 +300,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -310,7 +318,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given inactive promo', () => {
       it('should throw an error', async function () {
-        await Promo.findOneAndUpdate(
+        await PromoModel.findOneAndUpdate(
           { _id: this.signUpMockId },
           {
             status: PromoStatus.Inactive,
@@ -318,8 +326,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -335,7 +344,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given draft promo', () => {
       it('should throw an error', async function () {
-        await Promo.findOneAndUpdate(
+        await PromoModel.findOneAndUpdate(
           { _id: this.signUpMockId },
           {
             status: PromoStatus.Draft,
@@ -343,8 +352,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.signUpMockId,
           },
           source: null,
@@ -360,7 +370,7 @@ describe('Promo Enrollment Use Cases', function () {
 
     describe('Given not set minimum balance deposit promo', () => {
       it('should throw an error', async function () {
-        await Promo.findOneAndUpdate(
+        await PromoModel.findOneAndUpdate(
           { _id: this.depositMockId },
           {
             minimumBalance: null,
@@ -368,8 +378,9 @@ describe('Promo Enrollment Use Cases', function () {
         );
 
         this.mock = {
-          id: this.member._id,
+          id: null,
           info: {
+            member: this.member._id,
             promo: this.depositMockId,
           },
           source: null,
@@ -384,7 +395,7 @@ describe('Promo Enrollment Use Cases', function () {
 
   describe(`Listing all Promo Enrollment Requests`, () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -393,7 +404,7 @@ describe('Promo Enrollment Use Cases', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -408,20 +419,20 @@ describe('Promo Enrollment Use Cases', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      await PromoEnrollmentRequest.create({
+      await PromoEnrollmentRequestModel.create({
         member: this.member._id,
         promo: this.depositMockId,
       });
 
-      await PromoEnrollmentRequest.create({
+      await PromoEnrollmentRequestModel.create({
         member: this.member._id,
         promo: this.signUpMockId,
       });
     });
 
     after(async () => {
-      await PromoEnrollmentRequest.deleteMany({});
-      return Promo.deleteMany({});
+      await PromoEnrollmentRequestModel.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     it('should return list of all promo enrollment requests', async function () {
@@ -439,7 +450,7 @@ describe('Promo Enrollment Use Cases', function () {
 
   describe(`List one Promo Enrollment Request`, () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -448,7 +459,7 @@ describe('Promo Enrollment Use Cases', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -463,25 +474,27 @@ describe('Promo Enrollment Use Cases', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequestModel.create(
         {
           member: this.member._id,
           promo: this.depositMockId,
         },
       );
 
-      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
-        member: this.member._id,
-        promo: this.signUpMockId,
-      });
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequestModel.create(
+        {
+          member: this.member._id,
+          promo: this.signUpMockId,
+        },
+      );
 
       this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
       this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
     });
 
     after(async () => {
-      await PromoEnrollmentRequest.deleteMany({});
-      return Promo.deleteMany({});
+      await PromoEnrollmentRequestModel.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     describe('Given Existent Promo Enroll Request ID', () => {
@@ -519,7 +532,7 @@ describe('Promo Enrollment Use Cases', function () {
 
   describe(`Updating status of enrollment request`, () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -528,7 +541,7 @@ describe('Promo Enrollment Use Cases', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -543,25 +556,27 @@ describe('Promo Enrollment Use Cases', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequestModel.create(
         {
           member: this.member._id,
           promo: this.depositMockId,
         },
       );
 
-      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
-        member: this.member._id,
-        promo: this.signUpMockId,
-      });
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequestModel.create(
+        {
+          member: this.member._id,
+          promo: this.signUpMockId,
+        },
+      );
 
       this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
       this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
     });
 
     after(async () => {
-      await PromoEnrollmentRequest.deleteMany({});
-      return Promo.deleteMany({});
+      await PromoEnrollmentRequestModel.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     describe('Given existent promo ID and approve request use-case', () => {

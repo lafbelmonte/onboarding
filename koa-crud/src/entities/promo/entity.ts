@@ -1,5 +1,9 @@
 import rType from 'ramda';
-import { PromoTemplate, Promo, RequiredMemberFields } from '../../types/index';
+import {
+  PromoTemplate,
+  Promo,
+  RequiredMemberFields,
+} from '../../lib/mongoose/models/promo';
 import {
   MissingPromoInformationError,
   InvalidPromoTemplateError,
@@ -7,7 +11,33 @@ import {
   InvalidPromoRequiredMemberFieldError,
 } from '../../custom-errors';
 
-const entity = ({ R }: { R: typeof rType }) => {
+type Input = {
+  name: Promo['name'];
+  template: Promo['template'];
+  title: Promo['title'];
+  description: Promo['description'];
+  status: Promo['status'];
+  minimumBalance: Promo['minimumBalance'];
+  requiredMemberFields: Promo['requiredMemberFields'];
+  submitted: Promo['submitted'];
+  enabled: Promo['enabled'];
+};
+
+type Output = {
+  name: Promo['name'];
+  template: Promo['template'];
+  title: Promo['title'];
+  description: Promo['description'];
+  status: Promo['status'];
+  minimumBalance: Promo['minimumBalance'];
+  requiredMemberFields: Promo['requiredMemberFields'];
+  submitted: Promo['submitted'];
+  enabled: Promo['enabled'];
+};
+
+export type PromoEntity = (input: Input) => Promise<Output>;
+
+const entity = ({ R }: { R: typeof rType }): PromoEntity => {
   return async function promo({
     name,
     template,
@@ -18,7 +48,7 @@ const entity = ({ R }: { R: typeof rType }) => {
     requiredMemberFields,
     submitted,
     enabled,
-  }: Promo): Promise<Omit<Promo, 'cursorBuffer'>> {
+  }) {
     if (!name) {
       throw new MissingPromoInformationError(`Please input name`);
     }

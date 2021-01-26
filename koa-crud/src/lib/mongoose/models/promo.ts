@@ -1,14 +1,42 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import {
-  PromoTemplate,
-  PromoStatus,
-  PromoDocument,
-  RequiredMemberFields,
-} from '../../../types/index';
 
-const schema = new Schema(
+export enum PromoTemplate {
+  Deposit = 'DEPOSIT',
+  SignUp = 'SIGN_UP',
+}
+
+export enum PromoStatus {
+  Draft = 'DRAFT',
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}
+
+export enum RequiredMemberFields {
+  Email = 'EMAIL',
+  Realname = 'REAL_NAME',
+  BankAccount = 'BANK_ACCOUNT',
+}
+
+export type Promo = {
+  _id: string;
+  name: string;
+  template: PromoTemplate;
+  title: string;
+  description: string;
+  status?: PromoStatus;
+  minimumBalance?: number;
+  requiredMemberFields?: RequiredMemberFields[];
+  submitted?: boolean;
+  enabled?: boolean;
+  cursorBuffer: Buffer;
+  cursor: Buffer;
+};
+
+export type PromoDocument = Promo & Document;
+
+const schema: Schema = new Schema(
   {
     _id: {
       type: String,
@@ -73,4 +101,4 @@ schema.virtual('cursorBuffer').get(function () {
 
 const Promo = model<PromoDocument>('Promo', schema);
 
-export { Promo };
+export default Promo;

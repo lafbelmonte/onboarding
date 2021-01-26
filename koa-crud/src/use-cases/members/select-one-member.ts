@@ -1,13 +1,24 @@
-import { UseCase, MembersStore, MemberDocument } from '../../types';
+import { MemberDocument } from '../../lib/mongoose/models/member';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = MemberDocument;
+
+export type SelectOneMemberUseCase = (input: Input) => Promise<Output>;
+
 const selectOneMember = ({
-  membersStore,
+  memberStore,
 }: {
-  membersStore: MembersStore;
-}): UseCase<MemberDocument> => {
+  memberStore: MemberStore;
+}): SelectOneMemberUseCase => {
   return async function useCase({ id }) {
-    const memberExists = await membersStore.memberExistsByFilter({
+    const memberExists = await memberStore.memberExistsByFilter({
       _id: id,
     });
 
@@ -15,7 +26,7 @@ const selectOneMember = ({
       throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
-    const member = await membersStore.selectOneMemberByFilters({ _id: id });
+    const member = await memberStore.selectOneMemberByFilters({ _id: id });
 
     return member;
   };

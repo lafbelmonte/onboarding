@@ -7,7 +7,7 @@ import paginate from '../../src/pagination';
 
 const chance = new Chance();
 
-describe.only('Pagination Function', () => {
+describe('Pagination Function', () => {
   before(function () {
     this.randomString = () => chance.word();
     const buffer1 = Buffer.from(this.randomString());
