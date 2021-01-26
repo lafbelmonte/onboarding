@@ -132,6 +132,12 @@ class DatabaseError extends ApolloError {
   }
 }
 
+class PaginationInputError extends ApolloError {
+  constructor(message: string) {
+    super(message, 'PAGINATION_INPUT_ERROR');
+  }
+}
+
 export {
   MissingMemberInformationError,
   ExistingMemberError,
@@ -155,4 +161,5 @@ export {
   MissingPromoEnrollmentRequestInformationError,
   NotAllowedError,
   DatabaseError,
+  PaginationInputError,
 };

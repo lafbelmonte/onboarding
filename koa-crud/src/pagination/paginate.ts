@@ -2,6 +2,8 @@ import rType from 'ramda';
 
 import { Connection } from '../types';
 
+import { PaginationInputError } from '../custom-errors';
+
 const makePaginate = ({ R }: { R: typeof rType }) => {
   return function <T extends { cursorBuffer: Buffer }>({
     data,
@@ -21,11 +23,11 @@ const makePaginate = ({ R }: { R: typeof rType }) => {
     }
 
     if (startingIndex < 0) {
-      throw new Error(`Invalid cursor`);
+      throw new PaginationInputError(`Invalid cursor`);
     }
 
     if (first < 0) {
-      throw new Error(`Invalid first`);
+      throw new PaginationInputError(`Invalid first`);
     }
 
     const lastIndex = first ? startingIndex + first : data.length;

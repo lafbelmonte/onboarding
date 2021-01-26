@@ -2,6 +2,7 @@
 import { expect } from 'chai';
 
 import { Chance } from 'chance';
+import { PaginationInputError } from '../../src/custom-errors';
 
 import paginate from '../../src/pagination';
 
@@ -82,7 +83,7 @@ describe('Pagination Function', () => {
           first: -1,
           after: this.mockData[2].cursorBuffer,
         });
-      }).to.throw(Error, 'Invalid first');
+      }).to.throw(PaginationInputError, 'Invalid first');
     });
   });
 
@@ -94,7 +95,7 @@ describe('Pagination Function', () => {
           first: 3,
           after: this.randomString(),
         });
-      }).to.throw(Error, 'Invalid cursor');
+      }).to.throw(PaginationInputError, 'Invalid cursor');
     });
   });
 });
