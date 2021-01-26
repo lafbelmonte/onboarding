@@ -11,7 +11,7 @@ const makePaginate = ({ R }: { R: typeof rType }) => {
     data: T[];
     first: number;
     after: string;
-  }): Connection<Omit<T, 'cursorBuffer'>> {
+  }): Connection<T> {
     let startingIndex = 0;
 
     if (after) {
