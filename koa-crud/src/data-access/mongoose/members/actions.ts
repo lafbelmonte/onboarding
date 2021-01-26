@@ -3,30 +3,25 @@ import MemberModelType, {
   MemberDocument,
 } from '../../../lib/mongoose/models/member';
 
-type Information = {
-  username?: Member['username'];
-  password?: Member['password'];
-  realName?: Member[`realName`];
-  email?: Member[`email`];
-  bankAccount?: Member[`bankAccount`];
-  balance?: Member[`balance`];
-};
+type MemberInformation = { password?: Member['password'] | null } & Partial<
+  Pick<Member, 'username' | 'realName' | 'email' | 'bankAccount' | 'balance'>
+>;
 
-type Filters = {
-  _id?: string | Record<string, any>;
-  username?: string | Record<string, any>;
+type MemberFilters = {
+  _id?: Member['_id'] | Record<string, any>;
+  username?: Member['username'] | Record<string, any>;
 };
 
 export type MemberStore = {
-  insertOneMember: (info: Information) => Promise<MemberDocument>;
-  memberExistsByFilter: (filters: Filters) => Promise<boolean>;
+  insertOneMember: (info: MemberInformation) => Promise<MemberDocument>;
+  memberExistsByFilter: (filters: MemberFilters) => Promise<boolean>;
   selectAllMembers: () => Promise<MemberDocument[]>;
-  selectOneMemberByFilters: (filters: Filters) => Promise<MemberDocument>;
+  selectOneMemberByFilters: (filters: MemberFilters) => Promise<MemberDocument>;
   updateMemberByFilters: (
-    filters: Filters,
-    info: Information,
+    filters: MemberFilters,
+    info: MemberInformation,
   ) => Promise<MemberDocument>;
-  deleteOneMember: (filters: Filters) => Promise<boolean>;
+  deleteOneMember: (filters: MemberFilters) => Promise<boolean>;
 };
 
 export default ({

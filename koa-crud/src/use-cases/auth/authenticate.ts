@@ -4,7 +4,7 @@ import {
   InvalidCredentialsError,
 } from '../../custom-errors';
 
-type Input = {
+type AuthenticateUseCaseInput = {
   id?: string;
   info: {
     username: string;
@@ -13,9 +13,11 @@ type Input = {
   source?;
 };
 
-type Output = string;
+type AuthenticateUseCaseOutput = string;
 
-export type AuthenticateUseCase = (input: Input) => Promise<Output>;
+export type AuthenticateUseCase = (
+  input: AuthenticateUseCaseInput,
+) => Promise<AuthenticateUseCaseOutput>;
 
 const authenticate = ({
   memberStore,

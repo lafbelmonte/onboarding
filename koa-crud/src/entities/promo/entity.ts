@@ -11,31 +11,12 @@ import {
   InvalidPromoRequiredMemberFieldError,
 } from '../../custom-errors';
 
-type Input = {
-  name: Promo['name'];
-  template: Promo['template'];
-  title: Promo['title'];
-  description: Promo['description'];
-  status: Promo['status'];
-  minimumBalance: Promo['minimumBalance'];
-  requiredMemberFields: Promo['requiredMemberFields'];
-  submitted: Promo['submitted'];
-  enabled: Promo['enabled'];
-};
+type PromoEntityInput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+type PromoEntityOutput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
 
-type Output = {
-  name: Promo['name'];
-  template: Promo['template'];
-  title: Promo['title'];
-  description: Promo['description'];
-  status: Promo['status'];
-  minimumBalance: Promo['minimumBalance'];
-  requiredMemberFields: Promo['requiredMemberFields'];
-  submitted: Promo['submitted'];
-  enabled: Promo['enabled'];
-};
-
-export type PromoEntity = (input: Input) => Promise<Output>;
+export type PromoEntity = (
+  input: PromoEntityInput,
+) => Promise<PromoEntityOutput>;
 
 const entity = ({ R }: { R: typeof rType }): PromoEntity => {
   return async function promo({

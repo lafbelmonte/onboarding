@@ -6,22 +6,20 @@ import {
 } from '../../custom-errors';
 import { MemberEntity } from '../../entities/member/entity';
 
-type Input = {
+type InsertMemberUseCaseInput = {
   id?: string;
   info: {
     username: Member[`username`];
     password: Member[`password`];
-    realName?: Member[`realName`];
-    email?: Member[`email`];
-    bankAccount?: Member[`bankAccount`];
-    balance?: Member[`balance`];
-  };
+  } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
   source?;
 };
 
-type Output = boolean;
+type InsertMemberUseCaseOutput = boolean;
 
-export type InsertMemberUseCase = (input: Input) => Promise<Output>;
+export type InsertMemberUseCase = (
+  input: InsertMemberUseCaseInput,
+) => Promise<InsertMemberUseCaseOutput>;
 
 const insertMember = ({
   memberEntity,

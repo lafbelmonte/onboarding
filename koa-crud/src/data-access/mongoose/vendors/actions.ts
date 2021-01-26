@@ -3,27 +3,24 @@ import VendorModelType, {
   VendorDocument,
 } from '../../../lib/mongoose/models/vendor';
 
-type Information = {
-  name?: Vendor['name'];
-  type?: Vendor['type'];
-};
+type VendorInformation = Partial<Pick<Vendor, 'name' | 'type'>>;
 
-type Filters = {
+type VendorFilters = {
   _id?: string;
   name?: string;
   type?: string;
 };
 
 export type VendorStore = {
-  insertOneVendor: (info: Information) => Promise<VendorDocument>;
-  vendorExistsByFilter: (filters: Filters) => Promise<boolean>;
+  insertOneVendor: (info: VendorInformation) => Promise<VendorDocument>;
+  vendorExistsByFilter: (filters: VendorFilters) => Promise<boolean>;
   selectAllVendors: () => Promise<VendorDocument[]>;
-  selectOneVendorByFilters: (filters: Filters) => Promise<VendorDocument>;
+  selectOneVendorByFilters: (filters: VendorFilters) => Promise<VendorDocument>;
   updateVendorByFilters: (
-    filters: Filters,
-    info: Information,
+    filters: VendorFilters,
+    info: VendorInformation,
   ) => Promise<VendorDocument>;
-  deleteOneVendor: (filters: Filters) => Promise<boolean>;
+  deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
 };
 
 export default ({

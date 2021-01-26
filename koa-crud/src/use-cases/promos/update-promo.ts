@@ -5,17 +5,7 @@ import { PromoStore } from '../../data-access/mongoose/promos/actions';
 
 type Input = {
   id: string;
-  info: {
-    name: Promo['name'];
-    template: Promo['template'];
-    title: Promo['title'];
-    description: Promo['description'];
-    status: Promo['status'];
-    minimumBalance: Promo['minimumBalance'];
-    requiredMemberFields: Promo['requiredMemberFields'];
-    submitted: Promo['submitted'];
-    enabled: Promo['enabled'];
-  };
+  info: Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
   source?;
 };
 

@@ -3,10 +3,10 @@ import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequestDocument,
 } from '../../../lib/mongoose/models/promo-enrollment-request';
 
-type Filters = {
-  _id?: string | Record<string, any>;
-  promo?: string;
-  member?: string;
+type PromoEnrollmentRequestFilters = {
+  _id?: PromoEnrollmentRequest['_id'] | Record<string, any>;
+  promo?: PromoEnrollmentRequest['promo'];
+  member?: PromoEnrollmentRequest['member'];
 };
 
 export type PromoEnrollmentRequestStore = {
@@ -14,15 +14,17 @@ export type PromoEnrollmentRequestStore = {
     promo: string;
     member: string;
   }) => Promise<PromoEnrollmentRequestDocument>;
-  promoEnrollmentExistsByFilter: (filters: Filters) => Promise<boolean>;
+  promoEnrollmentExistsByFilter: (
+    filters: PromoEnrollmentRequestFilters,
+  ) => Promise<boolean>;
   selectOnePromoEnrollmentByFilters: (
-    filters: Filters,
+    filters: PromoEnrollmentRequestFilters,
   ) => Promise<PromoEnrollmentRequestDocument>;
   selectAllPromoEnrollmentRequests: () => Promise<
     PromoEnrollmentRequestDocument[]
   >;
   updatePromoEnrollmentRequestStatusByFilters: (
-    filters: Filters,
+    filters: PromoEnrollmentRequestFilters,
     info: { status: PromoEnrollmentRequest['status'] },
   ) => Promise<PromoEnrollmentRequestDocument>;
 };

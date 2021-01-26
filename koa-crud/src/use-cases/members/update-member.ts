@@ -3,21 +3,19 @@ import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError, ExistingMemberError } from '../../custom-errors';
 import { MemberEntity } from '../../entities/member/entity';
 
-type Input = {
+type UpdateMemberUseCaseInput = {
   id: string;
   info: {
     username: Member[`username`];
-    realName?: Member[`realName`];
-    email?: Member[`email`];
-    bankAccount?: Member[`bankAccount`];
-    balance?: Member[`balance`];
-  };
+  } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
   source?;
 };
 
-type Output = boolean;
+type UpdateMemberUseCaseOutput = boolean;
 
-export type UpdateMemberUseCase = (input: Input) => Promise<Output>;
+export type UpdateMemberUseCase = (
+  input: UpdateMemberUseCaseInput,
+) => Promise<UpdateMemberUseCaseOutput>;
 
 const updateMember = ({
   memberEntity,

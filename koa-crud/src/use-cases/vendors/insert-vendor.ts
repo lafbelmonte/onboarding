@@ -5,10 +5,7 @@ import { ExistingVendorError } from '../../custom-errors';
 
 type Input = {
   id?: string;
-  info: {
-    name: Vendor['name'];
-    type: Vendor['type'];
-  };
+  info: Pick<Vendor, 'name' | 'type'>;
   source?;
 };
 

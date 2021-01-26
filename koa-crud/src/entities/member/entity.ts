@@ -2,25 +2,18 @@ import bcryptType from 'bcrypt';
 import { Member } from '../../lib/mongoose/models/member';
 import { MissingMemberInformationError } from '../../custom-errors';
 
-type Input = {
-  username: Member[`username`];
-  password?: Member[`password`];
-  realName?: Member[`realName`];
-  email?: Member[`email`];
-  bankAccount?: Member[`bankAccount`];
-  balance?: Member[`balance`];
-};
+type MemberEntityInput = { username: Member[`username`] } & Partial<
+  Pick<Member, 'password' | 'realName' | 'email' | 'bankAccount' | 'balance'>
+>;
 
-type Output = {
+type MemberEntityOutput = {
   username: Member[`username`];
-  password?: Member[`password`];
-  realName?: Member[`realName`];
-  email?: Member[`email`];
-  bankAccount?: Member[`bankAccount`];
-  balance?: Member[`balance`];
-};
+  password: Member['password'] | null;
+} & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
 
-export type MemberEntity = (input: Input) => Promise<Output>;
+export type MemberEntity = (
+  input: MemberEntityInput,
+) => Promise<MemberEntityOutput>;
 
 const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }): MemberEntity => {
   return async function member({
@@ -37,7 +30,7 @@ const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }): MemberEntity => {
 
     return {
       username,
-      password: password ? await bcrypt.hash(password, 10) : undefined,
+      password: password ? await bcrypt.hash(password, 10) : null,
       realName,
       email,
       bankAccount,

@@ -3,32 +3,35 @@ import PromoModelType, {
   PromoDocument,
 } from '../../../lib/mongoose/models/promo';
 
-type Information = {
-  name?: Promo['name'];
-  template?: Promo['template'];
-  title?: Promo['title'];
-  description?: Promo['description'];
-  status?: Promo['status'];
-  minimumBalance?: Promo['minimumBalance'];
-  requiredMemberFields?: Promo['requiredMemberFields'];
-  submitted?: Promo['submitted'];
-  enabled?: Promo['enabled'];
-};
+type PromoInformation = Partial<
+  Pick<
+    Promo,
+    | 'name'
+    | 'template'
+    | 'title'
+    | 'description'
+    | 'status'
+    | 'minimumBalance'
+    | 'requiredMemberFields'
+    | 'submitted'
+    | 'enabled'
+  >
+>;
 
-type Filters = {
-  _id?: string | Record<string, any>;
+type PromoFilters = {
+  _id?: Promo['_id'] | Record<string, any>;
 };
 
 export type PromoStore = {
-  insertOnePromo: (info: Information) => Promise<PromoDocument>;
-  promoExistsByFilter: (filters: Filters) => Promise<boolean>;
+  insertOnePromo: (info: PromoInformation) => Promise<PromoDocument>;
+  promoExistsByFilter: (filters: PromoFilters) => Promise<boolean>;
   selectAllPromos: () => Promise<PromoDocument[]>;
-  selectOnePromoByFilters: (filters: Filters) => Promise<PromoDocument>;
+  selectOnePromoByFilters: (filters: PromoFilters) => Promise<PromoDocument>;
   updatePromoByFilters: (
-    filters: Filters,
-    info: Information,
+    filters: PromoFilters,
+    info: PromoInformation,
   ) => Promise<PromoDocument>;
-  deleteOnePromo: (filters: Filters) => Promise<boolean>;
+  deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
 };
 
 export default ({
