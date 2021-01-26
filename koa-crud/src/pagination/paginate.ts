@@ -1,4 +1,5 @@
 import rType from 'ramda';
+
 import { Connection } from '../types';
 
 const makePaginate = ({ R }: { R: typeof rType }) => {
@@ -10,20 +11,24 @@ const makePaginate = ({ R }: { R: typeof rType }) => {
     data: T[];
     first: number;
     after: string;
-  }): Connection<T> {
-    if (first < 0) {
-      throw new Error(`Invalid first`);
-    }
+  }): Connection<Omit<T, 'cursorBuffer'>> {
+    let startingIndex = 0;
 
-    const startingIndex = R.findIndex(
-      R.propEq('cursorBuffer', Buffer.from(after, 'base64')),
-    )(data);
+    if (after) {
+      startingIndex = R.findIndex(
+        R.propEq('cursorBuffer', Buffer.from(after, 'base64')),
+      )(data);
+    }
 
     if (startingIndex < 0) {
       throw new Error(`Invalid cursor`);
     }
 
-    const lastIndex = startingIndex + first;
+    if (first < 0) {
+      throw new Error(`Invalid first`);
+    }
+
+    const lastIndex = first ? startingIndex + first : data.length;
 
     const nodes = R.slice(startingIndex, lastIndex, data);
 

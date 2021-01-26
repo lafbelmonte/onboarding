@@ -41,7 +41,7 @@ describe('Pagination Function', () => {
       });
 
       expect(result.totalCount).eqls(3);
-      expect(result.edges[0].node.cursor).eqls(this.mockData[0].cursorBuffer);
+      expect(result.edges[0].cursor).eqls(this.mockData[0].cursorBuffer);
       expect(result.pageInfo.hasNextPage).be.false;
     });
   });
@@ -55,7 +55,7 @@ describe('Pagination Function', () => {
       });
 
       expect(result.totalCount).eqls(2);
-      expect(result.edges[0].node.cursor).eqls(this.mockData[0].cursorBuffer);
+      expect(result.edges[0].cursor).eqls(this.mockData[0].cursorBuffer);
       expect(result.pageInfo.hasNextPage).be.true;
     });
   });
@@ -69,7 +69,7 @@ describe('Pagination Function', () => {
       });
 
       expect(result.totalCount).eqls(1);
-      expect(result.edges[0].node.cursor).eqls(this.mockData[2].cursorBuffer);
+      expect(result.edges[0].cursor).eqls(this.mockData[2].cursorBuffer);
       expect(result.pageInfo.hasNextPage).be.false;
     });
   });

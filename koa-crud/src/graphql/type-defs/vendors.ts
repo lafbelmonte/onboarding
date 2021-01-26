@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   extend type Query {
-    vendors(first: Int!, after: String!): VendorConnection
+    vendors(first: Int, after: String): VendorConnection
     vendor(id: ID!): Vendor
   }
   extend type Mutation {
@@ -22,8 +22,8 @@ export default gql`
   }
 
   type VendorConnection {
-    totalCount: Int
-    edges: [VendorConnectionEdge]
+    totalCount: Int!
+    edges: [VendorConnectionEdge]!
     pageInfo: PageInfo
   }
 

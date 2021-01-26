@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   extend type Query {
-    members(first: Int!, after: String!): MemberConnection
+    members(first: Int, after: String): MemberConnection
     member(id: ID!): Member
   }
 
@@ -18,8 +18,8 @@ export default gql`
   }
 
   type MemberConnection {
-    totalCount: Int
-    edges: [MemberConnectionEdge]
+    totalCount: Int!
+    edges: [MemberConnectionEdge]!
     pageInfo: PageInfo
   }
 
