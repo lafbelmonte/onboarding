@@ -1,15 +1,23 @@
 import { VendorStore } from '../../data-access/mongoose/vendors/actions';
 import { VendorDocument } from '../../lib/mongoose/models/vendor';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectAllVendorsUseCaseInput = {
   id?: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = VendorDocument[];
+type SelectAllVendorsUseCaseOutput = VendorDocument[];
 
-export type SelectAllVendorsUseCase = (input: Input) => Promise<Output>;
+export type SelectAllVendorsUseCase = UseCase<
+  SelectAllVendorsUseCaseInput,
+  SelectAllVendorsUseCaseOutput
+>;
 
 const selectAllVendors = ({
   vendorStore,

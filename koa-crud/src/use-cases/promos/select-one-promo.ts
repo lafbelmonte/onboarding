@@ -1,16 +1,24 @@
 import { PromoDocument } from '../../lib/mongoose/models/promo';
 import { PromoStore } from '../../data-access/mongoose/promos/actions';
 import { PromoNotFoundError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectOnePromoUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = PromoDocument;
+type SelectOnePromoUseCaseOutput = PromoDocument;
 
-export type SelectOnePromoUseCase = (input: Input) => Promise<Output>;
+export type SelectOnePromoUseCase = UseCase<
+  SelectOnePromoUseCaseInput,
+  SelectOnePromoUseCaseOutput
+>;
 
 const selectOnePromo = ({
   promoStore,

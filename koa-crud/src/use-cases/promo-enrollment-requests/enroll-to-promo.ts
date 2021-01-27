@@ -2,6 +2,7 @@ import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { PromoStore } from '../../data-access/mongoose/promos/actions';
 import { PromoStatus, PromoTemplate } from '../../lib/mongoose/models/promo';
 import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
+import { UseCase } from '../../types';
 
 import {
   MissingPromoEnrollmentRequestInformationError,
@@ -14,18 +15,25 @@ import {
   MissingPromoInformationError,
 } from '../../custom-errors';
 
-type Input = {
+type EnrollToPromoUseCaseInput = {
   id?: string;
   info: {
     member: string;
     promo: string;
   };
-  source?;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type EnrollToPromoUseCaseOutput = boolean;
 
-export type EnrollToPromoUseCase = (input: Input) => Promise<Output>;
+export type EnrollToPromoUseCase = UseCase<
+  EnrollToPromoUseCaseInput,
+  EnrollToPromoUseCaseOutput
+>;
 
 const enrollToPromo = ({
   memberStore,

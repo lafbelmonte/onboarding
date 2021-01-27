@@ -11,12 +11,12 @@ import {
   InvalidPromoRequiredMemberFieldError,
 } from '../../custom-errors';
 
+import { Entity } from '../../types';
+
 type PromoEntityInput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
 type PromoEntityOutput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
 
-export type PromoEntity = (
-  input: PromoEntityInput,
-) => Promise<PromoEntityOutput>;
+export type PromoEntity = Entity<PromoEntityInput, PromoEntityOutput>;
 
 const entity = ({ R }: { R: typeof rType }): PromoEntity => {
   return async function promo({

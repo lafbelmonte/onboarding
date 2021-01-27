@@ -1,16 +1,24 @@
 import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
 import { PromoEnrollmentRequestStatus } from '../../lib/mongoose/models/promo-enrollment-request';
 import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type RejectEnrollmentRequestUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type RejectEnrollmentRequestUseCaseOutput = boolean;
 
-export type RejectEnrollmentRequestUseCase = (input: Input) => Promise<Output>;
+export type RejectEnrollmentRequestUseCase = UseCase<
+  RejectEnrollmentRequestUseCaseInput,
+  RejectEnrollmentRequestUseCaseOutput
+>;
 
 const rejectEnrollmentRequest = ({
   promoEnrollmentRequestStore,

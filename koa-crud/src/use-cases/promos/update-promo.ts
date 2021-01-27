@@ -2,16 +2,24 @@ import { PromoNotFoundError } from '../../custom-errors';
 import { PromoEntity } from '../../entities/promo/entity';
 import { Promo } from '../../lib/mongoose/models/promo';
 import { PromoStore } from '../../data-access/mongoose/promos/actions';
+import { UseCase } from '../../types';
 
-type Input = {
+type UpdatePromoUseCaseInput = {
   id: string;
   info: Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
-  source?;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type UpdatePromoUseCaseOutput = boolean;
 
-export type UpdatePromoUseCase = (input: Input) => Promise<Output>;
+export type UpdatePromoUseCase = UseCase<
+  UpdatePromoUseCaseInput,
+  UpdatePromoUseCaseOutput
+>;
 
 const updatePromo = ({
   promoEntity,

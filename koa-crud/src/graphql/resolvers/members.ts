@@ -6,14 +6,17 @@ import {
   deleteOneMemberUseCase,
 } from '../../use-cases/members';
 
-import { MemberDocument } from '../../lib/mongoose/models/member';
+import { Member, MemberDocument } from '../../lib/mongoose/models/member';
+
 import { Connection } from '../../types';
 
 import paginate from '../../pagination';
 
+import { PaginateInput } from '../../pagination/paginate';
+
 const members = async (
-  obj,
-  args: { first: number; after: string },
+  parent: null,
+  args: Omit<PaginateInput<MemberDocument>, 'data'>,
 ): Promise<Connection<MemberDocument>> => {
   const data = await selectAllMembersUseCase({});
 
@@ -24,22 +27,44 @@ const members = async (
   });
 };
 
-const member = async (obj, args: { id: string }): Promise<MemberDocument> => {
+const member = async (
+  parent: null,
+  args: { id: string },
+): Promise<MemberDocument> => {
   return selectOneMemberUseCase({ id: args.id });
 };
 
-const createMember = async (obj, args): Promise<boolean> => {
+const createMember = async (
+  parent: null,
+  args: {
+    input: {
+      username: Member[`username`];
+      password: Member[`password`];
+    } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
+  },
+): Promise<boolean> => {
   return insertMemberUseCase({ info: args.input });
 };
 
-const updateMember = async (obj, args): Promise<boolean> => {
+const updateMember = async (
+  parent: null,
+  args: {
+    input: {
+      id: string;
+      username: Member[`username`];
+    } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
+  },
+): Promise<boolean> => {
   return updateMemberUseCase({
     id: args.input.id,
     info: args.input,
   });
 };
 
-const deleteMember = async (obj, args): Promise<boolean> => {
+const deleteMember = async (
+  parent: null,
+  args: { id: string },
+): Promise<boolean> => {
   return deleteOneMemberUseCase({ id: args.id });
 };
 

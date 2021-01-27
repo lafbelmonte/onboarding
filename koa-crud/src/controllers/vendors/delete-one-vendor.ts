@@ -15,7 +15,6 @@ const deleteOneVendor = ({
       const deleted = await deleteOneVendorUseCase({
         id: httpRequest.params.id,
         info: null,
-        source: null,
       });
 
       return {

@@ -3,6 +3,7 @@ import {
   MissingCredentialsError,
   InvalidCredentialsError,
 } from '../../custom-errors';
+import { UseCase } from '../../types';
 
 type AuthenticateUseCaseInput = {
   id?: string;
@@ -10,14 +11,19 @@ type AuthenticateUseCaseInput = {
     username: string;
     password: string;
   };
-  source?;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
 type AuthenticateUseCaseOutput = string;
 
-export type AuthenticateUseCase = (
-  input: AuthenticateUseCaseInput,
-) => Promise<AuthenticateUseCaseOutput>;
+export type AuthenticateUseCase = UseCase<
+  AuthenticateUseCaseInput,
+  AuthenticateUseCaseOutput
+>;
 
 const authenticate = ({
   memberStore,

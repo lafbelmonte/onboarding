@@ -10,10 +10,15 @@ import { NotAllowedError } from '../../custom-errors';
 
 import paginate from '../../pagination';
 
-import { VendorDocument } from '../../lib/mongoose/models/vendor';
+import { VendorDocument, Vendor } from '../../lib/mongoose/models/vendor';
 import { Connection } from '../../types';
+import { PaginateInput } from '../../pagination/paginate';
 
-const vendors = async (obj, args, ctx): Promise<Connection<VendorDocument>> => {
+const vendors = async (
+  parent: null,
+  args: Omit<PaginateInput<VendorDocument>, 'data'>,
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<Connection<VendorDocument>> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
@@ -26,21 +31,41 @@ const vendors = async (obj, args, ctx): Promise<Connection<VendorDocument>> => {
     after: args.after,
   });
 };
-const vendor = async (obj, args, ctx): Promise<VendorDocument> => {
+const vendor = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<VendorDocument> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
   return selectOneVendorUseCase({ id: args.id });
 };
 
-const createVendor = async (obj, args, ctx): Promise<boolean> => {
+const createVendor = async (
+  parent: null,
+  args: {
+    input: Pick<Vendor, 'name' | 'type'>;
+  },
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
 
   return insertVendorUseCase({ info: args.input });
 };
-const updateVendor = async (obj, args, ctx): Promise<boolean> => {
+const updateVendor = async (
+  parent: null,
+  args: {
+    input: {
+      id: string;
+    } & Pick<Vendor, 'name' | 'type'>;
+  },
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
@@ -50,7 +75,13 @@ const updateVendor = async (obj, args, ctx): Promise<boolean> => {
     info: args.input,
   });
 };
-const deleteVendor = async (obj, args, ctx): Promise<boolean> => {
+const deleteVendor = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }

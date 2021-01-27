@@ -1,15 +1,23 @@
 import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type DeleteOneMemberUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type DeleteOneMemberUseCaseOutput = boolean;
 
-export type DeleteOneMemberUseCase = (input: Input) => Promise<Output>;
+export type DeleteOneMemberUseCase = UseCase<
+  DeleteOneMemberUseCaseInput,
+  DeleteOneMemberUseCaseOutput
+>;
 
 const deleteOneMember = ({
   memberStore,

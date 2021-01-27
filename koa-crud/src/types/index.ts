@@ -20,6 +20,10 @@ type Controller = (httpRequest: HttpRequest) => Promise<HttpResponse>;
 
 type Serializer = (controller: Controller) => (ctx: Context) => Promise<void>;
 
+type UseCase<TInput, TOutput> = (input: TInput) => Promise<TOutput>;
+
+type Entity<TInput, TOutput> = (input: TInput) => Promise<TOutput>;
+
 type Edge<T> = {
   node: T;
   cursor: Buffer;
@@ -34,4 +38,13 @@ type Connection<T> = {
   edges: Edge<T>[];
 };
 
-export { HttpRequest, HttpResponse, Serializer, Controller, Connection, Edge };
+export {
+  HttpRequest,
+  HttpResponse,
+  Serializer,
+  Controller,
+  Connection,
+  Edge,
+  UseCase,
+  Entity,
+};
