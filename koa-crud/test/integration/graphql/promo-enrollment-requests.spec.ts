@@ -550,16 +550,16 @@ describe('Promo Enrollment Queries', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      const start = await PromoEnrollmentRequestModel.create({
+      this.data1 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.depositMockId,
+        cursor: Buffer.from(this.randomString()),
       });
-      await PromoEnrollmentRequestModel.create({
+      this.data2 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.signUpMockId,
+        cursor: Buffer.from(this.randomString()),
       });
-
-      this.startBuffer = start.cursor.toString('base64');
     });
 
     after(async () => {
@@ -567,62 +567,366 @@ describe('Promo Enrollment Queries', function () {
       return PromoModel.deleteMany({});
     });
 
-    it('should return list of all promo enrollment requests', async function () {
-      this.mock = {
-        query: {
-          promoEnrollmentRequests: {
-            __args: {
-              first: 2,
-              after: this.startBuffer,
-            },
-            totalCount: true,
-            edges: {
-              node: {
-                member: {
-                  id: true,
-                  username: true,
-                  realName: true,
-                  email: true,
-                  bankAccount: true,
-                  balance: true,
-                },
-                promo: {
-                  id: true,
-                  name: true,
-                  status: true,
-                  template: true,
-                  title: true,
-                  createdAt: true,
-                  updatedAt: true,
-                  __on: [
-                    {
-                      __typeName: 'DepositPromo',
-                      minimumBalance: true,
-                    },
-                    {
-                      __typeName: 'SignUpPromo',
-                      requiredMemberFields: true,
-                    },
-                  ],
-                  submitted: true,
-                  enabled: true,
-                },
+    describe('Given complete inputs', () => {
+      it('should return list of paginated promo enrollment requests', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              __args: {
+                first: 2,
+                after: this.data1.cursor.toString('base64'),
               },
-              cursor: true,
-            },
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: true,
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
             },
           },
-        },
-      };
+        };
 
-      const query = jsonToGraphQLQuery(this.mock);
-      const main = await this.request().post('/graphql').send({ query });
-      expect(main.statusCode).to.eqls(200);
-      expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
-      expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
+        expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+      });
+    });
+
+    describe('Given invalid first', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              __args: {
+                first: -1,
+                after: this.data1.cursor.toString('base64'),
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PAGINATION_INPUT_ERROR',
+        );
+        expect(main.body.errors[0].message).eqls(`Invalid first`);
+      });
+    });
+
+    describe('Given invalid after', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              __args: {
+                first: 2,
+                after: this.randomString(),
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PAGINATION_INPUT_ERROR',
+        );
+        expect(main.body.errors[0].message).eqls(`Invalid cursor`);
+      });
+    });
+
+    describe('Given no first and after', () => {
+      it('should return all paginated promo enrollment requests', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
+        expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+      });
+    });
+
+    describe('Given only first', () => {
+      it('should return promo enrollment requests equal to the given first', async function () {
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              __args: {
+                first: 2,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
+        expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+      });
+    });
+
+    describe('Given only after', () => {
+      it('should return promo enrollment requests starting from the given after', async function () {
+        const after = this.data1.cursor.toString('base64');
+        this.mock = {
+          query: {
+            promoEnrollmentRequests: {
+              __args: {
+                after,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  member: {
+                    id: true,
+                    username: true,
+                    realName: true,
+                    email: true,
+                    bankAccount: true,
+                    balance: true,
+                  },
+                  promo: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    template: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    __on: [
+                      {
+                        __typeName: 'DepositPromo',
+                        minimumBalance: true,
+                      },
+                      {
+                        __typeName: 'SignUpPromo',
+                        requiredMemberFields: true,
+                      },
+                    ],
+                    submitted: true,
+                    enabled: true,
+                  },
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.promoEnrollmentRequests.totalCount).eqls(2);
+        expect(main.body.data.promoEnrollmentRequests.edges).have.length(2);
+        expect(main.body.data.promoEnrollmentRequests.edges[0].cursor).eqls(
+          after,
+        );
+      });
     });
   });
 
