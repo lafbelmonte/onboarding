@@ -1,18 +1,24 @@
-import {
-  UseCase,
-  PromoEnrollmentRequestsStore,
-  PromoEnrollmentRequestStatus,
-} from '../../types';
-
+import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
+import { PromoEnrollmentRequestStatus } from '../../lib/mongoose/models/promo-enrollment-request';
 import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = boolean;
+
+export type ApproveEnrollmentRequestUseCase = (input: Input) => Promise<Output>;
+
 const approveEnrollmentRequest = ({
-  promoEnrollmentRequestsStore,
+  promoEnrollmentRequestStore,
 }: {
-  promoEnrollmentRequestsStore: PromoEnrollmentRequestsStore;
-}): UseCase<boolean> => {
+  promoEnrollmentRequestStore: PromoEnrollmentRequestStore;
+}): ApproveEnrollmentRequestUseCase => {
   return async function ({ id }) {
-    const promoEnrollmentExists = await promoEnrollmentRequestsStore.promoEnrollmentExistsByFilter(
+    const promoEnrollmentExists = await promoEnrollmentRequestStore.promoEnrollmentExistsByFilter(
       { _id: id },
     );
 
@@ -22,7 +28,7 @@ const approveEnrollmentRequest = ({
       );
     }
 
-    await promoEnrollmentRequestsStore.updatePromoEnrollmentRequestStatusByFilters(
+    await promoEnrollmentRequestStore.updatePromoEnrollmentRequestStatusByFilters(
       { _id: id },
       { status: PromoEnrollmentRequestStatus.Approved },
     );

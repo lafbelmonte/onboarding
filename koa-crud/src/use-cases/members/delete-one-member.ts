@@ -1,13 +1,23 @@
-import { UseCase, MembersStore } from '../../types';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = boolean;
+
+export type DeleteOneMemberUseCase = (input: Input) => Promise<Output>;
+
 const deleteOneMember = ({
-  membersStore,
+  memberStore,
 }: {
-  membersStore: MembersStore;
-}): UseCase<boolean> => {
+  memberStore: MemberStore;
+}): DeleteOneMemberUseCase => {
   return async function useCase({ id }) {
-    const memberExists = await membersStore.memberExistsByFilter({
+    const memberExists = await memberStore.memberExistsByFilter({
       _id: id,
     });
 
@@ -15,7 +25,7 @@ const deleteOneMember = ({
       throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
-    await membersStore.deleteOneMember({ _id: id });
+    await memberStore.deleteOneMember({ _id: id });
 
     return true;
   };

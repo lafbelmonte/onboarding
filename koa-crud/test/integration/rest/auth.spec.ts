@@ -7,7 +7,7 @@ import { Chance } from 'chance';
 import bcrypt from 'bcrypt';
 import server from '../../../src/index';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
 import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
 
@@ -26,7 +26,7 @@ describe('Auth Endpoints', () => {
     this.validUsername = this.randomUsername();
     this.validPassword = this.randomPassword();
 
-    await Member.create({
+    await MemberModel.create({
       username: this.validUsername,
       password: await bcrypt.hash(this.validPassword, 10),
       realName: this.randomRealName(),
@@ -36,7 +36,7 @@ describe('Auth Endpoints', () => {
   });
 
   after(async function () {
-    await Member.deleteMany({});
+    await MemberModel.deleteMany({});
     await closeDatabase();
   });
 

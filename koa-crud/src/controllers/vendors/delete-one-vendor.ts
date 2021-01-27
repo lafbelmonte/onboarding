@@ -1,9 +1,10 @@
-import { UseCase, Controller } from '../../types';
+import { Controller } from '../../types';
+import { DeleteOneVendorUseCase } from '../../use-cases/vendors/delete-one-vendor';
 
 const deleteOneVendor = ({
   deleteOneVendorUseCase,
 }: {
-  deleteOneVendorUseCase: UseCase<boolean>;
+  deleteOneVendorUseCase: DeleteOneVendorUseCase;
 }): Controller => {
   return async function controller(httpRequest) {
     const headers = {

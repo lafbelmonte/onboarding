@@ -1,5 +1,9 @@
 import rType from 'ramda';
-import { PromoTemplate, Promo, RequiredMemberFields } from '../../types/index';
+import {
+  PromoTemplate,
+  Promo,
+  RequiredMemberFields,
+} from '../../lib/mongoose/models/promo';
 import {
   MissingPromoInformationError,
   InvalidPromoTemplateError,
@@ -7,7 +11,14 @@ import {
   InvalidPromoRequiredMemberFieldError,
 } from '../../custom-errors';
 
-const entity = ({ R }: { R: typeof rType }) => {
+type PromoEntityInput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+type PromoEntityOutput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+
+export type PromoEntity = (
+  input: PromoEntityInput,
+) => Promise<PromoEntityOutput>;
+
+const entity = ({ R }: { R: typeof rType }): PromoEntity => {
   return async function promo({
     name,
     template,
@@ -18,7 +29,7 @@ const entity = ({ R }: { R: typeof rType }) => {
     requiredMemberFields,
     submitted,
     enabled,
-  }: Promo): Promise<Promo> {
+  }) {
     if (!name) {
       throw new MissingPromoInformationError(`Please input name`);
     }

@@ -1,38 +1,63 @@
-import { VendorsStore } from '../../../types/index';
-import { Vendor as VendorModel } from '../../../lib/mongoose/models/vendor';
+import VendorModelType, {
+  Vendor,
+  VendorDocument,
+} from '../../../lib/mongoose/models/vendor';
 
-const actions = ({ Vendor }: { Vendor: typeof VendorModel }): VendorsStore => {
+type VendorInformation = Partial<Pick<Vendor, 'name' | 'type'>>;
+
+type VendorFilters = {
+  _id?: string;
+  name?: string;
+  type?: string;
+};
+
+export type VendorStore = {
+  insertOneVendor: (info: VendorInformation) => Promise<VendorDocument>;
+  vendorExistsByFilter: (filters: VendorFilters) => Promise<boolean>;
+  selectAllVendors: () => Promise<VendorDocument[]>;
+  selectOneVendorByFilters: (filters: VendorFilters) => Promise<VendorDocument>;
+  updateVendorByFilters: (
+    filters: VendorFilters,
+    info: VendorInformation,
+  ) => Promise<VendorDocument>;
+  deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
+};
+
+export default ({
+  VendorModel,
+}: {
+  VendorModel: typeof VendorModelType;
+}): VendorStore => {
   async function insertOneVendor(info) {
-    return Vendor.create(info);
+    return VendorModel.create(info);
   }
 
   async function vendorExistsByFilter(filters) {
-    return Vendor.exists(filters);
+    return VendorModel.exists(filters);
   }
 
   async function selectAllVendors() {
-    return Vendor.find().lean({ virtuals: true });
+    return VendorModel.find().lean({ virtuals: true });
   }
 
   async function selectOneVendorByFilters(filters) {
-    return Vendor.findOne(filters).lean({ virtuals: true });
+    return VendorModel.findOne(filters).lean({ virtuals: true });
   }
 
   async function updateVendorByFilters(filters, info) {
-    return Vendor.findOneAndUpdate(filters, info, {
+    return VendorModel.findOneAndUpdate(filters, info, {
       new: true,
       runValidators: true,
     });
   }
 
   async function deleteOneVendor(filters) {
-    const vendor = await Vendor.deleteOne(filters);
+    const vendor = await VendorModel.deleteOne(filters);
 
     const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
 
     return isDeleted;
   }
-
   return {
     insertOneVendor,
     vendorExistsByFilter,
@@ -42,5 +67,3 @@ const actions = ({ Vendor }: { Vendor: typeof VendorModel }): VendorsStore => {
     deleteOneVendor,
   };
 };
-
-export default actions;

@@ -4,8 +4,8 @@ import chaiAsPromised from 'chai-as-promised';
 
 import { Chance } from 'chance';
 import { vendorEntity } from '../../src/entities/vendor';
-import { VendorType } from '../../src/types';
 
+import { VendorType } from '../../src/lib/mongoose/models/vendor';
 import { MissingVendorInformationError } from '../../src/custom-errors';
 
 const chance = new Chance();

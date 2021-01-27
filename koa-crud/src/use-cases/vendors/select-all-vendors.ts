@@ -1,12 +1,23 @@
-import { UseCase, VendorsStore, VendorDocument } from '../../types';
+import { VendorStore } from '../../data-access/mongoose/vendors/actions';
+import { VendorDocument } from '../../lib/mongoose/models/vendor';
+
+type Input = {
+  id?: string;
+  info?;
+  source?;
+};
+
+type Output = VendorDocument[];
+
+export type SelectAllVendorsUseCase = (input: Input) => Promise<Output>;
 
 const selectAllVendors = ({
-  vendorsStore,
+  vendorStore,
 }: {
-  vendorsStore: VendorsStore;
-}): UseCase<VendorDocument[]> => {
+  vendorStore: VendorStore;
+}): SelectAllVendorsUseCase => {
   return async function useCase() {
-    const vendors = await vendorsStore.selectAllVendors();
+    const vendors = await vendorStore.selectAllVendors();
     return vendors;
   };
 };

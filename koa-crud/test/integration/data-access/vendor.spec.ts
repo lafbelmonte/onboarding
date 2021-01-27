@@ -5,13 +5,13 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { Vendor } from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, {
+  VendorType,
+} from '../../../src/lib/mongoose/models/vendor';
 
-import { vendorsStore } from '../../../src/data-access/mongoose/vendors';
+import { vendorStore } from '../../../src/data-access/mongoose/vendors';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-import { VendorType } from '../../../src/types';
 
 chai.use(chaiAsPromised);
 
@@ -24,7 +24,7 @@ const {
   selectOneVendorByFilters,
   updateVendorByFilters,
   deleteOneVendor,
-} = vendorsStore;
+} = vendorStore;
 
 describe('Vendor Store', () => {
   before(async function () {
@@ -40,11 +40,11 @@ describe('Vendor Store', () => {
 
   describe('Insert one Vendor', () => {
     afterEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
@@ -100,12 +100,12 @@ describe('Vendor Store', () => {
 
   describe('Vendor exists? By filters', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -127,12 +127,12 @@ describe('Vendor Store', () => {
 
   describe('Select All Vendors', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -145,12 +145,12 @@ describe('Vendor Store', () => {
 
   describe('Select One Vendor By Filters', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -174,12 +174,12 @@ describe('Vendor Store', () => {
 
   describe('Updating a vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -244,12 +244,12 @@ describe('Vendor Store', () => {
 
   describe('Deleting a Vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });

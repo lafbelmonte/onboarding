@@ -1,18 +1,33 @@
-import { UseCase, MembersStore } from '../../types';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
 import {
   MissingCredentialsError,
   InvalidCredentialsError,
 } from '../../custom-errors';
 
+type AuthenticateUseCaseInput = {
+  id?: string;
+  info: {
+    username: string;
+    password: string;
+  };
+  source?;
+};
+
+type AuthenticateUseCaseOutput = string;
+
+export type AuthenticateUseCase = (
+  input: AuthenticateUseCaseInput,
+) => Promise<AuthenticateUseCaseOutput>;
+
 const authenticate = ({
-  membersStore,
+  memberStore,
   bcrypt,
   generateToken,
 }: {
-  membersStore: MembersStore;
+  memberStore: MemberStore;
   bcrypt;
   generateToken;
-}): UseCase<string> => {
+}): AuthenticateUseCase => {
   return async function ({ info }) {
     if (!info.username) {
       throw new MissingCredentialsError(`Please input username`);
@@ -22,7 +37,7 @@ const authenticate = ({
       throw new MissingCredentialsError(`Please input password`);
     }
 
-    const usernameExists = await membersStore.selectOneMemberByFilters({
+    const usernameExists = await memberStore.selectOneMemberByFilters({
       username: info.username,
     });
 

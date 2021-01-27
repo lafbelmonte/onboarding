@@ -8,18 +8,17 @@ import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
 
-import { Member } from '../../../src/lib/mongoose/models/member';
-import { Promo } from '../../../src/lib/mongoose/models/promo';
-import { PromoEnrollmentRequest } from '../../../src/lib/mongoose/models/promo-enrollment-request';
-
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-import {
+import MemberModel from '../../../src/lib/mongoose/models/member';
+import PromoModel, {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
+} from '../../../src/lib/mongoose/models/promo';
+import PromoEnrollmentRequestModel, {
   PromoEnrollmentRequestStatus,
-} from '../../../src/types';
+} from '../../../src/lib/mongoose/models/promo-enrollment-request';
+
+import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
 chai.use(chaiAsPromised);
 
@@ -33,7 +32,7 @@ describe('Promo Enrollment Model', function () {
 
     this.randomString = () => chance.word();
 
-    const member = await Member.create({
+    const member = await MemberModel.create({
       username: this.randomString(),
       password: await bcrypt.hash(this.randomString(), 10),
       realName: this.randomString(),
@@ -46,13 +45,13 @@ describe('Promo Enrollment Model', function () {
   });
 
   after(async function () {
-    await Member.deleteMany({});
+    await MemberModel.deleteMany({});
     await closeDatabase();
   });
 
   describe('Enroll Member to a Promo', () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -61,7 +60,7 @@ describe('Promo Enrollment Model', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -78,15 +77,15 @@ describe('Promo Enrollment Model', function () {
     });
 
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     afterEach(() => {
-      return PromoEnrollmentRequest.deleteMany({});
+      return PromoEnrollmentRequestModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return PromoEnrollmentRequest.deleteMany({});
+      return PromoEnrollmentRequestModel.deleteMany({});
     });
 
     describe('Given promo and member with no status', () => {
@@ -97,7 +96,7 @@ describe('Promo Enrollment Model', function () {
         };
 
         await expect(
-          PromoEnrollmentRequest.create(this.mock),
+          PromoEnrollmentRequestModel.create(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
           PromoEnrollmentRequestStatus.Pending,
@@ -114,7 +113,7 @@ describe('Promo Enrollment Model', function () {
         };
 
         await expect(
-          PromoEnrollmentRequest.create(this.mock),
+          PromoEnrollmentRequestModel.create(this.mock),
         ).to.eventually.fulfilled.property(
           'status',
           PromoEnrollmentRequestStatus.Approved,
@@ -128,8 +127,8 @@ describe('Promo Enrollment Model', function () {
           member: this.member._id,
         };
 
-        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
-          .rejected;
+        await expect(PromoEnrollmentRequestModel.create(this.mock)).to
+          .eventually.rejected;
       });
     });
 
@@ -139,8 +138,8 @@ describe('Promo Enrollment Model', function () {
           promo: this.depositMockId,
         };
 
-        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
-          .rejected;
+        await expect(PromoEnrollmentRequestModel.create(this.mock)).to
+          .eventually.rejected;
       });
     });
 
@@ -152,15 +151,15 @@ describe('Promo Enrollment Model', function () {
           status: this.randomString(),
         };
 
-        await expect(PromoEnrollmentRequest.create(this.mock)).to.eventually
-          .rejected;
+        await expect(PromoEnrollmentRequestModel.create(this.mock)).to
+          .eventually.rejected;
       });
     });
   });
 
   describe(`Updating  Status of Promo Enrollment Request`, () => {
     before(async function () {
-      const depositMock = await Promo.create({
+      const depositMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.Deposit,
         title: this.randomString(),
@@ -169,7 +168,7 @@ describe('Promo Enrollment Model', function () {
         status: PromoStatus.Active,
       });
 
-      const signUpMock = await Promo.create({
+      const signUpMock = await PromoModel.create({
         name: this.randomString(),
         template: PromoTemplate.SignUp,
         title: this.randomString(),
@@ -184,31 +183,33 @@ describe('Promo Enrollment Model', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequest.create(
+      const promoEnrollmentRequestDeposit = await PromoEnrollmentRequestModel.create(
         {
           member: this.member._id,
           promo: this.depositMockId,
         },
       );
 
-      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequest.create({
-        member: this.member._id,
-        promo: this.signUpMockId,
-      });
+      const promoEnrollmentRequestSignUp = await PromoEnrollmentRequestModel.create(
+        {
+          member: this.member._id,
+          promo: this.signUpMockId,
+        },
+      );
 
       this.promoEnrollmentRequestDepositId = promoEnrollmentRequestDeposit._id;
       this.promoEnrollmentRequestSignUpId = promoEnrollmentRequestSignUp._id;
     });
 
     after(async () => {
-      await PromoEnrollmentRequest.deleteMany({});
-      return Promo.deleteMany({});
+      await PromoEnrollmentRequestModel.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     describe('Given Approve Status', () => {
       it('should return the promo enrollment request with approved status', async function () {
         await expect(
-          PromoEnrollmentRequest.findOneAndUpdate(
+          PromoEnrollmentRequestModel.findOneAndUpdate(
             { _id: this.promoEnrollmentRequestDepositId },
             { status: PromoEnrollmentRequestStatus.Approved },
             {
@@ -225,7 +226,7 @@ describe('Promo Enrollment Model', function () {
     describe('Given Rejected Status', () => {
       it('should return the promo enrollment request with approved status', async function () {
         await expect(
-          PromoEnrollmentRequest.findOneAndUpdate(
+          PromoEnrollmentRequestModel.findOneAndUpdate(
             { _id: this.promoEnrollmentRequestDepositId },
             { status: PromoEnrollmentRequestStatus.Rejected },
             { new: true },
@@ -240,7 +241,7 @@ describe('Promo Enrollment Model', function () {
     describe('Given Processing Status', () => {
       it('should return the promo enrollment request with approved status', async function () {
         await expect(
-          PromoEnrollmentRequest.findOneAndUpdate(
+          PromoEnrollmentRequestModel.findOneAndUpdate(
             { _id: this.promoEnrollmentRequestDepositId },
             { status: PromoEnrollmentRequestStatus.Processing },
             { new: true },
@@ -255,7 +256,7 @@ describe('Promo Enrollment Model', function () {
     describe('Given Invalid Status', () => {
       it('should be rejected', async function () {
         await expect(
-          PromoEnrollmentRequest.findOneAndUpdate(
+          PromoEnrollmentRequestModel.findOneAndUpdate(
             { _id: this.promoEnrollmentRequestDepositId },
             { status: this.randomString() },
             { new: true },

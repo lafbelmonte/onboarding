@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   extend type Query {
-    vendors: [Vendor]
+    vendors(first: Int, after: String): VendorConnection
     vendor(id: ID!): Vendor
   }
   extend type Mutation {
@@ -14,6 +14,17 @@ export default gql`
   enum VendorType {
     SEAMLESS
     TRANSFER
+  }
+
+  type VendorConnectionEdge {
+    node: Vendor
+    cursor: String
+  }
+
+  type VendorConnection {
+    totalCount: Int!
+    edges: [VendorConnectionEdge]!
+    pageInfo: PageInfo
   }
 
   input CreateVendorInput {

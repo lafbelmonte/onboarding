@@ -1,16 +1,25 @@
-import {
-  PromoEnrollmentRequestsStore,
-  PromoEnrollmentRequestDocument,
-  UseCase,
-} from '../../types';
+import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
+import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
+
+type Input = {
+  id?: string;
+  info?;
+  source?;
+};
+
+type Output = PromoEnrollmentRequestDocument[];
+
+export type SelectAllPromoEnrollmentRequestUseCase = (
+  input: Input,
+) => Promise<Output>;
 
 const selectAllPromoEnrollmentRequests = ({
-  promoEnrollmentRequestsStore,
+  promoEnrollmentRequestStore,
 }: {
-  promoEnrollmentRequestsStore: PromoEnrollmentRequestsStore;
-}): UseCase<PromoEnrollmentRequestDocument[]> => {
+  promoEnrollmentRequestStore: PromoEnrollmentRequestStore;
+}): SelectAllPromoEnrollmentRequestUseCase => {
   return async function useCase() {
-    const promoEnrollmentRequests = await promoEnrollmentRequestsStore.selectAllPromoEnrollmentRequests();
+    const promoEnrollmentRequests = await promoEnrollmentRequestStore.selectAllPromoEnrollmentRequests();
     return promoEnrollmentRequests;
   };
 };

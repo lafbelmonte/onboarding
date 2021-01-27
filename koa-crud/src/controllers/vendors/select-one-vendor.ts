@@ -1,9 +1,10 @@
-import { UseCase, Controller, VendorDocument } from '../../types';
+import { Controller } from '../../types';
+import { SelectOneVendorUseCase } from '../../use-cases/vendors/select-one-vendor';
 
 const selectOneVendor = ({
   selectOneVendorUseCase,
 }: {
-  selectOneVendorUseCase: UseCase<VendorDocument>;
+  selectOneVendorUseCase: SelectOneVendorUseCase;
 }): Controller => {
   return async function controller(httpRequest) {
     const headers = {
@@ -13,8 +14,6 @@ const selectOneVendor = ({
     try {
       const view = await selectOneVendorUseCase({
         id: httpRequest.params.id,
-        source: null,
-        info: null,
       });
 
       return {

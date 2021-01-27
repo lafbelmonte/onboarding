@@ -1,13 +1,24 @@
-import { UseCase, VendorsStore, VendorDocument } from '../../types';
+import { VendorDocument } from '../../lib/mongoose/models/vendor';
+import { VendorStore } from '../../data-access/mongoose/vendors/actions';
 import { VendorNotFoundError } from '../../custom-errors';
 
+type Input = {
+  id: string;
+  info?;
+  source?;
+};
+
+type Output = VendorDocument;
+
+export type SelectOneVendorUseCase = (input: Input) => Promise<Output>;
+
 const selectOneVendor = ({
-  vendorsStore,
+  vendorStore,
 }: {
-  vendorsStore: VendorsStore;
-}): UseCase<VendorDocument> => {
+  vendorStore: VendorStore;
+}): SelectOneVendorUseCase => {
   return async function useCase({ id }) {
-    const vendorExists = await vendorsStore.vendorExistsByFilter({
+    const vendorExists = await vendorStore.vendorExistsByFilter({
       _id: id,
     });
 
@@ -15,7 +26,7 @@ const selectOneVendor = ({
       throw new VendorNotFoundError(`Vendor with ID: ${id} doesn't exists`);
     }
 
-    const vendor = await vendorsStore.selectOneVendorByFilters({ _id: id });
+    const vendor = await vendorStore.selectOneVendorByFilters({ _id: id });
 
     return vendor;
   };

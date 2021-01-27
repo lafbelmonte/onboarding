@@ -1,9 +1,10 @@
-import { UseCase, Controller } from '../../types';
+import { Controller } from '../../types';
+import { UpdateVendorUseCase } from '../../use-cases/vendors/update-vendor';
 
 const updateVendor = ({
   updateVendorUseCase,
 }: {
-  updateVendorUseCase: UseCase<boolean>;
+  updateVendorUseCase: UpdateVendorUseCase;
 }): Controller => {
   return async function controller(httpRequest) {
     try {

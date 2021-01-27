@@ -28,8 +28,8 @@ export default gql`
   }
 
   type PromoEnrollmentRequestsConnection {
-    totalCount: Int
-    edges: [PromoEnrollmentRequestsConnectionEdge]
+    totalCount: Int!
+    edges: [PromoEnrollmentRequestsConnectionEdge]!
     pageInfo: PageInfo
   }
 
@@ -42,6 +42,9 @@ export default gql`
 
   extend type Query {
     promoEnrollmentRequest(id: ID!): PromoEnrollmentRequest
-    promoEnrollmentRequests: PromoEnrollmentRequestsConnection
+    promoEnrollmentRequests(
+      first: Int
+      after: String
+    ): PromoEnrollmentRequestsConnection
   }
 `;

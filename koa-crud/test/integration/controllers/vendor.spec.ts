@@ -5,11 +5,11 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { Vendor } from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, {
+  VendorType,
+} from '../../../src/lib/mongoose/models/vendor';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
-
-import { VendorType } from '../../../src/types';
 
 import {
   selectAllVendorsController,
@@ -37,11 +37,11 @@ describe('Vendor Controller', () => {
 
   describe('Adding a vendor', () => {
     afterEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     describe('GIVEN correct inputs and SEAMLESS type', () => {
@@ -201,12 +201,12 @@ describe('Vendor Controller', () => {
 
   describe('Selecting all vendors', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -235,12 +235,12 @@ describe('Vendor Controller', () => {
 
   describe('Selecting One Vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -297,12 +297,12 @@ describe('Vendor Controller', () => {
 
   describe('Updating a vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });
@@ -446,12 +446,12 @@ describe('Vendor Controller', () => {
 
   describe('Deleting a vendor', () => {
     after(() => {
-      return Vendor.deleteMany({});
+      return VendorModel.deleteMany({});
     });
 
     before(async function () {
-      await Vendor.deleteMany({});
-      this.mock = await Vendor.create({
+      await VendorModel.deleteMany({});
+      this.mock = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
       });

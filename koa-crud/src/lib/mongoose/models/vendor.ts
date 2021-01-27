@@ -1,9 +1,23 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { nanoid } from 'nanoid';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { VendorType, VendorDocument } from '../../../types/index';
 
-const schema = new Schema(
+export enum VendorType {
+  Seamless = 'SEAMLESS',
+  Transfer = 'TRANSFER',
+}
+
+export type Vendor = {
+  _id: string;
+  name: string;
+  type: VendorType;
+  cursorBuffer: Buffer;
+  cursor: Buffer;
+};
+
+export type VendorDocument = Vendor & Document;
+
+const schema: Schema = new Schema(
   {
     _id: {
       type: String,
@@ -20,12 +34,23 @@ const schema = new Schema(
       enum: [VendorType.Seamless, VendorType.Transfer],
       required: true,
     },
+    dateTimeCreated: { type: Date, default: Date.now },
+    cursor: {
+      type: Buffer,
+      default(this) {
+        return Buffer.from(this.dateTimeCreated);
+      },
+    },
   },
   { timestamps: true },
 );
 
 schema.plugin(mongooseLeanVirtuals);
 
+schema.virtual('cursorBuffer').get(function () {
+  return this.cursor.buffer;
+});
+
 const Vendor = model<VendorDocument>('Vendor', schema);
 
-export { Vendor };
+export default Vendor;

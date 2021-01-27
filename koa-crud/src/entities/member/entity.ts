@@ -1,8 +1,21 @@
 import bcryptType from 'bcrypt';
-import { Member } from '../../types/index';
+import { Member } from '../../lib/mongoose/models/member';
 import { MissingMemberInformationError } from '../../custom-errors';
 
-const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
+type MemberEntityInput = { username: Member[`username`] } & Partial<
+  Pick<Member, 'password' | 'realName' | 'email' | 'bankAccount' | 'balance'>
+>;
+
+type MemberEntityOutput = {
+  username: Member[`username`];
+  password: Member['password'] | null;
+} & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
+
+export type MemberEntity = (
+  input: MemberEntityInput,
+) => Promise<MemberEntityOutput>;
+
+const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }): MemberEntity => {
   return async function member({
     username,
     password,
@@ -10,7 +23,7 @@ const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }) => {
     email,
     bankAccount,
     balance,
-  }: Member): Promise<Member> {
+  }) {
     if (!username) {
       throw new MissingMemberInformationError(`Please input username`);
     }

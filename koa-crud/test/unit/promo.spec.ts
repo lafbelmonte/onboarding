@@ -6,7 +6,10 @@ import { Chance } from 'chance';
 
 import { promoEntity } from '../../src/entities/promo';
 
-import { PromoTemplate, RequiredMemberFields } from '../../src/types';
+import {
+  PromoTemplate,
+  RequiredMemberFields,
+} from '../../src/lib/mongoose/models/promo';
 
 import {
   MissingPromoInformationError,

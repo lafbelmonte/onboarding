@@ -1,9 +1,10 @@
-import { UseCase, Controller } from '../../types';
+import { AuthenticateUseCase } from '../../use-cases/auth/authenticate';
+import { Controller } from '../../types';
 
 const authenticate = ({
   authenticateUseCase,
 }: {
-  authenticateUseCase: UseCase<string>;
+  authenticateUseCase: AuthenticateUseCase;
 }): Controller => {
   return async function controller(httpRequest) {
     try {
@@ -14,9 +15,7 @@ const authenticate = ({
         source.referrer = httpRequest.headers.Referer;
       }
       const token = await authenticateUseCase({
-        id: null,
         info,
-        source,
       });
       return {
         headers: {

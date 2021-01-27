@@ -1,4 +1,10 @@
-import { PromoTemplate, Promo } from '../../types';
+import {
+  PromoTemplate,
+  Promo,
+  PromoDocument,
+} from '../../lib/mongoose/models/promo';
+import { MemberDocument } from '../../lib/mongoose/models/member';
+import { PromoEnrollmentRequest } from '../../lib/mongoose/models/promo-enrollment-request';
 
 import {
   members,
@@ -25,6 +31,9 @@ import {
   rejectPromoEnrollmentRequest,
   approvePromoEnrollmentRequest,
 } from './promo-enrollments';
+
+import { selectOneMemberUseCase } from '../../use-cases/members';
+import { selectOnePromoUseCase } from '../../use-cases/promos';
 
 const Query = {
   members,
@@ -61,6 +70,19 @@ export default {
         return 'DepositPromo';
       }
       return 'SignUpPromo';
+    },
+  },
+  PromoEnrollmentRequest: {
+    async member(parent: PromoEnrollmentRequest): Promise<MemberDocument> {
+      return selectOneMemberUseCase({
+        id: parent.member,
+      });
+    },
+
+    async promo(parent: PromoEnrollmentRequest): Promise<PromoDocument> {
+      return selectOnePromoUseCase({
+        id: parent.promo,
+      });
     },
   },
 };

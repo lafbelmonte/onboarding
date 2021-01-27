@@ -1,35 +1,59 @@
-import { PromoEnrollmentRequest as PromoEnrollmentRequestModel } from '../../../lib/mongoose/models/promo-enrollment-request';
-import { PromoEnrollmentRequestsStore } from '../../../types/index';
-
-const actions = ({
+import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequest,
+  PromoEnrollmentRequestDocument,
+} from '../../../lib/mongoose/models/promo-enrollment-request';
+
+type PromoEnrollmentRequestFilters = {
+  _id?: PromoEnrollmentRequest['_id'] | Record<string, any>;
+  promo?: PromoEnrollmentRequest['promo'];
+  member?: PromoEnrollmentRequest['member'];
+};
+
+export type PromoEnrollmentRequestStore = {
+  insertPromoEnrollment: (info: {
+    promo: string;
+    member: string;
+  }) => Promise<PromoEnrollmentRequestDocument>;
+  promoEnrollmentExistsByFilter: (
+    filters: PromoEnrollmentRequestFilters,
+  ) => Promise<boolean>;
+  selectOnePromoEnrollmentByFilters: (
+    filters: PromoEnrollmentRequestFilters,
+  ) => Promise<PromoEnrollmentRequestDocument>;
+  selectAllPromoEnrollmentRequests: () => Promise<
+    PromoEnrollmentRequestDocument[]
+  >;
+  updatePromoEnrollmentRequestStatusByFilters: (
+    filters: PromoEnrollmentRequestFilters,
+    info: { status: PromoEnrollmentRequest['status'] },
+  ) => Promise<PromoEnrollmentRequestDocument>;
+};
+
+export default ({
+  PromoEnrollmentRequestModel,
 }: {
-  PromoEnrollmentRequest: typeof PromoEnrollmentRequestModel;
-}): PromoEnrollmentRequestsStore => {
+  PromoEnrollmentRequestModel: typeof PromoEnrollmentRequestModelType;
+}): PromoEnrollmentRequestStore => {
   async function insertPromoEnrollment(info) {
-    return PromoEnrollmentRequest.create(info);
+    return PromoEnrollmentRequestModel.create(info);
   }
 
   async function promoEnrollmentExistsByFilter(filters) {
-    return PromoEnrollmentRequest.exists(filters);
+    return PromoEnrollmentRequestModel.exists(filters);
   }
 
   async function selectOnePromoEnrollmentByFilters(filters) {
-    return PromoEnrollmentRequest.findOne(filters)
-      .populate('member')
-      .populate('promo')
-      .lean({ virtuals: true });
+    return PromoEnrollmentRequestModel.findOne(filters).lean({
+      virtuals: true,
+    });
   }
 
   async function selectAllPromoEnrollmentRequests() {
-    return PromoEnrollmentRequest.find()
-      .populate('member')
-      .populate('promo')
-      .lean({ virtuals: true });
+    return PromoEnrollmentRequestModel.find().lean({ virtuals: true });
   }
 
   async function updatePromoEnrollmentRequestStatusByFilters(filters, info) {
-    return PromoEnrollmentRequest.findOneAndUpdate(filters, info, {
+    return PromoEnrollmentRequestModel.findOneAndUpdate(filters, info, {
       new: true,
     });
   }
@@ -42,5 +66,3 @@ const actions = ({
     updatePromoEnrollmentRequestStatusByFilters,
   };
 };
-
-export default actions;

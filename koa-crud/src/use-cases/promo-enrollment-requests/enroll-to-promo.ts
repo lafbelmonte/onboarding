@@ -1,11 +1,7 @@
-import {
-  UseCase,
-  MembersStore,
-  PromosStore,
-  PromoTemplate,
-  PromoStatus,
-  PromoEnrollmentRequestsStore,
-} from '../../types';
+import { MemberStore } from '../../data-access/mongoose/members/actions';
+import { PromoStore } from '../../data-access/mongoose/promos/actions';
+import { PromoStatus, PromoTemplate } from '../../lib/mongoose/models/promo';
+import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
 
 import {
   MissingPromoEnrollmentRequestInformationError,
@@ -18,27 +14,46 @@ import {
   MissingPromoInformationError,
 } from '../../custom-errors';
 
+type Input = {
+  id?: string;
+  info: {
+    member: string;
+    promo: string;
+  };
+  source?;
+};
+
+type Output = boolean;
+
+export type EnrollToPromoUseCase = (input: Input) => Promise<Output>;
+
 const enrollToPromo = ({
-  membersStore,
-  promosStore,
+  memberStore,
+  promoStore,
   R,
-  promoEnrollmentRequestsStore,
+  promoEnrollmentRequestStore,
   camelCase,
 }: {
-  membersStore: MembersStore;
-  promosStore: PromosStore;
+  memberStore: MemberStore;
+  promoStore: PromoStore;
   R;
-  promoEnrollmentRequestsStore: PromoEnrollmentRequestsStore;
+  promoEnrollmentRequestStore: PromoEnrollmentRequestStore;
   camelCase;
-}): UseCase<boolean> => {
-  return async function ({ id, info }) {
+}): EnrollToPromoUseCase => {
+  return async function ({ info }) {
     if (!info.promo) {
       throw new MissingPromoEnrollmentRequestInformationError(
         `Please input promo ID`,
       );
     }
 
-    const promo = await promosStore.selectOnePromoByFilters({
+    if (!info.member) {
+      throw new MissingPromoEnrollmentRequestInformationError(
+        `Please input member ID`,
+      );
+    }
+
+    const promo = await promoStore.selectOnePromoByFilters({
       _id: info.promo,
     });
 
@@ -52,15 +67,17 @@ const enrollToPromo = ({
       throw new InvalidPromoError(`Promo with ID: ${info.promo} not active`);
     }
 
-    const member = await membersStore.selectOneMemberByFilters({
-      _id: id,
+    const member = await memberStore.selectOneMemberByFilters({
+      _id: info.member,
     });
 
     if (!member) {
-      throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
+      throw new MemberNotFoundError(
+        `Member with ID: ${info.member} doesn't exists`,
+      );
     }
 
-    const promoEnrollmentExists = await promoEnrollmentRequestsStore.promoEnrollmentExistsByFilter(
+    const promoEnrollmentExists = await promoEnrollmentRequestStore.promoEnrollmentExistsByFilter(
       { promo: promo._id, member: member._id },
     );
 
@@ -100,7 +117,7 @@ const enrollToPromo = ({
       }
     }
 
-    await promoEnrollmentRequestsStore.insertPromoEnrollment({
+    await promoEnrollmentRequestStore.insertPromoEnrollment({
       promo: promo._id,
       member: member._id,
     });

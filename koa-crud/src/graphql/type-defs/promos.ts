@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-koa';
 
 export default gql`
   extend type Query {
-    promos: [Promo]
+    promos(first: Int, after: String): PromoConnection
     promo(id: ID!): Promo
   }
 
@@ -27,6 +27,17 @@ export default gql`
     DRAFT
     ACTIVE
     INACTIVE
+  }
+
+  type PromoConnectionEdge {
+    node: Promo
+    cursor: String
+  }
+
+  type PromoConnection {
+    totalCount: Int!
+    edges: [PromoConnectionEdge]!
+    pageInfo: PageInfo
   }
 
   interface Promo {

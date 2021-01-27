@@ -1,17 +1,29 @@
-import { UseCase, PromosStore } from '../../types';
 import { PromoNotFoundError } from '../../custom-errors';
+import { PromoEntity } from '../../entities/promo/entity';
+import { Promo } from '../../lib/mongoose/models/promo';
+import { PromoStore } from '../../data-access/mongoose/promos/actions';
+
+type Input = {
+  id: string;
+  info: Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+  source?;
+};
+
+type Output = boolean;
+
+export type UpdatePromoUseCase = (input: Input) => Promise<Output>;
 
 const updatePromo = ({
   promoEntity,
-  promosStore,
+  promoStore,
   R,
 }: {
-  promosStore: PromosStore;
-  promoEntity;
+  promoStore: PromoStore;
+  promoEntity: PromoEntity;
   R;
-}): UseCase<boolean> => {
+}): UpdatePromoUseCase => {
   return async function ({ id, info }) {
-    const promoExists = await promosStore.promoExistsByFilter({
+    const promoExists = await promoStore.promoExistsByFilter({
       _id: id,
     });
 
@@ -23,7 +35,7 @@ const updatePromo = ({
 
     const truthlyPromo = R.filter(Boolean)(promo);
 
-    await promosStore.updatePromoByFilters({ _id: id }, truthlyPromo);
+    await promoStore.updatePromoByFilters({ _id: id }, truthlyPromo);
 
     return true;
   };

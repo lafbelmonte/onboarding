@@ -1,31 +1,68 @@
-import { PromosStore } from '../../../types/index';
-import { Promo as PromoModel } from '../../../lib/mongoose/models/promo';
+import PromoModelType, {
+  Promo,
+  PromoDocument,
+} from '../../../lib/mongoose/models/promo';
 
-const actions = ({ Promo }: { Promo: typeof PromoModel }): PromosStore => {
+type PromoInformation = Partial<
+  Pick<
+    Promo,
+    | 'name'
+    | 'template'
+    | 'title'
+    | 'description'
+    | 'status'
+    | 'minimumBalance'
+    | 'requiredMemberFields'
+    | 'submitted'
+    | 'enabled'
+  >
+>;
+
+type PromoFilters = {
+  _id?: Promo['_id'] | Record<string, any>;
+};
+
+export type PromoStore = {
+  insertOnePromo: (info: PromoInformation) => Promise<PromoDocument>;
+  promoExistsByFilter: (filters: PromoFilters) => Promise<boolean>;
+  selectAllPromos: () => Promise<PromoDocument[]>;
+  selectOnePromoByFilters: (filters: PromoFilters) => Promise<PromoDocument>;
+  updatePromoByFilters: (
+    filters: PromoFilters,
+    info: PromoInformation,
+  ) => Promise<PromoDocument>;
+  deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
+};
+
+export default ({
+  PromoModel,
+}: {
+  PromoModel: typeof PromoModelType;
+}): PromoStore => {
   async function insertOnePromo(info) {
-    return Promo.create(info);
+    return PromoModel.create(info);
   }
 
   async function promoExistsByFilter(filters) {
-    return Promo.exists(filters);
+    return PromoModel.exists(filters);
   }
 
   async function selectAllPromos() {
-    return Promo.find().lean({ virtuals: true });
+    return PromoModel.find().lean({ virtuals: true });
   }
 
   async function selectOnePromoByFilters(filters) {
-    return Promo.findOne(filters).lean({ virtuals: true });
+    return PromoModel.findOne(filters).lean({ virtuals: true });
   }
 
   async function updatePromoByFilters(filters, info) {
-    return Promo.findOneAndUpdate(filters, info, {
+    return PromoModel.findOneAndUpdate(filters, info, {
       new: true,
     });
   }
 
   async function deleteOnePromo(filters) {
-    const vendor = await Promo.deleteOne(filters);
+    const vendor = await PromoModel.deleteOne(filters);
 
     const isDeleted = !!(vendor.ok === 1 && vendor.deletedCount === 1);
 
@@ -41,5 +78,3 @@ const actions = ({ Promo }: { Promo: typeof PromoModel }): PromosStore => {
     deleteOnePromo,
   };
 };
-
-export default actions;

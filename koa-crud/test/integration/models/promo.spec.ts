@@ -7,13 +7,11 @@ import mongoose from 'mongoose';
 import { Chance } from 'chance';
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
-import { Promo } from '../../../src/lib/mongoose/models/promo';
-
-import {
+import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/types';
+} from '../../../src/lib/mongoose/models/promo';
 
 chai.use(chaiAsPromised);
 
@@ -36,11 +34,11 @@ describe('Promo Models', () => {
 
   describe('Creating a promo', () => {
     afterEach(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     describe('Given correct inputs and deposit template', () => {
@@ -52,10 +50,9 @@ describe('Promo Models', () => {
           description: this.randomDescription(),
           minimumBalance: this.randomBalance(),
         };
-        await expect(Promo.create(this.mock)).to.eventually.fulfilled.property(
-          'status',
-          PromoStatus.Draft,
-        );
+        await expect(
+          PromoModel.create(this.mock),
+        ).to.eventually.fulfilled.property('status', PromoStatus.Draft);
       });
     });
 
@@ -72,10 +69,9 @@ describe('Promo Models', () => {
             RequiredMemberFields.Realname,
           ],
         };
-        await expect(Promo.create(this.mock)).to.eventually.fulfilled.property(
-          'status',
-          PromoStatus.Draft,
-        );
+        await expect(
+          PromoModel.create(this.mock),
+        ).to.eventually.fulfilled.property('status', PromoStatus.Draft);
       });
     });
 
@@ -88,7 +84,7 @@ describe('Promo Models', () => {
           description: this.randomDescription(),
           minimumBalance: this.randomBalance(),
         };
-        await expect(Promo.create(this.mock)).to.eventually.rejected;
+        await expect(PromoModel.create(this.mock)).to.eventually.rejected;
       });
     });
 
@@ -101,7 +97,7 @@ describe('Promo Models', () => {
           description: this.randomDescription(),
           minimumBalance: this.randomBalance(),
         };
-        await expect(Promo.create(this.mock)).to.eventually.rejected;
+        await expect(PromoModel.create(this.mock)).to.eventually.rejected;
       });
     });
 
@@ -114,7 +110,7 @@ describe('Promo Models', () => {
           description: '',
           minimumBalance: this.randomBalance(),
         };
-        await expect(Promo.create(this.mock)).to.eventually.rejected;
+        await expect(PromoModel.create(this.mock)).to.eventually.rejected;
       });
     });
 
@@ -127,19 +123,19 @@ describe('Promo Models', () => {
           description: this.randomDescription(),
           requiredMemberFields: [this.randomDescription()],
         };
-        await expect(Promo.create(this.mock)).to.eventually.rejected;
+        await expect(PromoModel.create(this.mock)).to.eventually.rejected;
       });
     });
   });
 
   describe('Updating a Promo', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
-      this.mock = await Promo.create({
+      await PromoModel.deleteMany({});
+      this.mock = await PromoModel.create({
         name: this.randomName(),
         template: PromoTemplate.Deposit,
         title: this.randomTitle(),
@@ -162,7 +158,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.fulfilled;
@@ -184,7 +180,7 @@ describe('Promo Models', () => {
           status: PromoStatus.Active,
         };
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.fulfilled;
@@ -207,7 +203,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -229,7 +225,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -251,7 +247,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -273,7 +269,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -295,7 +291,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -317,7 +313,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -335,7 +331,7 @@ describe('Promo Models', () => {
         };
 
         await expect(
-          Promo.findOneAndUpdate({ _id: this.baseId }, this.mock, {
+          PromoModel.findOneAndUpdate({ _id: this.baseId }, this.mock, {
             new: true,
           }),
         ).to.eventually.rejected;
@@ -345,16 +341,16 @@ describe('Promo Models', () => {
 
   describe('Deleting a promo', () => {
     after(() => {
-      return Promo.deleteMany({});
+      return PromoModel.deleteMany({});
     });
 
     before(async function () {
-      await Promo.deleteMany({});
+      await PromoModel.deleteMany({});
     });
 
     describe('GIVEN valid and existent promo ID', () => {
       it('should be fulfilled and deleted count should be 1', async function () {
-        this.mock = await Promo.create({
+        this.mock = await PromoModel.create({
           name: this.randomName(),
           template: PromoTemplate.Deposit,
           title: this.randomTitle(),
@@ -363,7 +359,7 @@ describe('Promo Models', () => {
         });
 
         await expect(
-          Promo.deleteOne({ _id: this.mock._id }),
+          PromoModel.deleteOne({ _id: this.mock._id }),
         ).to.eventually.fulfilled.property('deletedCount', 1);
       });
     });
@@ -371,7 +367,7 @@ describe('Promo Models', () => {
     describe('GIVEN non existent promo ID', () => {
       it('should be fulfilled and deleted count should be 0', async function () {
         await expect(
-          Promo.deleteOne({ _id: this.mockedId }),
+          PromoModel.deleteOne({ _id: this.mockedId }),
         ).to.eventually.fulfilled.property('deletedCount', 0);
       });
     });

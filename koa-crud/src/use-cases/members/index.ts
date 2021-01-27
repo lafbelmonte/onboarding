@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { membersStore } from '../../data-access/mongoose/members';
+import { memberStore } from '../../data-access/mongoose/members';
 
 import { memberEntity } from '../../entities/member';
 
@@ -9,11 +9,11 @@ import selectOneMember from './select-one-member';
 import updateMember from './update-member';
 import deleteOneMember from './delete-one-member';
 
-const insertMemberUseCase = insertMember({ memberEntity, membersStore });
-const selectAllMembersUseCase = selectAllMembers({ membersStore });
-const selectOneMemberUseCase = selectOneMember({ membersStore });
-const updateMemberUseCase = updateMember({ memberEntity, membersStore, R });
-const deleteOneMemberUseCase = deleteOneMember({ membersStore });
+const insertMemberUseCase = insertMember({ memberEntity, memberStore });
+const selectAllMembersUseCase = selectAllMembers({ memberStore });
+const selectOneMemberUseCase = selectOneMember({ memberStore });
+const updateMemberUseCase = updateMember({ memberEntity, memberStore, R });
+const deleteOneMemberUseCase = deleteOneMember({ memberStore });
 
 export {
   insertMemberUseCase,

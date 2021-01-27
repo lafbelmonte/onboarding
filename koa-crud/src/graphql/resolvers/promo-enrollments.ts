@@ -1,5 +1,3 @@
-import R from 'ramda';
-
 import {
   enrollToPromoUseCase,
   selectAllPromoEnrollmentRequestsUseCase,
@@ -10,91 +8,62 @@ import {
 } from '../../use-cases/promo-enrollment-requests';
 
 import { NotAllowedError } from '../../custom-errors';
-import { Connection, PromoEnrollmentRequest } from '../../types/index';
 
-const enrollToPromo = async (
-  obj,
-  args: PromoEnrollmentRequest,
-  ctx,
-): Promise<boolean> => {
+import paginate from '../../pagination';
+
+import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
+import { Connection } from '../../types';
+
+const enrollToPromo = async (obj, args, ctx): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
 
   return enrollToPromoUseCase({
-    id: ctx.userId.data,
-    info: args,
-    source: null,
+    info: {
+      member: ctx.userId.data,
+      promo: args.promo,
+    },
   });
 };
 
-const promoEnrollmentRequests = async (): Promise<
-  Connection<PromoEnrollmentRequest>
-> => {
-  const nodes = await selectAllPromoEnrollmentRequestsUseCase({
-    id: null,
-    info: null,
-    source: null,
+const promoEnrollmentRequests = async (
+  obj,
+  args,
+): Promise<Connection<PromoEnrollmentRequestDocument>> => {
+  const data = await selectAllPromoEnrollmentRequestsUseCase({});
+
+  return paginate({
+    data,
+    first: args.first,
+    after: args.after,
   });
-
-  const edges = R.map((node: PromoEnrollmentRequest) => {
-    return {
-      node,
-      cursor: 'not implemented',
-    };
-  })(nodes);
-
-  return {
-    totalCount: nodes.length,
-    pageInfo: {
-      endCursor: 'not implemented',
-      hasNextPage: false,
-    },
-    edges,
-  };
 };
 
 const promoEnrollmentRequest = async (
   obj,
-  args: PromoEnrollmentRequest,
-): Promise<PromoEnrollmentRequest> => {
+  args,
+): Promise<PromoEnrollmentRequestDocument> => {
   return selectOnePromoEnrollmentRequestUseCase({
     id: args.id,
-    info: null,
-    source: null,
   });
 };
 
-const processPromoEnrollmentRequest = async (
-  obj,
-  args: { id: string },
-): Promise<boolean> => {
+const processPromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
   return processEnrollmentRequestUseCase({
     id: args.id,
-    info: null,
-    source: null,
   });
 };
 
-const approvePromoEnrollmentRequest = async (
-  obj,
-  args: { id: string },
-): Promise<boolean> => {
+const approvePromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
   return approveEnrollmentRequestUseCase({
     id: args.id,
-    info: null,
-    source: null,
   });
 };
 
-const rejectPromoEnrollmentRequest = async (
-  obj,
-  args: { id: string },
-): Promise<boolean> => {
+const rejectPromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
   return rejectEnrollmentRequestUseCase({
     id: args.id,
-    info: null,
-    source: null,
   });
 };
 

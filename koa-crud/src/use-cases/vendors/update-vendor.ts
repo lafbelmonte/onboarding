@@ -1,17 +1,29 @@
-import { UseCase, VendorsStore } from '../../types';
 import { VendorNotFoundError } from '../../custom-errors';
+import { VendorEntity } from '../../entities/vendor/entity';
+import { VendorStore } from '../../data-access/mongoose/vendors/actions';
+import { Vendor } from '../../lib/mongoose/models/vendor';
+
+type Input = {
+  id: string;
+  info: Pick<Vendor, 'name' | 'type'>;
+  source?;
+};
+
+type Output = boolean;
+
+export type UpdateVendorUseCase = (input: Input) => Promise<Output>;
 
 const updateVendor = ({
-  vendorsStore,
+  vendorStore,
   vendorEntity,
   R,
 }: {
-  vendorsStore: VendorsStore;
-  vendorEntity;
+  vendorStore: VendorStore;
+  vendorEntity: VendorEntity;
   R;
-}): UseCase<boolean> => {
+}): UpdateVendorUseCase => {
   return async function ({ id, info }) {
-    const vendorExists = await vendorsStore.vendorExistsByFilter({
+    const vendorExists = await vendorStore.vendorExistsByFilter({
       _id: id,
     });
 
@@ -21,7 +33,7 @@ const updateVendor = ({
 
     const vendor = await vendorEntity(info);
 
-    await vendorsStore.updateVendorByFilters(
+    await vendorStore.updateVendorByFilters(
       { _id: id },
       R.omit(['dateTimeCreated'], vendor),
     );

@@ -1,7 +1,7 @@
-import { Promo } from '../../../lib/mongoose/models/promo';
+import PromoModel from '../../../lib/mongoose/models/promo';
 
 import actions from './actions';
 
-const promosStore = actions({ Promo });
+const promoStore = actions({ PromoModel });
 
-export { promosStore };
+export { promoStore };

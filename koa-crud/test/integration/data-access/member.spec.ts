@@ -5,9 +5,9 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { Member } from '../../../src/lib/mongoose/models/member';
+import MemberModel from '../../../src/lib/mongoose/models/member';
 
-import { membersStore } from '../../../src/data-access/mongoose/members';
+import { memberStore } from '../../../src/data-access/mongoose/members';
 
 import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
 
@@ -22,7 +22,7 @@ const {
   selectAllMembers,
   updateMemberByFilters,
   deleteOneMember,
-} = membersStore;
+} = memberStore;
 
 describe('Member Store', () => {
   before(async function () {
@@ -40,11 +40,11 @@ describe('Member Store', () => {
 
   describe('Insert one Member', () => {
     afterEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     beforeEach(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     describe('GIVEN correct inputs', () => {
@@ -83,12 +83,12 @@ describe('Member Store', () => {
 
   describe('Member exists? By filters', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -111,12 +111,12 @@ describe('Member Store', () => {
 
   describe('Select All Members', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -130,12 +130,12 @@ describe('Member Store', () => {
 
   describe('Select One Member By Filters', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -160,12 +160,12 @@ describe('Member Store', () => {
 
   describe('Update member by filters', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
@@ -215,12 +215,12 @@ describe('Member Store', () => {
 
   describe('Deleting a Member', () => {
     after(() => {
-      return Member.deleteMany({});
+      return MemberModel.deleteMany({});
     });
 
     before(async function () {
-      await Member.deleteMany({});
-      this.mock = await Member.create({
+      await MemberModel.deleteMany({});
+      this.mock = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
