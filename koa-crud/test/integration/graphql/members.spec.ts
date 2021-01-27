@@ -146,47 +146,243 @@ describe('Member Queries', function () {
 
     before(async function () {
       await MemberModel.deleteMany({});
-      this.mock = await MemberModel.create({
+      this.data1 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
+        cursor: Buffer.from(this.randomRealName()),
       });
 
-      this.startBuffer = this.mock.cursor.toString('base64');
+      this.data2 = await MemberModel.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(this.randomRealName()),
+        cursor: Buffer.from(this.randomRealName()),
+      });
+
+      this.data3 = await MemberModel.create({
+        username: this.randomUsername(),
+        password: this.randomPassword(),
+        realName: this.randomRealName(this.randomRealName()),
+        cursor: Buffer.from(this.randomRealName()),
+      });
     });
 
-    it('should return list of members', async function () {
-      this.mock = {
-        query: {
-          members: {
-            __args: {
-              first: 2,
-              after: this.startBuffer,
-            },
-            totalCount: true,
-            edges: {
-              node: {
-                id: true,
-                username: true,
-                realName: true,
-                createdAt: true,
-                updatedAt: true,
+    describe('Given complete inputs', () => {
+      it('should return list of paginated members', async function () {
+        this.mock = {
+          query: {
+            members: {
+              __args: {
+                first: 3,
+                after: this.data1.cursor.toString('base64'),
               },
-              cursor: true,
-            },
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: true,
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
             },
           },
-        },
-      };
+        };
 
-      const query = jsonToGraphQLQuery(this.mock);
-      const main = await this.request().post('/graphql').send({ query });
-      expect(main.statusCode).to.eqls(200);
-      expect(main.body.data.members.totalCount).eqls(1);
-      expect(main.body.data.members.edges).have.length(1);
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.members.totalCount).eqls(3);
+        expect(main.body.data.members.edges).have.length(3);
+      });
+    });
+
+    describe('Given invalid first', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            members: {
+              __args: {
+                first: -1,
+                after: this.data1.cursor.toString('base64'),
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PAGINATION_INPUT_ERROR',
+        );
+        expect(main.body.errors[0].message).eqls(`Invalid first`);
+      });
+    });
+
+    describe('Given invalid after', () => {
+      it('should throw an error', async function () {
+        this.mock = {
+          query: {
+            members: {
+              __args: {
+                first: -1,
+                after: this.randomRealName(),
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.errors[0].extensions.code).eqls(
+          'PAGINATION_INPUT_ERROR',
+        );
+        expect(main.body.errors[0].message).eqls(`Invalid cursor`);
+      });
+    });
+
+    describe('Given no first and after', () => {
+      it('should return all paginated members', async function () {
+        this.mock = {
+          query: {
+            members: {
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.members.totalCount).eqls(3);
+        expect(main.body.data.members.edges).have.length(3);
+      });
+    });
+
+    describe('Given only first', () => {
+      it('should return members equal to the given first', async function () {
+        this.mock = {
+          query: {
+            members: {
+              __args: {
+                first: 2,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.members.totalCount).eqls(2);
+        expect(main.body.data.members.edges).have.length(2);
+      });
+    });
+
+    describe('Given only after', () => {
+      it('should return members starting from the given after', async function () {
+        const after = this.data2.cursor.toString('base64');
+
+        this.mock = {
+          query: {
+            members: {
+              __args: {
+                after,
+              },
+              totalCount: true,
+              edges: {
+                node: {
+                  id: true,
+                  username: true,
+                  realName: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+                cursor: true,
+              },
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: true,
+              },
+            },
+          },
+        };
+
+        const query = jsonToGraphQLQuery(this.mock);
+        const main = await this.request().post('/graphql').send({ query });
+        expect(main.statusCode).to.eqls(200);
+        expect(main.body.data.members.totalCount).eqls(2);
+        expect(main.body.data.members.edges).have.length(2);
+        expect(main.body.data.members.edges[0].cursor).eqls(after);
+      });
     });
   });
 
