@@ -4,16 +4,18 @@ import { Connection } from '../types';
 
 import { PaginationInputError } from '../custom-errors';
 
+export type PaginateInput<T> = {
+  data: T[];
+  first: number;
+  after: string;
+};
+
 const makePaginate = ({ R }: { R: typeof rType }) => {
   return function <T extends { cursorBuffer: Buffer }>({
     data,
     first,
     after,
-  }: {
-    data: T[];
-    first: number;
-    after: string;
-  }): Connection<T> {
+  }: PaginateInput<T>): Connection<T> {
     let startingIndex = 0;
 
     if (after) {

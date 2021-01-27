@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import MemberModelType, {
   Member,
   MemberDocument,
@@ -7,10 +8,7 @@ type MemberInformation = { password?: Member['password'] | null } & Partial<
   Pick<Member, 'username' | 'realName' | 'email' | 'bankAccount' | 'balance'>
 >;
 
-type MemberFilters = {
-  _id?: Member['_id'] | Record<string, any>;
-  username?: Member['username'] | Record<string, any>;
-};
+type MemberFilters = FilterQuery<Partial<Pick<Member, '_id' | 'username'>>>;
 
 export type MemberStore = {
   insertOneMember: (info: MemberInformation) => Promise<MemberDocument>;

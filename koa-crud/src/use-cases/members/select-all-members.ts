@@ -1,15 +1,23 @@
 import { MemberDocument } from '../../lib/mongoose/models/member';
 import { MemberStore } from '../../data-access/mongoose/members/actions';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectAllMembersUseCaseInput = {
   id?: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = MemberDocument[];
+type SelectAllMembersUseCaseOutput = MemberDocument[];
 
-export type SelectAllMembersUseCase = (input: Input) => Promise<Output>;
+export type SelectAllMembersUseCase = UseCase<
+  SelectAllMembersUseCaseInput,
+  SelectAllMembersUseCaseOutput
+>;
 
 const selectAllMembers = ({
   memberStore,

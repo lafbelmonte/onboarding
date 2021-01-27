@@ -1,6 +1,7 @@
 import bcryptType from 'bcrypt';
 import { Member } from '../../lib/mongoose/models/member';
 import { MissingMemberInformationError } from '../../custom-errors';
+import { Entity } from '../../types';
 
 type MemberEntityInput = { username: Member[`username`] } & Partial<
   Pick<Member, 'password' | 'realName' | 'email' | 'bankAccount' | 'balance'>
@@ -11,9 +12,7 @@ type MemberEntityOutput = {
   password: Member['password'] | null;
 } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
 
-export type MemberEntity = (
-  input: MemberEntityInput,
-) => Promise<MemberEntityOutput>;
+export type MemberEntity = Entity<MemberEntityInput, MemberEntityOutput>;
 
 const entity = ({ bcrypt }: { bcrypt: typeof bcryptType }): MemberEntity => {
   return async function member({

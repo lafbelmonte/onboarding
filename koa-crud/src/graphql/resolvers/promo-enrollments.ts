@@ -11,10 +11,18 @@ import { NotAllowedError } from '../../custom-errors';
 
 import paginate from '../../pagination';
 
+import { PaginateInput } from '../../pagination/paginate';
+
 import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
 import { Connection } from '../../types';
 
-const enrollToPromo = async (obj, args, ctx): Promise<boolean> => {
+const enrollToPromo = async (
+  parent: null,
+  args: {
+    promo: string;
+  },
+  ctx: { allowed: boolean; userId: { data: string } },
+): Promise<boolean> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
@@ -28,8 +36,8 @@ const enrollToPromo = async (obj, args, ctx): Promise<boolean> => {
 };
 
 const promoEnrollmentRequests = async (
-  obj,
-  args,
+  parent: null,
+  args: Omit<PaginateInput<PromoEnrollmentRequestDocument>, 'data'>,
 ): Promise<Connection<PromoEnrollmentRequestDocument>> => {
   const data = await selectAllPromoEnrollmentRequestsUseCase({});
 
@@ -41,27 +49,44 @@ const promoEnrollmentRequests = async (
 };
 
 const promoEnrollmentRequest = async (
-  obj,
-  args,
+  parent: null,
+  args: {
+    id: string;
+  },
 ): Promise<PromoEnrollmentRequestDocument> => {
   return selectOnePromoEnrollmentRequestUseCase({
     id: args.id,
   });
 };
 
-const processPromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
+const processPromoEnrollmentRequest = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+): Promise<boolean> => {
   return processEnrollmentRequestUseCase({
     id: args.id,
   });
 };
 
-const approvePromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
+const approvePromoEnrollmentRequest = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+): Promise<boolean> => {
   return approveEnrollmentRequestUseCase({
     id: args.id,
   });
 };
 
-const rejectPromoEnrollmentRequest = async (obj, args): Promise<boolean> => {
+const rejectPromoEnrollmentRequest = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+): Promise<boolean> => {
   return rejectEnrollmentRequestUseCase({
     id: args.id,
   });

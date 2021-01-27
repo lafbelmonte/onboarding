@@ -1,16 +1,24 @@
 import { VendorDocument } from '../../lib/mongoose/models/vendor';
 import { VendorStore } from '../../data-access/mongoose/vendors/actions';
 import { VendorNotFoundError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectOneVendorUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = VendorDocument;
+type SelectOneVendorUseCaseOutput = VendorDocument;
 
-export type SelectOneVendorUseCase = (input: Input) => Promise<Output>;
+export type SelectOneVendorUseCase = UseCase<
+  SelectOneVendorUseCaseInput,
+  SelectOneVendorUseCaseOutput
+>;
 
 const selectOneVendor = ({
   vendorStore,

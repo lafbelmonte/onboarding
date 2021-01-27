@@ -1,17 +1,23 @@
 import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
 import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectAllPromoEnrollmentRequestUseCaseInput = {
   id?: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = PromoEnrollmentRequestDocument[];
+type SelectAllPromoEnrollmentRequestUseCaseOutput = PromoEnrollmentRequestDocument[];
 
-export type SelectAllPromoEnrollmentRequestUseCase = (
-  input: Input,
-) => Promise<Output>;
+export type SelectAllPromoEnrollmentRequestUseCase = UseCase<
+  SelectAllPromoEnrollmentRequestUseCaseInput,
+  SelectAllPromoEnrollmentRequestUseCaseOutput
+>;
 
 const selectAllPromoEnrollmentRequests = ({
   promoEnrollmentRequestStore,

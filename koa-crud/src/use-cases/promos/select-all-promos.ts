@@ -1,15 +1,23 @@
 import { PromoStore } from '../../data-access/mongoose/promos/actions';
 import { PromoDocument } from '../../lib/mongoose/models/promo';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectAllMembersUseCaseInput = {
   id?: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = PromoDocument[];
+type SelectAllMembersUseCaseOutput = PromoDocument[];
 
-export type SelectAllMembersUseCase = (input: Input) => Promise<Output>;
+export type SelectAllMembersUseCase = UseCase<
+  SelectAllMembersUseCaseInput,
+  SelectAllMembersUseCaseOutput
+>;
 
 const selectAllPromos = ({
   promoStore,

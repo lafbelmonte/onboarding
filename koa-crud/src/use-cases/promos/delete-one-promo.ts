@@ -2,16 +2,24 @@ import { PromoStore } from '../../data-access/mongoose/promos/actions';
 import { PromoStatus } from '../../lib/mongoose/models/promo';
 
 import { PromoNotFoundError, ActivePromoError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type DeleteOnePromoUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type DeleteOnePromoUseCaseOutput = boolean;
 
-export type DeleteOnePromoUseCase = (input: Input) => Promise<Output>;
+export type DeleteOnePromoUseCase = UseCase<
+  DeleteOnePromoUseCaseInput,
+  DeleteOnePromoUseCaseOutput
+>;
 
 const deleteOnePromo = ({
   promoStore,

@@ -2,16 +2,24 @@ import { VendorNotFoundError } from '../../custom-errors';
 import { VendorEntity } from '../../entities/vendor/entity';
 import { VendorStore } from '../../data-access/mongoose/vendors/actions';
 import { Vendor } from '../../lib/mongoose/models/vendor';
+import { UseCase } from '../../types';
 
-type Input = {
+type UpdateVendorUseCaseInput = {
   id: string;
   info: Pick<Vendor, 'name' | 'type'>;
-  source?;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type UpdateVendorUseCaseOutput = boolean;
 
-export type UpdateVendorUseCase = (input: Input) => Promise<Output>;
+export type UpdateVendorUseCase = UseCase<
+  UpdateVendorUseCaseInput,
+  UpdateVendorUseCaseOutput
+>;
 
 const updateVendor = ({
   vendorStore,

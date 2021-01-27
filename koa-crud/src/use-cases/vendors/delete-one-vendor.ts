@@ -1,15 +1,23 @@
 import { VendorNotFoundError } from '../../custom-errors';
 import { VendorStore } from '../../data-access/mongoose/vendors/actions';
+import { UseCase } from '../../types';
 
-type Input = {
+type DeleteOneVendorUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = boolean;
+type DeleteOneVendorUseCaseOutput = boolean;
 
-export type DeleteOneVendorUseCase = (input: Input) => Promise<Output>;
+export type DeleteOneVendorUseCase = UseCase<
+  DeleteOneVendorUseCaseInput,
+  DeleteOneVendorUseCaseOutput
+>;
 
 const deleteOneVendor = ({
   vendorStore,

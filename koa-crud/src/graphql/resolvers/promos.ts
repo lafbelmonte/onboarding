@@ -8,14 +8,23 @@ import {
 
 import paginate from '../../pagination';
 
-import { PromoDocument } from '../../lib/mongoose/models/promo';
+import { PromoDocument, Promo } from '../../lib/mongoose/models/promo';
 import { Connection } from '../../types';
+import { PaginateInput } from '../../pagination/paginate';
 
-const createPromo = async (obj, args): Promise<boolean> => {
+const createPromo = async (
+  parent: null,
+  args: {
+    input: Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+  },
+): Promise<boolean> => {
   return insertPromoUseCase({ info: args.input });
 };
 
-const promos = async (obj, args): Promise<Connection<PromoDocument>> => {
+const promos = async (
+  parent: null,
+  args: Omit<PaginateInput<PromoDocument>, 'data'>,
+): Promise<Connection<PromoDocument>> => {
   const data = await selectAllPromosUseCase({});
   return paginate({
     data,
@@ -24,18 +33,35 @@ const promos = async (obj, args): Promise<Connection<PromoDocument>> => {
   });
 };
 
-const promo = async (obj, args): Promise<PromoDocument> => {
+const promo = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+): Promise<PromoDocument> => {
   return selectOnePromoUseCase({ id: args.id });
 };
 
-const updatePromo = async (obj, args): Promise<boolean> => {
+const updatePromo = async (
+  parent: null,
+  args: {
+    input: {
+      id: string;
+    } & Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
+  },
+): Promise<boolean> => {
   return updatePromoUseCase({
     id: args.input.id,
     info: args.input,
   });
 };
 
-const deletePromo = async (obj, args): Promise<boolean> => {
+const deletePromo = async (
+  parent: null,
+  args: {
+    id: string;
+  },
+): Promise<boolean> => {
   return deleteOnePromoUseCase({ id: args.id });
 };
 

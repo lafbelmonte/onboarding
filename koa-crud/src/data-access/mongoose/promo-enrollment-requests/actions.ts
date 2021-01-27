@@ -1,13 +1,12 @@
+import { FilterQuery } from 'mongoose';
 import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequest,
   PromoEnrollmentRequestDocument,
 } from '../../../lib/mongoose/models/promo-enrollment-request';
 
-type PromoEnrollmentRequestFilters = {
-  _id?: PromoEnrollmentRequest['_id'] | Record<string, any>;
-  promo?: PromoEnrollmentRequest['promo'];
-  member?: PromoEnrollmentRequest['member'];
-};
+type PromoEnrollmentRequestFilters = FilterQuery<
+  Partial<Pick<PromoEnrollmentRequest, '_id' | 'promo' | 'member'>>
+>;
 
 export type PromoEnrollmentRequestStore = {
   insertPromoEnrollment: (info: {

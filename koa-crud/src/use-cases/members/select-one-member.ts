@@ -1,16 +1,24 @@
 import { MemberDocument } from '../../lib/mongoose/models/member';
 import { MemberStore } from '../../data-access/mongoose/members/actions';
 import { MemberNotFoundError } from '../../custom-errors';
+import { UseCase } from '../../types';
 
-type Input = {
+type SelectOneMemberUseCaseInput = {
   id: string;
-  info?;
-  source?;
+  info?: null;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
-type Output = MemberDocument;
+type SelectOneMemberUseCaseOutput = MemberDocument;
 
-export type SelectOneMemberUseCase = (input: Input) => Promise<Output>;
+export type SelectOneMemberUseCase = UseCase<
+  SelectOneMemberUseCaseInput,
+  SelectOneMemberUseCaseOutput
+>;
 
 const selectOneMember = ({
   memberStore,
@@ -26,7 +34,9 @@ const selectOneMember = ({
       throw new MemberNotFoundError(`Member with ID: ${id} doesn't exists`);
     }
 
-    const member = await memberStore.selectOneMemberByFilters({ _id: id });
+    const member = await memberStore.selectOneMemberByFilters({
+      _id: id,
+    });
 
     return member;
   };

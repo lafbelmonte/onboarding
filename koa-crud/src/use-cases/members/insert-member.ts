@@ -5,6 +5,7 @@ import {
   ExistingMemberError,
 } from '../../custom-errors';
 import { MemberEntity } from '../../entities/member/entity';
+import { UseCase } from '../../types';
 
 type InsertMemberUseCaseInput = {
   id?: string;
@@ -12,14 +13,19 @@ type InsertMemberUseCaseInput = {
     username: Member[`username`];
     password: Member[`password`];
   } & Partial<Pick<Member, 'realName' | 'email' | 'bankAccount' | 'balance'>>;
-  source?;
+  source?: {
+    ip: string;
+    browser: string;
+    referrer?: string;
+  };
 };
 
 type InsertMemberUseCaseOutput = boolean;
 
-export type InsertMemberUseCase = (
-  input: InsertMemberUseCaseInput,
-) => Promise<InsertMemberUseCaseOutput>;
+export type InsertMemberUseCase = UseCase<
+  InsertMemberUseCaseInput,
+  InsertMemberUseCaseOutput
+>;
 
 const insertMember = ({
   memberEntity,

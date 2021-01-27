@@ -5,11 +5,7 @@ import VendorModelType, {
 
 type VendorInformation = Partial<Pick<Vendor, 'name' | 'type'>>;
 
-type VendorFilters = {
-  _id?: string;
-  name?: string;
-  type?: string;
-};
+type VendorFilters = Partial<Pick<Vendor, '_id' | 'name' | 'type'>>;
 
 export type VendorStore = {
   insertOneVendor: (info: VendorInformation) => Promise<VendorDocument>;

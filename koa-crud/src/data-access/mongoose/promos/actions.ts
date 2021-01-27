@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import PromoModelType, {
   Promo,
   PromoDocument,
@@ -18,9 +19,7 @@ type PromoInformation = Partial<
   >
 >;
 
-type PromoFilters = {
-  _id?: Promo['_id'] | Record<string, any>;
-};
+type PromoFilters = FilterQuery<Partial<Pick<Promo, '_id'>>>;
 
 export type PromoStore = {
   insertOnePromo: (info: PromoInformation) => Promise<PromoDocument>;

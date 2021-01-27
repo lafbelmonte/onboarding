@@ -1,12 +1,11 @@
 import { MissingVendorInformationError } from '../../custom-errors';
 import { Vendor } from '../../lib/mongoose/models/vendor';
+import { Entity } from '../../types';
 
 type VendorEntityInput = Pick<Vendor, 'name' | 'type'>;
 type VendorEntityOutput = Pick<Vendor, 'name' | 'type'>;
 
-export type VendorEntity = (
-  input: VendorEntityInput,
-) => Promise<VendorEntityOutput>;
+export type VendorEntity = Entity<VendorEntityInput, VendorEntityOutput>;
 
 const entity = (): VendorEntity => {
   return async function vendor({ name, type }) {
