@@ -1,6 +1,6 @@
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { PromoDocument } from '../../lib/mongoose/models/promo';
-import { UseCase } from '../../types';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { PromoDocument } from '@lib/mongoose/models/promo';
+import { UseCase } from '@types';
 
 type SelectAllMembersUseCaseInput = {
   id?: string;

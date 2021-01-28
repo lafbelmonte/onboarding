@@ -4,19 +4,19 @@ import chaiAsPromised from 'chai-as-promised';
 
 import { Chance } from 'chance';
 
-import { promoEntity } from '../../src/entities/promo';
+import { promoEntity } from '@entities/promo';
 
 import {
   PromoTemplate,
   RequiredMemberFields,
-} from '../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
 import {
   MissingPromoInformationError,
   InvalidPromoTemplateError,
   InvalidPromoInformationGivenError,
   InvalidPromoRequiredMemberFieldError,
-} from '../../src/custom-errors';
+} from '@custom-errors';
 
 const chance = new Chance();
 

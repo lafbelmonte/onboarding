@@ -1,6 +1,6 @@
-import { MissingVendorInformationError } from '../../custom-errors';
-import { Vendor } from '../../lib/mongoose/models/vendor';
-import { Entity } from '../../types';
+import { MissingVendorInformationError } from '@custom-errors';
+import { Vendor } from '@lib/mongoose/models/vendor';
+import { Entity } from '@types';
 
 type VendorEntityInput = Pick<Vendor, 'name' | 'type'>;
 type VendorEntityOutput = Pick<Vendor, 'name' | 'type'>;

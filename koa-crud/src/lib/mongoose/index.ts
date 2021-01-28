@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { DatabaseError } from '../../custom-errors';
+import { DatabaseError } from '@custom-errors';
 
 const mongod = new MongoMemoryServer();
 

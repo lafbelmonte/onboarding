@@ -4,13 +4,13 @@ import {
   selectOnePromoUseCase,
   updatePromoUseCase,
   deleteOnePromoUseCase,
-} from '../../use-cases/promos';
+} from '@use-cases/promos';
 
-import paginate from '../../pagination';
+import paginate from '@pagination/index';
 
-import { PromoDocument, Promo } from '../../lib/mongoose/models/promo';
-import { Connection } from '../../types';
-import { PaginateInput } from '../../pagination/paginate';
+import { PromoDocument, Promo } from '@lib/mongoose/models/promo';
+import { Connection } from '@types';
+import { PaginateInput } from '@pagination/paginate';
 
 const createPromo = async (
   parent: null,

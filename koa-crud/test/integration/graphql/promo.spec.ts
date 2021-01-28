@@ -4,15 +4,15 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import { Chance } from 'chance';
 import { jsonToGraphQLQuery, EnumType } from 'json-to-graphql-query';
-import server from '../../../src/index';
+import server from '@server';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
 chai.use(chaiHttp);
 

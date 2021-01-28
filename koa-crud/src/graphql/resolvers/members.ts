@@ -4,15 +4,15 @@ import {
   selectOneMemberUseCase,
   updateMemberUseCase,
   deleteOneMemberUseCase,
-} from '../../use-cases/members';
+} from '@use-cases/members';
 
-import { Member, MemberDocument } from '../../lib/mongoose/models/member';
+import { Member, MemberDocument } from '@lib/mongoose/models/member';
 
-import { Connection } from '../../types';
+import { Connection } from '@types';
 
-import paginate from '../../pagination';
+import paginate from '@pagination/index';
 
-import { PaginateInput } from '../../pagination/paginate';
+import { PaginateInput } from '@pagination/paginate';
 
 const members = async (
   parent: null,

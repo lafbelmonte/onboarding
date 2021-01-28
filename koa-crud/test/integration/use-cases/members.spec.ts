@@ -11,17 +11,17 @@ import {
   selectOneMemberUseCase,
   updateMemberUseCase,
   deleteOneMemberUseCase,
-} from '../../../src/use-cases/members';
+} from '@use-cases/members';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import {
   MissingMemberInformationError,
   ExistingMemberError,
   MemberNotFoundError,
-} from '../../../src/custom-errors';
+} from '@custom-errors';
 
 chai.use(chaiAsPromised);
 

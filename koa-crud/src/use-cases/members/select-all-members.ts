@@ -1,6 +1,6 @@
-import { MemberDocument } from '../../lib/mongoose/models/member';
-import { MemberStore } from '../../data-access/mongoose/members/actions';
-import { UseCase } from '../../types';
+import { MemberDocument } from '@lib/mongoose/models/member';
+import { MemberStore } from '@data-access/mongoose/members/actions';
+import { UseCase } from '@types';
 
 type SelectAllMembersUseCaseInput = {
   id?: string;

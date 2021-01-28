@@ -5,11 +5,9 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
-import VendorModel, {
-  VendorType,
-} from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, { VendorType } from '@lib/mongoose/models/vendor';
 
 chai.use(chaiAsPromised);
 

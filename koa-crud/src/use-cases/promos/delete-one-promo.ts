@@ -1,8 +1,8 @@
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { PromoStatus } from '../../lib/mongoose/models/promo';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { PromoStatus } from '@lib/mongoose/models/promo';
 
-import { PromoNotFoundError, ActivePromoError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { PromoNotFoundError, ActivePromoError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type DeleteOnePromoUseCaseInput = {
   id: string;

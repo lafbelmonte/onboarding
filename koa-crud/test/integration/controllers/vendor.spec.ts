@@ -5,11 +5,9 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import VendorModel, {
-  VendorType,
-} from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, { VendorType } from '@lib/mongoose/models/vendor';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import {
   selectAllVendorsController,
@@ -17,7 +15,7 @@ import {
   insertVendorController,
   updateVendorController,
   deleteOneVendorController,
-} from '../../../src/controllers/vendors';
+} from '@controllers/vendors';
 
 const chance = new Chance();
 

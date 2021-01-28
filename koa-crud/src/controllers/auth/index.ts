@@ -1,4 +1,4 @@
-import { authenticateUseCase } from '../../use-cases/auth';
+import { authenticateUseCase } from '@use-cases/auth';
 
 import authenticate from './authenticate';
 

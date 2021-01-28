@@ -3,15 +3,15 @@ import {
   PromoTemplate,
   Promo,
   RequiredMemberFields,
-} from '../../lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 import {
   MissingPromoInformationError,
   InvalidPromoTemplateError,
   InvalidPromoInformationGivenError,
   InvalidPromoRequiredMemberFieldError,
-} from '../../custom-errors';
+} from '@custom-errors';
 
-import { Entity } from '../../types';
+import { Entity } from '@types';
 
 type PromoEntityInput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;
 type PromoEntityOutput = Omit<Promo, '_id' | 'cursor' | 'cursorBuffer'>;

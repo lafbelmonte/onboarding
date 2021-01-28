@@ -1,5 +1,5 @@
-import { Controller } from '../../types';
-import { InsertVendorUseCase } from '../../use-cases/vendors/insert-vendor';
+import { Controller } from '@types';
+import { InsertVendorUseCase } from '@use-cases/vendors/insert-vendor';
 
 const insertVendor = ({
   insertVendorUseCase,

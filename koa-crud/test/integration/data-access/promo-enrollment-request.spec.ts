@@ -8,19 +8,19 @@ import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 import PromoModel, {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
-} from '../../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 import PromoEnrollmentRequestModel, {
   PromoEnrollmentRequestStatus,
-} from '../../../src/lib/mongoose/models/promo-enrollment-request';
+} from '@lib/mongoose/models/promo-enrollment-request';
 
-import { promoEnrollmentRequestStore } from '../../../src/data-access/mongoose/promo-enrollment-requests';
+import { promoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 const {
   insertPromoEnrollment,

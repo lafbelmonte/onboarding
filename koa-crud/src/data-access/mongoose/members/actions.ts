@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 import MemberModelType, {
   Member,
   MemberDocument,
-} from '../../../lib/mongoose/models/member';
+} from '@lib/mongoose/models/member';
 
 type MemberInformation = { password?: Member['password'] | null } & Partial<
   Pick<Member, 'username' | 'realName' | 'email' | 'bankAccount' | 'balance'>

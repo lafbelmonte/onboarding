@@ -1,5 +1,5 @@
-import { Controller } from '../../types';
-import { UpdateVendorUseCase } from '../../use-cases/vendors/update-vendor';
+import { Controller } from '@types';
+import { UpdateVendorUseCase } from '@use-cases/vendors/update-vendor';
 
 const updateVendor = ({
   updateVendorUseCase,

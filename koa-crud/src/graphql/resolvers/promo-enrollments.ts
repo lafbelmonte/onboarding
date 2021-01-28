@@ -5,16 +5,16 @@ import {
   approveEnrollmentRequestUseCase,
   rejectEnrollmentRequestUseCase,
   processEnrollmentRequestUseCase,
-} from '../../use-cases/promo-enrollment-requests';
+} from '@use-cases/promo-enrollment-requests';
 
-import { NotAllowedError } from '../../custom-errors';
+import { NotAllowedError } from '@custom-errors';
 
-import paginate from '../../pagination';
+import paginate from '@pagination/index';
 
-import { PaginateInput } from '../../pagination/paginate';
+import { PaginateInput } from '@pagination/paginate';
 
-import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
-import { Connection } from '../../types';
+import { PromoEnrollmentRequestDocument } from '@lib/mongoose/models/promo-enrollment-request';
+import { Connection } from '@types';
 
 const enrollToPromo = async (
   parent: null,

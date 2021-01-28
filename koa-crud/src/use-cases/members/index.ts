@@ -1,7 +1,7 @@
 import R from 'ramda';
-import { memberStore } from '../../data-access/mongoose/members';
+import { memberStore } from '@data-access/mongoose/members';
 
-import { memberEntity } from '../../entities/member';
+import { memberEntity } from '@entities/member';
 
 import insertMember from './insert-member';
 import selectAllMembers from './select-all-members';

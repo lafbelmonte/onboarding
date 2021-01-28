@@ -4,13 +4,11 @@ import chaiHttp from 'chai-http';
 
 import mongoose from 'mongoose';
 import { Chance } from 'chance';
-import server from '../../../src/index';
+import server from '@server';
 
-import VendorModel, {
-  VendorType,
-} from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, { VendorType } from '@lib/mongoose/models/vendor';
 
-import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '@lib/mongoose';
 
 chai.use(chaiHttp);
 

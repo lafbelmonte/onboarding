@@ -1,8 +1,8 @@
-import { PromoNotFoundError } from '../../custom-errors';
-import { PromoEntity } from '../../entities/promo/entity';
-import { Promo } from '../../lib/mongoose/models/promo';
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { UseCase } from '../../types';
+import { PromoNotFoundError } from '@custom-errors';
+import { PromoEntity } from '@entities/promo/entity';
+import { Promo } from '@lib/mongoose/models/promo';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { UseCase } from '@types';
 
 type UpdatePromoUseCaseInput = {
   id: string;

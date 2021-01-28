@@ -1,4 +1,4 @@
-import PromoModel from '../../../lib/mongoose/models/promo';
+import PromoModel from '@lib/mongoose/models/promo';
 
 import actions from './actions';
 

@@ -1,8 +1,8 @@
-import { VendorNotFoundError } from '../../custom-errors';
-import { VendorEntity } from '../../entities/vendor/entity';
-import { VendorStore } from '../../data-access/mongoose/vendors/actions';
-import { Vendor } from '../../lib/mongoose/models/vendor';
-import { UseCase } from '../../types';
+import { VendorNotFoundError } from '@custom-errors';
+import { VendorEntity } from '@entities/vendor/entity';
+import { VendorStore } from '@data-access/mongoose/vendors/actions';
+import { Vendor } from '@lib/mongoose/models/vendor';
+import { UseCase } from '@types';
 
 type UpdateVendorUseCaseInput = {
   id: string;

@@ -4,7 +4,7 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import { Chance } from 'chance';
 import { jsonToGraphQLQuery } from 'json-to-graphql-query';
-import server from '../../../src/index';
+import server from '@server';
 
 import MemberModel from '../../../src/lib/mongoose/models/member';
 

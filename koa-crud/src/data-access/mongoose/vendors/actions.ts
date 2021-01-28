@@ -1,7 +1,7 @@
 import VendorModelType, {
   Vendor,
   VendorDocument,
-} from '../../../lib/mongoose/models/vendor';
+} from '@lib/mongoose/models/vendor';
 
 type VendorInformation = Partial<Pick<Vendor, 'name' | 'type'>>;
 

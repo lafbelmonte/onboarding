@@ -1,7 +1,7 @@
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { Promo } from '../../lib/mongoose/models/promo';
-import { PromoEntity } from '../../entities/promo/entity';
-import { UseCase } from '../../types';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { Promo } from '@lib/mongoose/models/promo';
+import { PromoEntity } from '@entities/promo/entity';
+import { UseCase } from '@types';
 
 type InsertPromoUseCaseInput = {
   id?: string;

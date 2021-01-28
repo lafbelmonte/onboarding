@@ -1,8 +1,8 @@
 import R from 'ramda';
 
-import { vendorEntity } from '../../entities/vendor';
+import { vendorEntity } from '@entities/vendor';
 
-import { vendorStore } from '../../data-access/mongoose/vendors';
+import { vendorStore } from '@data-access/mongoose/vendors';
 
 import selectAllVendors from './select-all-vendors';
 import selectOneVendor from './select-one-vendor';

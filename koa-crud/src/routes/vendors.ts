@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 
-import { Serializer } from '../types';
+import { Serializer } from '@types';
 
 import {
   selectAllVendorsController,
@@ -8,7 +8,7 @@ import {
   insertVendorController,
   updateVendorController,
   deleteOneVendorController,
-} from '../controllers/vendors';
+} from '@controllers/vendors';
 
 const prefix = '/vendors';
 

@@ -4,15 +4,15 @@ import {
   selectOneVendorUseCase,
   updateVendorUseCase,
   deleteOneVendorUseCase,
-} from '../../use-cases/vendors';
+} from '@use-cases/vendors';
 
-import { NotAllowedError } from '../../custom-errors';
+import { NotAllowedError } from '@custom-errors';
 
-import paginate from '../../pagination';
+import paginate from '@pagination/index';
 
-import { VendorDocument, Vendor } from '../../lib/mongoose/models/vendor';
-import { Connection } from '../../types';
-import { PaginateInput } from '../../pagination/paginate';
+import { VendorDocument, Vendor } from '@lib/mongoose/models/vendor';
+import { Connection } from '@types';
+import { PaginateInput } from '@pagination/paginate';
 
 const vendors = async (
   parent: null,

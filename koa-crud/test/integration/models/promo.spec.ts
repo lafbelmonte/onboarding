@@ -5,13 +5,13 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
 chai.use(chaiAsPromised);
 
