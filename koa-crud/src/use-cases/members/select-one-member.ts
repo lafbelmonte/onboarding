@@ -1,7 +1,7 @@
-import { MemberDocument } from '../../lib/mongoose/models/member';
-import { MemberStore } from '../../data-access/mongoose/members/actions';
-import { MemberNotFoundError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { MemberDocument } from '@lib/mongoose/models/member';
+import { MemberStore } from '@data-access/mongoose/members/actions';
+import { MemberNotFoundError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type SelectOneMemberUseCaseInput = {
   id: string;

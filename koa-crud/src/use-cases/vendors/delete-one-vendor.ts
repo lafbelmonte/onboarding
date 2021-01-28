@@ -1,6 +1,6 @@
-import { VendorNotFoundError } from '../../custom-errors';
-import { VendorStore } from '../../data-access/mongoose/vendors/actions';
-import { UseCase } from '../../types';
+import { VendorNotFoundError } from '@custom-errors';
+import { VendorStore } from '@data-access/mongoose/vendors/actions';
+import { UseCase } from '@types';
 
 type DeleteOneVendorUseCaseInput = {
   id: string;

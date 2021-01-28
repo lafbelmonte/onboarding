@@ -1,8 +1,8 @@
 import R from 'ramda';
 
-import { promoEntity } from '../../entities/promo';
+import { promoEntity } from '@entities/promo';
 
-import { promoStore } from '../../data-access/mongoose/promos';
+import { promoStore } from '@data-access/mongoose/promos';
 
 import insertPromo from './insert-promo';
 import selectAllPromos from './select-all-promos';

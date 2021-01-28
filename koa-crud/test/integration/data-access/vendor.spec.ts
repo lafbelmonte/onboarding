@@ -5,13 +5,11 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import VendorModel, {
-  VendorType,
-} from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, { VendorType } from '@lib/mongoose/models/vendor';
 
-import { vendorStore } from '../../../src/data-access/mongoose/vendors';
+import { vendorStore } from '@data-access/mongoose/vendors';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 chai.use(chaiAsPromised);
 

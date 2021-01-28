@@ -1,7 +1,7 @@
 import bcryptType from 'bcrypt';
-import { Member } from '../../lib/mongoose/models/member';
-import { MissingMemberInformationError } from '../../custom-errors';
-import { Entity } from '../../types';
+import { Member } from '@lib/mongoose/models/member';
+import { MissingMemberInformationError } from '@custom-errors';
+import { Entity } from '@types';
 
 type MemberEntityInput = { username: Member[`username`] } & Partial<
   Pick<Member, 'password' | 'realName' | 'email' | 'bankAccount' | 'balance'>

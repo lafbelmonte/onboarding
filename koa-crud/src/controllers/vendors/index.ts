@@ -4,7 +4,7 @@ import {
   insertVendorUseCase,
   updateVendorUseCase,
   deleteOneVendorUseCase,
-} from '../../use-cases/vendors';
+} from '@use-cases/vendors';
 
 import selectAllVendors from './select-all-vendors';
 import selectOneVendor from './select-one-vendor';

@@ -9,11 +9,11 @@ import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
-import { promoStore } from '../../../src/data-access/mongoose/promos';
+import { promoStore } from '@data-access/mongoose/promos';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 chai.use(chaiAsPromised);
 

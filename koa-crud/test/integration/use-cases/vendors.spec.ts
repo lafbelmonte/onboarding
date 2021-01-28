@@ -11,18 +11,16 @@ import {
   selectOneVendorUseCase,
   updateVendorUseCase,
   deleteOneVendorUseCase,
-} from '../../../src/use-cases/vendors';
+} from '@use-cases/vendors';
 
-import VendorModel, {
-  VendorType,
-} from '../../../src/lib/mongoose/models/vendor';
+import VendorModel, { VendorType } from '@lib/mongoose/models/vendor';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 import {
   MissingVendorInformationError,
   ExistingVendorError,
   VendorNotFoundError,
-} from '../../../src/custom-errors';
+} from '@custom-errors';
 
 chai.use(chaiAsPromised);
 

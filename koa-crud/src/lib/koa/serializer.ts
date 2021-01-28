@@ -1,4 +1,4 @@
-import { Serializer } from '../../types';
+import { Serializer } from '@types';
 
 const serialize: Serializer = (controller) => {
   return async (ctx) => {

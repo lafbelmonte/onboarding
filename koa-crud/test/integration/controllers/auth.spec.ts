@@ -6,11 +6,11 @@ import { Chance } from 'chance';
 
 import bcrypt from 'bcrypt';
 
-import { authenticateController } from '../../../src/controllers/auth';
+import { authenticateController } from '@controllers/auth';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 chai.use(chaiAsPromised);
 

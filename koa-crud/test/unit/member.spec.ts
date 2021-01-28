@@ -4,9 +4,9 @@ import chaiAsPromised from 'chai-as-promised';
 
 import { Chance } from 'chance';
 
-import { memberEntity } from '../../src/entities/member';
+import { memberEntity } from '@entities/member';
 
-import { MissingMemberInformationError } from '../../src/custom-errors';
+import { MissingMemberInformationError } from '@custom-errors';
 
 const chance = new Chance();
 

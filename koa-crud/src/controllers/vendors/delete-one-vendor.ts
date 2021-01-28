@@ -1,5 +1,5 @@
-import { Controller } from '../../types';
-import { DeleteOneVendorUseCase } from '../../use-cases/vendors/delete-one-vendor';
+import { Controller } from '@types';
+import { DeleteOneVendorUseCase } from '@use-cases/vendors/delete-one-vendor';
 
 const deleteOneVendor = ({
   deleteOneVendorUseCase,

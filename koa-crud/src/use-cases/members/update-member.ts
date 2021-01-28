@@ -1,8 +1,8 @@
-import { Member } from '../../lib/mongoose/models/member';
-import { MemberStore } from '../../data-access/mongoose/members/actions';
-import { MemberNotFoundError, ExistingMemberError } from '../../custom-errors';
-import { MemberEntity } from '../../entities/member/entity';
-import { UseCase } from '../../types';
+import { Member } from '@lib/mongoose/models/member';
+import { MemberStore } from '@data-access/mongoose/members/actions';
+import { MemberNotFoundError, ExistingMemberError } from '@custom-errors';
+import { MemberEntity } from '@entities/member/entity';
+import { UseCase } from '@types';
 
 type UpdateMemberUseCaseInput = {
   id: string;

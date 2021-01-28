@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 import PromoModelType, {
   Promo,
   PromoDocument,
-} from '../../../lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
 type PromoInformation = Partial<
   Pick<

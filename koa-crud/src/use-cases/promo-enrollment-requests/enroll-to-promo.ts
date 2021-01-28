@@ -1,8 +1,8 @@
-import { MemberStore } from '../../data-access/mongoose/members/actions';
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { PromoStatus, PromoTemplate } from '../../lib/mongoose/models/promo';
-import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
-import { UseCase } from '../../types';
+import { MemberStore } from '@data-access/mongoose/members/actions';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { PromoStatus, PromoTemplate } from '@lib/mongoose/models/promo';
+import { PromoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests/actions';
+import { UseCase } from '@types';
 
 import {
   MissingPromoEnrollmentRequestInformationError,
@@ -13,7 +13,7 @@ import {
   RequiredMemberFieldsNotMetError,
   NotEnoughBalanceError,
   MissingPromoInformationError,
-} from '../../custom-errors';
+} from '@custom-errors';
 
 type EnrollToPromoUseCaseInput = {
   id?: string;

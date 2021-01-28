@@ -1,7 +1,7 @@
-import { PromoDocument } from '../../lib/mongoose/models/promo';
-import { PromoStore } from '../../data-access/mongoose/promos/actions';
-import { PromoNotFoundError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { PromoDocument } from '@lib/mongoose/models/promo';
+import { PromoStore } from '@data-access/mongoose/promos/actions';
+import { PromoNotFoundError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type SelectOnePromoUseCaseInput = {
   id: string;

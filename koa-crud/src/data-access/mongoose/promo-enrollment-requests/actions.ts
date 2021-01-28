@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequest,
   PromoEnrollmentRequestDocument,
-} from '../../../lib/mongoose/models/promo-enrollment-request';
+} from '@lib/mongoose/models/promo-enrollment-request';
 
 type PromoEnrollmentRequestFilters = FilterQuery<
   Partial<Pick<PromoEnrollmentRequest, '_id' | 'promo' | 'member'>>

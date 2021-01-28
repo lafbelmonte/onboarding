@@ -1,6 +1,6 @@
-import { VendorStore } from '../../data-access/mongoose/vendors/actions';
-import { VendorDocument } from '../../lib/mongoose/models/vendor';
-import { UseCase } from '../../types';
+import { VendorStore } from '@data-access/mongoose/vendors/actions';
+import { VendorDocument } from '@lib/mongoose/models/vendor';
+import { UseCase } from '@types';
 
 type SelectAllVendorsUseCaseInput = {
   id?: string;

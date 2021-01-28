@@ -1,8 +1,8 @@
 import R from 'ramda';
 import camelCase from 'camelcase';
-import { memberStore } from '../../data-access/mongoose/members';
-import { promoStore } from '../../data-access/mongoose/promos';
-import { promoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests';
+import { memberStore } from '@data-access/mongoose/members';
+import { promoStore } from '@data-access/mongoose/promos';
+import { promoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests';
 
 import enrollToPromo from './enroll-to-promo';
 import selectAllPromoEnrollmentRequests from './select-all-promo-enrollment-requests';

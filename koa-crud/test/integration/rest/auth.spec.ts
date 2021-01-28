@@ -5,11 +5,11 @@ import chaiHttp from 'chai-http';
 import { Chance } from 'chance';
 
 import bcrypt from 'bcrypt';
-import server from '../../../src/index';
+import server from '@server';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 
-import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
+import { closeDatabase, initializeDatabase } from '@lib/mongoose';
 
 chai.use(chaiHttp);
 

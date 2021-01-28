@@ -3,5 +3,6 @@
     "exit": true,
     "recursive": true,
     "bail": true,
-    "require": "ts-node/register/transpile-only"
+    "require": ["ts-node/register/transpile-only", "tsconfig-paths/register"],
+    "check-leaks": true
 }

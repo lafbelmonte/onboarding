@@ -1,6 +1,6 @@
-import { MemberStore } from '../../data-access/mongoose/members/actions';
-import { MemberNotFoundError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { MemberStore } from '@data-access/mongoose/members/actions';
+import { MemberNotFoundError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type DeleteOneMemberUseCaseInput = {
   id: string;

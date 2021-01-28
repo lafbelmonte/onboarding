@@ -1,7 +1,7 @@
-import { VendorDocument } from '../../lib/mongoose/models/vendor';
-import { VendorStore } from '../../data-access/mongoose/vendors/actions';
-import { VendorNotFoundError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { VendorDocument } from '@lib/mongoose/models/vendor';
+import { VendorStore } from '@data-access/mongoose/vendors/actions';
+import { VendorNotFoundError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type SelectOneVendorUseCaseInput = {
   id: string;

@@ -2,9 +2,9 @@
 import { expect } from 'chai';
 
 import { Chance } from 'chance';
-import { PaginationInputError } from '../../src/custom-errors';
+import { PaginationInputError } from '@custom-errors';
 
-import paginate from '../../src/pagination';
+import paginate from '@pagination/index.ts';
 
 const chance = new Chance();
 

@@ -1,8 +1,8 @@
 import Router from 'koa-router';
 
-import { Serializer } from '../types';
+import { Serializer } from '@types';
 
-import { authenticateController } from '../controllers/auth';
+import { authenticateController } from '@controllers/auth';
 
 const prefix = '/auth';
 

@@ -1,8 +1,8 @@
 import rType from 'ramda';
 
-import { Connection } from '../types';
+import { Connection } from '@types';
 
-import { PaginationInputError } from '../custom-errors';
+import { PaginationInputError } from '@custom-errors';
 
 export type PaginateInput<T> = {
   data: T[];

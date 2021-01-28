@@ -4,20 +4,29 @@
     "module": "commonjs",
     "allowJs": true,
     "moduleResolution": "node",
-    "lib": [
-      "esnext",
-      "es2016.array.include",
-      "esnext.asynciterable"
-    ],
+    "lib": ["esnext", "es2016.array.include", "esnext.asynciterable"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "outDir": "./build",
     "sourceMap": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["src/lib/*"],
+      "@routes/*": ["src/routes/*"],
+      "@server": ["src/index.ts"],
+      "@types": ["src/types"],
+      "@use-cases/*": ["src/use-cases/*"],
+      "@pagination/*": ["src/pagination/*"],
+      "@logger": ["src/logger"],
+      "@graphql/*": ["src/graphql/*"],
+      "@entities/*": ["src/entities/*"],
+      "@data-access/*": ["src/data-access/*"],
+      "@custom-errors": ["src/custom-errors"],
+      "@controllers/*": ["src/controllers/*"]
+    }
   },
-  "include": [
-    "src/"
-  ]
+  "include": ["src/"]
 }

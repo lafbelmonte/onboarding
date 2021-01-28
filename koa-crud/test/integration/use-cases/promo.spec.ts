@@ -12,15 +12,15 @@ import {
   selectAllPromosUseCase,
   deleteOnePromoUseCase,
   updatePromoUseCase,
-} from '../../../src/use-cases/promos';
+} from '@use-cases/promos';
 
 import PromoModel, {
   PromoTemplate,
   RequiredMemberFields,
   PromoStatus,
-} from '../../../src/lib/mongoose/models/promo';
+} from '@lib/mongoose/models/promo';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import {
   MissingPromoInformationError,

@@ -1,7 +1,7 @@
-import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
-import { PromoEnrollmentRequestStatus } from '../../lib/mongoose/models/promo-enrollment-request';
-import { PromoEnrollmentRequestNotFoundError } from '../../custom-errors';
-import { UseCase } from '../../types';
+import { PromoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests/actions';
+import { PromoEnrollmentRequestStatus } from '@lib/mongoose/models/promo-enrollment-request';
+import { PromoEnrollmentRequestNotFoundError } from '@custom-errors';
+import { UseCase } from '@types';
 
 type ApproveEnrollmentRequestUseCaseInput = {
   id: string;

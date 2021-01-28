@@ -1,9 +1,9 @@
-import { MemberStore } from '../../data-access/mongoose/members/actions';
+import { MemberStore } from '@data-access/mongoose/members/actions';
 import {
   MissingCredentialsError,
   InvalidCredentialsError,
-} from '../../custom-errors';
-import { UseCase } from '../../types';
+} from '@custom-errors';
+import { UseCase } from '@types';
 
 type AuthenticateUseCaseInput = {
   id?: string;

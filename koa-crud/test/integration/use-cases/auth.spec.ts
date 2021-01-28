@@ -6,16 +6,16 @@ import { Chance } from 'chance';
 
 import bcrypt from 'bcrypt';
 
-import { authenticateUseCase } from '../../../src/use-cases/auth';
+import { authenticateUseCase } from '@use-cases/auth';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import {
   MissingCredentialsError,
   InvalidCredentialsError,
-} from '../../../src/custom-errors';
+} from '@custom-errors';
 
 chai.use(chaiAsPromised);
 

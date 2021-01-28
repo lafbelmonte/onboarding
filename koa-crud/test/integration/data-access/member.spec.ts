@@ -5,11 +5,11 @@ import chaiAsPromised from 'chai-as-promised';
 import mongoose from 'mongoose';
 
 import { Chance } from 'chance';
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 
-import { memberStore } from '../../../src/data-access/mongoose/members';
+import { memberStore } from '@data-access/mongoose/members';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 chai.use(chaiAsPromised);
 

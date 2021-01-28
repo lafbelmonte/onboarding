@@ -1,5 +1,5 @@
-import { AuthenticateUseCase } from '../../use-cases/auth/authenticate';
-import { Controller } from '../../types';
+import { AuthenticateUseCase } from '@use-cases/auth/authenticate';
+import { Controller } from '@types';
 
 const authenticate = ({
   authenticateUseCase,

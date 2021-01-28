@@ -2,9 +2,9 @@ import {
   PromoTemplate,
   Promo,
   PromoDocument,
-} from '../../lib/mongoose/models/promo';
-import { MemberDocument } from '../../lib/mongoose/models/member';
-import { PromoEnrollmentRequest } from '../../lib/mongoose/models/promo-enrollment-request';
+} from '@lib/mongoose/models/promo';
+import { MemberDocument } from '@lib/mongoose/models/member';
+import { PromoEnrollmentRequest } from '@lib/mongoose/models/promo-enrollment-request';
 
 import {
   members,
@@ -32,8 +32,8 @@ import {
   approvePromoEnrollmentRequest,
 } from './promo-enrollments';
 
-import { selectOneMemberUseCase } from '../../use-cases/members';
-import { selectOnePromoUseCase } from '../../use-cases/promos';
+import { selectOneMemberUseCase } from '@use-cases/members';
+import { selectOnePromoUseCase } from '@use-cases/promos';
 
 const Query = {
   members,

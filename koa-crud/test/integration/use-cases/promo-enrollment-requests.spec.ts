@@ -14,17 +14,17 @@ import {
   approveEnrollmentRequestUseCase,
   processEnrollmentRequestUseCase,
   rejectEnrollmentRequestUseCase,
-} from '../../../src/use-cases/promo-enrollment-requests';
+} from '@use-cases/promo-enrollment-requests';
 
-import MemberModel from '../../../src/lib/mongoose/models/member';
+import MemberModel from '@lib/mongoose/models/member';
 import PromoModel, {
   PromoTemplate,
   PromoStatus,
   RequiredMemberFields,
-} from '../../../src/lib/mongoose/models/promo';
-import PromoEnrollmentRequestModel from '../../../src/lib/mongoose/models/promo-enrollment-request';
+} from '@lib/mongoose/models/promo';
+import PromoEnrollmentRequestModel from '@lib/mongoose/models/promo-enrollment-request';
 
-import { initializeDatabase, closeDatabase } from '../../../src/lib/mongoose';
+import { initializeDatabase, closeDatabase } from '@lib/mongoose';
 
 import {
   MissingPromoEnrollmentRequestInformationError,

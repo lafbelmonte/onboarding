@@ -1,6 +1,6 @@
-import { PromoEnrollmentRequestDocument } from '../../lib/mongoose/models/promo-enrollment-request';
-import { PromoEnrollmentRequestStore } from '../../data-access/mongoose/promo-enrollment-requests/actions';
-import { UseCase } from '../../types';
+import { PromoEnrollmentRequestDocument } from '@lib/mongoose/models/promo-enrollment-request';
+import { PromoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests/actions';
+import { UseCase } from '@types';
 
 type SelectAllPromoEnrollmentRequestUseCaseInput = {
   id?: string;

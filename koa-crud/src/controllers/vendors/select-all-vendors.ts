@@ -1,5 +1,5 @@
-import { Controller } from '../../types';
-import { SelectAllVendorsUseCase } from '../../use-cases/vendors/select-all-vendors';
+import { Controller } from '@types';
+import { SelectAllVendorsUseCase } from '@use-cases/vendors/select-all-vendors';
 
 const selectAllVendors = ({
   selectAllVendorsUseCase,
