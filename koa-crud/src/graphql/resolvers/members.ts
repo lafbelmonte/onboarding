@@ -10,21 +10,13 @@ import { Member, MemberDocument } from '@lib/mongoose/models/member';
 
 import { Connection } from '@types';
 
-import paginate from '@pagination/index';
-
-import { PaginateInput } from '@pagination/paginate';
+import { PaginateInput } from '@pagination/paginate-db-layer';
 
 const members = async (
   parent: null,
-  args: Omit<PaginateInput<MemberDocument>, 'data'>,
+  args: Omit<PaginateInput, 'model'>,
 ): Promise<Connection<MemberDocument>> => {
-  const data = await selectAllMembersUseCase({});
-
-  return paginate<MemberDocument>({
-    data,
-    first: args.first,
-    after: args.after,
-  });
+  return selectAllMembersUseCase({ info: { ...args } });
 };
 
 const member = async (

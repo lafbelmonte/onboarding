@@ -49,11 +49,10 @@ const schema: Schema = new Schema(
       required: true,
       ref: 'Member',
     },
-    dateTimeCreated: { type: Date, default: Date.now },
     cursor: {
       type: Buffer,
       default(this) {
-        return Buffer.from(this.dateTimeCreated);
+        return Buffer.from(new Date());
       },
     },
   },

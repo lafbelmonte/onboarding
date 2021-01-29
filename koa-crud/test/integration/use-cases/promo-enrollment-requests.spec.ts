@@ -442,9 +442,9 @@ describe('Promo Enrollment Use Cases', function () {
         source: null,
       };
 
-      await expect(
-        selectAllPromoEnrollmentRequestsUseCase(this.mock),
-      ).to.eventually.fulfilled.and.have.length(2);
+      await expect(selectAllPromoEnrollmentRequestsUseCase(this.mock))
+        .to.eventually.fulfilled.and.have.property('totalCount')
+        .eqls(2);
     });
   });
 

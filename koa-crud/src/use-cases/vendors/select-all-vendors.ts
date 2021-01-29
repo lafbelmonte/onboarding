@@ -1,10 +1,13 @@
 import { VendorStore } from '@data-access/mongoose/vendors/actions';
 import { VendorDocument } from '@lib/mongoose/models/vendor';
-import { UseCase } from '@types';
+import { UseCase, Connection } from '@types';
 
 type SelectAllVendorsUseCaseInput = {
   id?: string;
-  info?: null;
+  info?: {
+    first: number;
+    after: string;
+  };
   source?: {
     ip: string;
     browser: string;
@@ -12,7 +15,7 @@ type SelectAllVendorsUseCaseInput = {
   };
 };
 
-type SelectAllVendorsUseCaseOutput = VendorDocument[];
+type SelectAllVendorsUseCaseOutput = Connection<VendorDocument>;
 
 export type SelectAllVendorsUseCase = UseCase<
   SelectAllVendorsUseCaseInput,
@@ -24,8 +27,8 @@ const selectAllVendors = ({
 }: {
   vendorStore: VendorStore;
 }): SelectAllVendorsUseCase => {
-  return async function useCase() {
-    const vendors = await vendorStore.selectAllVendors();
+  return async function useCase({ info }) {
+    const vendors = await vendorStore.paginatedVendors(info);
     return vendors;
   };
 };

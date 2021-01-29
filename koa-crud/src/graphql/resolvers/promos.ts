@@ -6,11 +6,9 @@ import {
   deleteOnePromoUseCase,
 } from '@use-cases/promos';
 
-import paginate from '@pagination/index';
-
 import { PromoDocument, Promo } from '@lib/mongoose/models/promo';
 import { Connection } from '@types';
-import { PaginateInput } from '@pagination/paginate';
+import { PaginateInput } from '@pagination/paginate-db-layer';
 
 const createPromo = async (
   parent: null,
@@ -23,14 +21,9 @@ const createPromo = async (
 
 const promos = async (
   parent: null,
-  args: Omit<PaginateInput<PromoDocument>, 'data'>,
+  args: Omit<PaginateInput, 'model'>,
 ): Promise<Connection<PromoDocument>> => {
-  const data = await selectAllPromosUseCase({});
-  return paginate({
-    data,
-    first: args.first,
-    after: args.after,
-  });
+  return selectAllPromosUseCase({ info: { ...args } });
 };
 
 const promo = async (

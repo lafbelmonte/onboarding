@@ -1,10 +1,13 @@
 import { MemberDocument } from '@lib/mongoose/models/member';
 import { MemberStore } from '@data-access/mongoose/members/actions';
-import { UseCase } from '@types';
+import { UseCase, Connection } from '@types';
 
 type SelectAllMembersUseCaseInput = {
   id?: string;
-  info?: null;
+  info?: {
+    first: number;
+    after: string;
+  };
   source?: {
     ip: string;
     browser: string;
@@ -12,7 +15,7 @@ type SelectAllMembersUseCaseInput = {
   };
 };
 
-type SelectAllMembersUseCaseOutput = MemberDocument[];
+type SelectAllMembersUseCaseOutput = Connection<MemberDocument>;
 
 export type SelectAllMembersUseCase = UseCase<
   SelectAllMembersUseCaseInput,
@@ -24,8 +27,8 @@ const selectAllMembers = ({
 }: {
   memberStore: MemberStore;
 }): SelectAllMembersUseCase => {
-  return async function useCase() {
-    const members = await memberStore.selectAllMembers();
+  return async function useCase({ info }) {
+    const members = await memberStore.paginatedMembers(info);
     return members;
   };
 };

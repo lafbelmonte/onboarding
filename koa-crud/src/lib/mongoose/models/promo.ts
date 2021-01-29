@@ -82,11 +82,10 @@ const schema: Schema = new Schema(
       enum: RequiredMemberFields,
       default: [],
     },
-    dateTimeCreated: { type: Date, default: Date.now },
     cursor: {
       type: Buffer,
       default(this) {
-        return Buffer.from(this.dateTimeCreated);
+        return Buffer.from(new Date());
       },
     },
   },

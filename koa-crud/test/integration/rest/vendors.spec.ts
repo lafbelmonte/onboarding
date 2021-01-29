@@ -126,7 +126,7 @@ describe('Vendor Endpoints', function () {
     it('should return list of vendors', async function () {
       const main = await this.request().get('/vendors');
       expect(main.status).to.eqls(200);
-      expect(main.body.length).to.eqls(1);
+      expect(main.body.totalCount).to.eqls(1);
     });
   });
 

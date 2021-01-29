@@ -9,12 +9,9 @@ import {
 
 import { NotAllowedError } from '@custom-errors';
 
-import paginate from '@pagination/index';
-
-import { PaginateInput } from '@pagination/paginate';
-
 import { PromoEnrollmentRequestDocument } from '@lib/mongoose/models/promo-enrollment-request';
 import { Connection } from '@types';
+import { PaginateInput } from '@pagination/paginate-db-layer';
 
 const enrollToPromo = async (
   parent: null,
@@ -37,15 +34,9 @@ const enrollToPromo = async (
 
 const promoEnrollmentRequests = async (
   parent: null,
-  args: Omit<PaginateInput<PromoEnrollmentRequestDocument>, 'data'>,
+  args: Omit<PaginateInput, 'model'>,
 ): Promise<Connection<PromoEnrollmentRequestDocument>> => {
-  const data = await selectAllPromoEnrollmentRequestsUseCase({});
-
-  return paginate({
-    data,
-    first: args.first,
-    after: args.after,
-  });
+  return selectAllPromoEnrollmentRequestsUseCase({ info: { ...args } });
 };
 
 const promoEnrollmentRequest = async (

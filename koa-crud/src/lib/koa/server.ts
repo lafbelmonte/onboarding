@@ -4,12 +4,12 @@ import bodyParser from 'koa-body';
 import R from 'ramda';
 import { ApolloServer } from 'apollo-server-koa';
 import koaPinoLogger from 'koa-pino-logger';
-import serializer from './serializer';
-import { initializeDatabase } from '../mongoose';
 import typeDefs from '@graphql/type-defs';
 import resolvers from '@graphql/resolvers';
-import { verifyToken } from '../jwt/index';
 import { pinoLogger } from '@logger';
+import serializer from './serializer';
+import { initializeDatabase } from '../mongoose';
+import { verifyToken } from '../jwt/index';
 
 class KoaApp {
   private app: Koa;

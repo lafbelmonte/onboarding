@@ -4,6 +4,10 @@ import MemberModelType, {
   MemberDocument,
 } from '@lib/mongoose/models/member';
 
+import { paginateDbLayer } from '@pagination/index';
+
+import { Connection } from '@types';
+
 type MemberInformation = { password?: Member['password'] | null } & Partial<
   Pick<Member, 'username' | 'realName' | 'email' | 'bankAccount' | 'balance'>
 >;
@@ -20,6 +24,7 @@ export type MemberStore = {
     info: MemberInformation,
   ) => Promise<MemberDocument>;
   deleteOneMember: (filters: MemberFilters) => Promise<boolean>;
+  paginatedMembers: (info) => Promise<Connection<MemberDocument>>;
 };
 
 export default ({
@@ -27,6 +32,13 @@ export default ({
 }: {
   MemberModel: typeof MemberModelType;
 }): MemberStore => {
+  async function paginatedMembers(info) {
+    return paginateDbLayer<MemberDocument>({
+      model: MemberModel,
+      ...info,
+    });
+  }
+
   async function insertOneMember(info) {
     return MemberModel.create(info);
   }
@@ -64,5 +76,6 @@ export default ({
     selectOneMemberByFilters,
     updateMemberByFilters,
     deleteOneMember,
+    paginatedMembers,
   };
 };
