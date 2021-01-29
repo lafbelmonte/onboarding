@@ -15,6 +15,7 @@ import PromoModel, {
 } from '@lib/mongoose/models/promo';
 import PromoEnrollmentRequestModel from '@lib/mongoose/models/promo-enrollment-request';
 import { initializeDatabase, closeDatabase } from '@lib/mongoose';
+import sinon from 'sinon';
 
 chai.use(chaiHttp);
 
@@ -550,27 +551,21 @@ describe('Promo Enrollment Queries', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
-      const dateToday = new Date();
-
-      const baseDate = new Date(dateToday);
-
-      baseDate.setMinutes(dateToday.getMinutes() + 30);
+      this.clock = sinon.useFakeTimers();
 
       this.data1 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.depositMockId,
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 60);
+      await this.clock.tick(1000);
 
       this.data2 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.signUpMockId,
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
+
+      await this.clock.restore();
     });
 
     after(async () => {
@@ -707,7 +702,7 @@ describe('Promo Enrollment Queries', function () {
             promoEnrollmentRequests: {
               __args: {
                 first: 2,
-                after: this.randomString(),
+                after: chance.string({ length: 1 }),
               },
               totalCount: true,
               edges: {

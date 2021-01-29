@@ -6,6 +6,7 @@ import { Chance } from 'chance';
 import { jsonToGraphQLQuery } from 'json-to-graphql-query';
 import server from '@server';
 
+import sinon from 'sinon';
 import MemberModel from '../../../src/lib/mongoose/models/member';
 
 import { closeDatabase, initializeDatabase } from '../../../src/lib/mongoose';
@@ -147,39 +148,31 @@ describe('Member Queries', function () {
     before(async function () {
       await MemberModel.deleteMany({});
 
-      const dateToday = new Date();
-
-      const baseDate = new Date(dateToday);
-
-      baseDate.setMinutes(dateToday.getMinutes() + 30);
+      this.clock = sinon.useFakeTimers();
 
       this.data1 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 60);
+      await this.clock.tick(1000);
 
       this.data2 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 120);
+      await this.clock.tick(1000);
 
       this.data3 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
+
+      await this.clock.restore();
     });
 
     describe('Given complete inputs', () => {
@@ -264,7 +257,7 @@ describe('Member Queries', function () {
             members: {
               __args: {
                 first: 3,
-                after: this.randomRealName(),
+                after: chance.string({ length: 1 }),
               },
               totalCount: true,
               edges: {

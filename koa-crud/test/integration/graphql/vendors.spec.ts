@@ -12,6 +12,8 @@ import MemberModel from '@lib/mongoose/models/member';
 
 import { closeDatabase, initializeDatabase } from '@lib/mongoose';
 
+import sinon from 'sinon';
+
 chai.use(chaiHttp);
 
 const chance = new Chance();
@@ -275,36 +277,27 @@ describe('Vendor Queries', function () {
     before(async function () {
       await VendorModel.deleteMany({});
 
-      const dateToday = new Date();
-
-      const baseDate = new Date(dateToday);
-
-      baseDate.setMinutes(dateToday.getMinutes() + 30);
+      this.clock = sinon.useFakeTimers();
 
       this.data1 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 60);
+      await this.clock.tick(1000);
 
       this.data2 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 120);
+      await this.clock.tick(1000);
 
       this.data3 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
+      await this.clock.restore();
     });
 
     describe('Given no token', () => {
@@ -472,7 +465,7 @@ describe('Vendor Queries', function () {
             vendors: {
               __args: {
                 first: 3,
-                after: this.randomName(),
+                after: chance.string({ length: 1 }),
               },
               totalCount: true,
               edges: {

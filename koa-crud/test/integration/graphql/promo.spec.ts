@@ -14,6 +14,8 @@ import PromoModel, {
   PromoStatus,
 } from '@lib/mongoose/models/promo';
 
+import sinon from 'sinon';
+
 chai.use(chaiHttp);
 
 const chance = new Chance();
@@ -384,11 +386,7 @@ describe('Promo Queries', function () {
     before(async function () {
       await PromoModel.deleteMany({});
 
-      const dateToday = new Date();
-
-      const baseDate = new Date(dateToday);
-
-      baseDate.setMinutes(dateToday.getMinutes() + 30);
+      this.clock = sinon.useFakeTimers();
 
       this.data1 = await PromoModel.create({
         name: this.randomName(),
@@ -396,11 +394,9 @@ describe('Promo Queries', function () {
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 60);
+      await this.clock.tick(1000);
 
       this.data2 = await PromoModel.create({
         name: this.randomName(),
@@ -408,11 +404,9 @@ describe('Promo Queries', function () {
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
 
-      baseDate.setMinutes(dateToday.getMinutes() + 120);
+      await this.clock.tick(1000);
 
       this.data3 = await PromoModel.create({
         name: this.randomName(),
@@ -420,9 +414,9 @@ describe('Promo Queries', function () {
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(baseDate),
-        createdAt: baseDate,
       });
+
+      await this.clock.restore();
     });
 
     describe('Given complete inputs', () => {
@@ -534,7 +528,7 @@ describe('Promo Queries', function () {
             promos: {
               __args: {
                 first: 3,
-                after: this.randomDescription(),
+                after: chance.string({ length: 1 }),
               },
               totalCount: true,
               edges: {

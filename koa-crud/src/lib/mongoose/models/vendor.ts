@@ -38,7 +38,7 @@ const schema: Schema = new Schema(
     cursor: {
       type: Buffer,
       default(this) {
-        return Buffer.from(this.dateTimeCreated);
+        return Buffer.from(new Date());
       },
     },
   },
