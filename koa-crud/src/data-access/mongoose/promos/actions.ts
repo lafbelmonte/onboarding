@@ -3,6 +3,9 @@ import PromoModelType, {
   Promo,
   PromoDocument,
 } from '@lib/mongoose/models/promo';
+import { paginateDbLayer } from '@pagination/index';
+
+import { Connection } from '@types';
 
 type PromoInformation = Partial<
   Pick<
@@ -31,6 +34,7 @@ export type PromoStore = {
     info: PromoInformation,
   ) => Promise<PromoDocument>;
   deleteOnePromo: (filters: PromoFilters) => Promise<boolean>;
+  paginatedPromos: (info) => Promise<Connection<PromoDocument>>;
 };
 
 export default ({
@@ -48,6 +52,13 @@ export default ({
 
   async function selectAllPromos() {
     return PromoModel.find().lean({ virtuals: true });
+  }
+
+  async function paginatedPromos(info) {
+    return paginateDbLayer<PromoDocument>({
+      model: PromoModel,
+      ...info,
+    });
   }
 
   async function selectOnePromoByFilters(filters) {
@@ -75,5 +86,6 @@ export default ({
     selectOnePromoByFilters,
     updatePromoByFilters,
     deleteOnePromo,
+    paginatedPromos,
   };
 };

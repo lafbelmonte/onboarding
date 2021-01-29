@@ -4,6 +4,10 @@ import PromoEnrollmentRequestModelType, {
   PromoEnrollmentRequestDocument,
 } from '@lib/mongoose/models/promo-enrollment-request';
 
+import { paginateDbLayer } from '@pagination/index';
+
+import { Connection } from '@types';
+
 type PromoEnrollmentRequestFilters = FilterQuery<
   Partial<Pick<PromoEnrollmentRequest, '_id' | 'promo' | 'member'>>
 >;
@@ -26,6 +30,9 @@ export type PromoEnrollmentRequestStore = {
     filters: PromoEnrollmentRequestFilters,
     info: { status: PromoEnrollmentRequest['status'] },
   ) => Promise<PromoEnrollmentRequestDocument>;
+  paginatedPromoEnrollmentRequests: (
+    info,
+  ) => Promise<Connection<PromoEnrollmentRequestDocument>>;
 };
 
 export default ({
@@ -33,6 +40,13 @@ export default ({
 }: {
   PromoEnrollmentRequestModel: typeof PromoEnrollmentRequestModelType;
 }): PromoEnrollmentRequestStore => {
+  async function paginatedPromoEnrollmentRequests(info) {
+    return paginateDbLayer<PromoEnrollmentRequestDocument>({
+      model: PromoEnrollmentRequestModel,
+      ...info,
+    });
+  }
+
   async function insertPromoEnrollment(info) {
     return PromoEnrollmentRequestModel.create(info);
   }
@@ -63,5 +77,6 @@ export default ({
     selectOnePromoEnrollmentByFilters,
     selectAllPromoEnrollmentRequests,
     updatePromoEnrollmentRequestStatusByFilters,
+    paginatedPromoEnrollmentRequests,
   };
 };

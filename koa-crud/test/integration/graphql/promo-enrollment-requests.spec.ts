@@ -550,15 +550,26 @@ describe('Promo Enrollment Queries', function () {
       this.depositMockId = depositMock._id;
       this.signUpMockId = signUpMock._id;
 
+      const dateToday = new Date();
+
+      const baseDate = new Date(dateToday);
+
+      baseDate.setMinutes(dateToday.getMinutes() + 30);
+
       this.data1 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.depositMockId,
-        cursor: Buffer.from(this.randomString()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 60);
+
       this.data2 = await PromoEnrollmentRequestModel.create({
         member: this.loggedInMember._id,
         promo: this.signUpMockId,
-        cursor: Buffer.from(this.randomString()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
     });
 

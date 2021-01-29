@@ -143,7 +143,9 @@ describe('Member Use Cases', () => {
     it('should return list of members', async function () {
       await expect(
         selectAllMembersUseCase({ id: null, info: null, source: null }),
-      ).to.eventually.fulfilled.and.length(1);
+      )
+        .to.eventually.fulfilled.and.property('totalCount')
+        .eqls(1);
     });
   });
 

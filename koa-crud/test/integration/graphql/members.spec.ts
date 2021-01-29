@@ -146,25 +146,39 @@ describe('Member Queries', function () {
 
     before(async function () {
       await MemberModel.deleteMany({});
+
+      const dateToday = new Date();
+
+      const baseDate = new Date(dateToday);
+
+      baseDate.setMinutes(dateToday.getMinutes() + 30);
+
       this.data1 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
         realName: this.randomRealName(),
-        cursor: Buffer.from(this.randomRealName()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 60);
 
       this.data2 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
-        realName: this.randomRealName(this.randomRealName()),
-        cursor: Buffer.from(this.randomRealName()),
+        realName: this.randomRealName(),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 120);
 
       this.data3 = await MemberModel.create({
         username: this.randomUsername(),
         password: this.randomPassword(),
-        realName: this.randomRealName(this.randomRealName()),
-        cursor: Buffer.from(this.randomRealName()),
+        realName: this.randomRealName(),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
     });
 
@@ -235,6 +249,7 @@ describe('Member Queries', function () {
         const query = jsonToGraphQLQuery(this.mock);
         const main = await this.request().post('/graphql').send({ query });
         expect(main.statusCode).to.eqls(200);
+
         expect(main.body.errors[0].extensions.code).eqls(
           'PAGINATION_INPUT_ERROR',
         );
@@ -248,7 +263,7 @@ describe('Member Queries', function () {
           query: {
             members: {
               __args: {
-                first: -1,
+                first: 3,
                 after: this.randomRealName(),
               },
               totalCount: true,

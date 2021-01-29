@@ -383,14 +383,24 @@ describe('Promo Queries', function () {
 
     before(async function () {
       await PromoModel.deleteMany({});
+
+      const dateToday = new Date();
+
+      const baseDate = new Date(dateToday);
+
+      baseDate.setMinutes(dateToday.getMinutes() + 30);
+
       this.data1 = await PromoModel.create({
         name: this.randomName(),
         template: PromoTemplate.Deposit,
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(this.randomDescription()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 60);
 
       this.data2 = await PromoModel.create({
         name: this.randomName(),
@@ -398,8 +408,11 @@ describe('Promo Queries', function () {
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(this.randomDescription()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 120);
 
       this.data3 = await PromoModel.create({
         name: this.randomName(),
@@ -407,7 +420,8 @@ describe('Promo Queries', function () {
         title: this.randomTitle(),
         description: this.randomDescription(),
         minimumBalance: this.randomBalance(),
-        cursor: Buffer.from(this.randomDescription()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
     });
 
@@ -663,6 +677,7 @@ describe('Promo Queries', function () {
     describe('Given only after', () => {
       it('should return promos starting from the given after', async function () {
         const after = this.data2.cursor.toString('base64');
+
         this.mock = {
           query: {
             promos: {

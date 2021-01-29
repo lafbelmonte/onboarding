@@ -149,7 +149,9 @@ describe('Vendor Use Cases', () => {
     it('should return list of vendors', async function () {
       await expect(
         selectAllVendorsUseCase({ id: null, info: null, source: null }),
-      ).to.eventually.fulfilled.and.length(1);
+      )
+        .to.eventually.fulfilled.and.property('totalCount')
+        .eqls(1);
     });
   });
 

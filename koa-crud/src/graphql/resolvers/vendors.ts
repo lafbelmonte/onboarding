@@ -8,28 +8,20 @@ import {
 
 import { NotAllowedError } from '@custom-errors';
 
-import paginate from '@pagination/index';
-
 import { VendorDocument, Vendor } from '@lib/mongoose/models/vendor';
 import { Connection } from '@types';
-import { PaginateInput } from '@pagination/paginate';
+import { PaginateInput } from '@pagination/paginate-db-layer';
 
 const vendors = async (
   parent: null,
-  args: Omit<PaginateInput<VendorDocument>, 'data'>,
+  args: Omit<PaginateInput, 'model'>,
   ctx: { allowed: boolean; userId: { data: string } },
 ): Promise<Connection<VendorDocument>> => {
   if (!ctx.allowed) {
     throw new NotAllowedError('You are not allowed to access this resource');
   }
 
-  const data = await selectAllVendorsUseCase({});
-
-  return paginate({
-    data,
-    first: args.first,
-    after: args.after,
-  });
+  return selectAllVendorsUseCase({ info: { ...args } });
 };
 const vendor = async (
   parent: null,

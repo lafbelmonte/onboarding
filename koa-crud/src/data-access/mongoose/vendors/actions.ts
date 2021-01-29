@@ -3,6 +3,10 @@ import VendorModelType, {
   VendorDocument,
 } from '@lib/mongoose/models/vendor';
 
+import { paginateDbLayer } from '@pagination/index';
+
+import { Connection } from '@types';
+
 type VendorInformation = Partial<Pick<Vendor, 'name' | 'type'>>;
 
 type VendorFilters = Partial<Pick<Vendor, '_id' | 'name' | 'type'>>;
@@ -17,6 +21,7 @@ export type VendorStore = {
     info: VendorInformation,
   ) => Promise<VendorDocument>;
   deleteOneVendor: (filters: VendorFilters) => Promise<boolean>;
+  paginatedVendors: (info) => Promise<Connection<VendorDocument>>;
 };
 
 export default ({
@@ -24,6 +29,12 @@ export default ({
 }: {
   VendorModel: typeof VendorModelType;
 }): VendorStore => {
+  async function paginatedVendors(info) {
+    return paginateDbLayer<VendorDocument>({
+      model: VendorModel,
+      ...info,
+    });
+  }
   async function insertOneVendor(info) {
     return VendorModel.create(info);
   }
@@ -61,5 +72,6 @@ export default ({
     selectOneVendorByFilters,
     updateVendorByFilters,
     deleteOneVendor,
+    paginatedVendors,
   };
 };

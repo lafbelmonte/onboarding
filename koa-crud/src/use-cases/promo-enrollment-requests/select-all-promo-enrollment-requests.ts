@@ -1,10 +1,13 @@
 import { PromoEnrollmentRequestDocument } from '@lib/mongoose/models/promo-enrollment-request';
 import { PromoEnrollmentRequestStore } from '@data-access/mongoose/promo-enrollment-requests/actions';
-import { UseCase } from '@types';
+import { UseCase, Connection } from '@types';
 
 type SelectAllPromoEnrollmentRequestUseCaseInput = {
   id?: string;
-  info?: null;
+  info?: {
+    first: number;
+    after: string;
+  };
   source?: {
     ip: string;
     browser: string;
@@ -12,7 +15,7 @@ type SelectAllPromoEnrollmentRequestUseCaseInput = {
   };
 };
 
-type SelectAllPromoEnrollmentRequestUseCaseOutput = PromoEnrollmentRequestDocument[];
+type SelectAllPromoEnrollmentRequestUseCaseOutput = Connection<PromoEnrollmentRequestDocument>;
 
 export type SelectAllPromoEnrollmentRequestUseCase = UseCase<
   SelectAllPromoEnrollmentRequestUseCaseInput,
@@ -24,8 +27,10 @@ const selectAllPromoEnrollmentRequests = ({
 }: {
   promoEnrollmentRequestStore: PromoEnrollmentRequestStore;
 }): SelectAllPromoEnrollmentRequestUseCase => {
-  return async function useCase() {
-    const promoEnrollmentRequests = await promoEnrollmentRequestStore.selectAllPromoEnrollmentRequests();
+  return async function useCase({ info }) {
+    const promoEnrollmentRequests = await promoEnrollmentRequestStore.paginatedPromoEnrollmentRequests(
+      info,
+    );
     return promoEnrollmentRequests;
   };
 };

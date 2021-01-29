@@ -328,7 +328,9 @@ describe('Promo Use Cases', () => {
     it('should return list of promos', async function () {
       await expect(
         selectAllPromosUseCase({ id: null, info: null, source: null }),
-      ).to.eventually.fulfilled.and.length(1);
+      )
+        .to.eventually.fulfilled.and.property('totalCount')
+        .eqls(1);
     });
   });
 

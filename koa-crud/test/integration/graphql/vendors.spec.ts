@@ -274,22 +274,36 @@ describe('Vendor Queries', function () {
 
     before(async function () {
       await VendorModel.deleteMany({});
+
+      const dateToday = new Date();
+
+      const baseDate = new Date(dateToday);
+
+      baseDate.setMinutes(dateToday.getMinutes() + 30);
+
       this.data1 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(this.randomName()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 60);
 
       this.data2 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(this.randomName()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
+
+      baseDate.setMinutes(dateToday.getMinutes() + 120);
 
       this.data3 = await VendorModel.create({
         name: this.randomName(),
         type: VendorType.Seamless,
-        cursor: Buffer.from(this.randomName()),
+        cursor: Buffer.from(baseDate),
+        createdAt: baseDate,
       });
     });
 
@@ -443,6 +457,7 @@ describe('Vendor Queries', function () {
           .set('Authorization', `Bearer ${this.token}`)
           .send({ query });
         expect(main.statusCode).to.eqls(200);
+
         expect(main.body.errors[0].extensions.code).eqls(
           'PAGINATION_INPUT_ERROR',
         );
