@@ -146,4 +146,4 @@ jobs:
         with:
           context: koa-crud
           push: true
-          tags: luisangelobelmonte/test:test${{ env.GITHUB_RUN_NUMBER }}
+          tags: luisangelobelmonte/test:test$GITHUB_RUN_NUMBER
