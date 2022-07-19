@@ -5,13 +5,16 @@ on:
     branches:
       - "feature/**"
 
-defaults:
-  run:
-    working-directory: ./koa-crud
+# defaults:
+#   run:
+#     working-directory: ./koa-crud
 
 jobs:
   target:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: koa-crud
     steps:
       - name: Checkout to branch
         uses: actions/checkout@v3
@@ -37,7 +40,7 @@ jobs:
 
       - name: List files
         run: ls
-        
+
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -47,6 +50,9 @@ jobs:
   test:
     needs: target
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: koa-crud
     steps:
       - name: Checkout to branch
         uses: actions/checkout@v3
