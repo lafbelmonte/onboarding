@@ -42,7 +42,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+          key: npm-${{ github.sha }}-${{ github.ref }}
 
   test:
     needs: target
@@ -57,7 +57,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+          key: npm-${{ github.sha }}-${{ github.ref }}
       
       - name: Run integration test
         run: npm run test:integration
