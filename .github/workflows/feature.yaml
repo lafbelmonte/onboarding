@@ -1,0 +1,98 @@
+name: "Feature"
+
+on:
+  push:
+    paths:
+      - "koa-crud/**"
+    branches:
+      - "feature/**"
+
+jobs:
+  target:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: koa-crud
+    steps:
+      - name: Checkout to branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.14.2"
+
+      - name: Cache npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-feature-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-feature-
+            npm-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: koa-crud/node_modules
+          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+
+  test:
+    needs: target
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: koa-crud
+    steps:
+      - name: Checkout to branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.14.2"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: koa-crud/node_modules
+          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+
+      - name: Run integration test
+        run: npm run test:integration
+
+      - name: Run unit test
+        run: npm run test:unit
+
+  build:
+    needs: target
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: koa-crud
+    steps:
+      - name: Checkout to branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.14.2"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: koa-crud/node_modules
+          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+
+      - name: Run build
+        run: npm run build

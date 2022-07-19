@@ -1,5 +1,4 @@
 import App from '@lib/koa/server';
-
 import vendors from '@routes/vendors';
 import auth from '@routes/auth';
 
