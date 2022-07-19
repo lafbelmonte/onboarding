@@ -36,7 +36,7 @@ jobs:
         run: npm install
 
       - name: Cache node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0
     
       - name: Cache node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
