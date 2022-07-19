@@ -21,7 +21,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.13.1"
+          node-version: "16.14.2"
 
       - name: Cache npm
         uses: actions/cache@v3
@@ -36,7 +36,7 @@ jobs:
         run: npm install
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
