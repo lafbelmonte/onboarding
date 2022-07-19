@@ -5,7 +5,7 @@ on:
     paths:
       - "koa-crud/**"
     branches:
-      - "feature/**"
+      - "master/**"
 
 jobs:
   target:
