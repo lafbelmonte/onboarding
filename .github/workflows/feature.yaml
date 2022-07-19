@@ -41,7 +41,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
 
   test:
@@ -61,7 +61,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
 
       - name: List files
