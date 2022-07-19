@@ -30,8 +30,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          key: npm-feature-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-feature-
+            npm-
 
       - name: Install dependencies
         run: npm install
@@ -43,7 +45,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./node_modules
-          key: npm-${{ github.sha }}-${{ github.ref }}-p9ou5j6m
+          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
 
   test:
     needs: target
@@ -66,7 +68,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./node_modules
-          key: npm-${{ github.sha }}-${{ github.ref }}-p9ou5j6m
+          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
 
       - name: List files
         run: |
