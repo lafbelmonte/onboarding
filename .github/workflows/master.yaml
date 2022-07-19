@@ -1,11 +1,9 @@
-name: "Feature"
+name: "Master"
 
 on:
   push:
-    paths:
-      - "koa-crud/**"
     branches:
-      - "feature/**"
+      - "master"
 
 jobs:
   target:
@@ -28,9 +26,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: npm-feature-${{ hashFiles('**/package-lock.json') }}
+          key: npm-master-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            npm-feature-
+            npm-master-
             npm-
 
       - name: Install dependencies
@@ -40,7 +38,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: koa-crud/node_modules
-          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+          key: node-modules-master-${{ github.sha }}-${{ github.ref }}
 
   test:
     needs: target
@@ -63,7 +61,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: koa-crud/node_modules
-          key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+          key: node-modules-master-${{ github.sha }}-${{ github.ref }}
 
       - name: Run integration test
         run: npm run test:integration
