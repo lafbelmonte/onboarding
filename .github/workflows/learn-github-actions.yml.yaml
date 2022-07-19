@@ -2,20 +2,37 @@ name: "Feature"
 
 on:
   push:
-    branches:    
-      - 'feature/**'
+    branches:
+      - "feature/**"
 
 defaults:
- run:
-  working-directory: ./koa-crud
+  run:
+    working-directory: ./koa-crud
 
 jobs:
   my_first_job:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout to branch
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Display files
-      run: ls
+      - name: Checkout to branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+            
+      - if: ${{ steps.cache-npm.outputs.cache-hit == 'false' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
