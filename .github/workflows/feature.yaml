@@ -38,11 +38,10 @@ jobs:
       - name: List files
         run: ls
 
-      - name: Cache node modules
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: node_modules
-          key: npm-${{ github.sha }}-${{ github.ref }}
+          key: npm-${{ github.sha }}-${{ github.ref }}-asd
 
   test:
     needs: target
@@ -53,11 +52,10 @@ jobs:
         with:
           fetch-depth: 0
     
-      - name: Cache node modules
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: node_modules
-          key: npm-${{ github.sha }}-${{ github.ref }}
+          key: npm-${{ github.sha }}-${{ github.ref }}-asd
       
       - name: Run integration test
         run: npm run test:integration
