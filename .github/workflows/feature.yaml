@@ -29,7 +29,10 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-      
+
+      - name: List files
+        run: ls
+
       - name: Cache node modules
         uses: actions/cache@v3
         with:
