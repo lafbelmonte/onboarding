@@ -69,6 +69,8 @@ jobs:
           ls
           cd ..
           ls
+          cd ..
+          ls
 
       - name: Run integration test
         run: npm run test:integration
