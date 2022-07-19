@@ -55,20 +55,14 @@ jobs:
         with:
           node-version: "16.14.2"
 
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-feature-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            npm-feature-
-            npm-
-
       - name: Cache node modules
         uses: actions/cache@v2
         with:
           path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
+
+      - name: List files
+        run: ls
 
       - name: Run integration test
         run: npm run test:integration
