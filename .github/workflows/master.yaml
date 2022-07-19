@@ -104,7 +104,9 @@ jobs:
           key: build-master-${{ github.sha }}-${{ github.ref }}
 
   build_docker:
-    needs: target
+    needs: 
+      - test
+      - build
     runs-on: ubuntu-latest
     defaults:
       run:
