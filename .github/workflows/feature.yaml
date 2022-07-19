@@ -65,7 +65,10 @@ jobs:
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
 
       - name: List files
-        run: ls
+        run: |
+          ls
+          cd ..
+          ls
 
       - name: Run integration test
         run: npm run test:integration
