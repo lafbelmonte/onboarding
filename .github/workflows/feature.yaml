@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -31,9 +31,9 @@ jobs:
           restore-keys: |
             npm-feature-
             npm-
-      
+
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -49,20 +49,29 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: "16.14.2"
-        
+
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-feature-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-feature-
+            npm-
+
       - name: Cache node modules
         uses: actions/cache@v2
         with:
           path: ./node_modules
           key: node-modules-feature-${{ github.sha }}-${{ github.ref }}
-      
+
       - name: Run integration test
         run: npm run test:integration
-      
+
       - name: Run unit test
         run: npm run test:unit
