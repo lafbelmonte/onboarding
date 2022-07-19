@@ -16,4 +16,4 @@ jobs:
     - name: Change directory
       run: cd ./koa-crud
     - name: Display files
-      run: ll
+      run: ls
