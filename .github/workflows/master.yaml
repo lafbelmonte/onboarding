@@ -103,7 +103,7 @@ jobs:
           path: koa-crud/build
           key: build-master-${{ github.sha }}-${{ github.ref }}
 
-  build_docker:
+  build_image:
     needs: 
       - test
       - build

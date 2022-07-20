@@ -39,6 +39,11 @@ jobs:
       - image: cimg/node:16.14.2
     working_directory: ~/onboarding/koa-crud
     steps:
+      - run:
+          command: |
+            echo ${CIRCLE_BRANCH:-br4nch} > .current-branch
+            echo $CIRCLE_SHA1 > .commit-sha
+          name: Save ENV variables to files for caching
       - checkout:
           path: ~/onboarding
       - restore_cache:
@@ -46,6 +51,10 @@ jobs:
       - run:
           command: npm run build
           name: Run build
+      - save_cache:
+          key: build-{{ checksum ".commit-sha" }}-{{ checksum ".current-branch" }}
+          paths: 
+            - build
         
 workflows:
   feature:
