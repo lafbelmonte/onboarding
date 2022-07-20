@@ -53,6 +53,8 @@ workflows:
                 - /^feature\/.+$/
                 - master
       - test:
+          requires:
+            - target
           filters:
             branches:
               only:
