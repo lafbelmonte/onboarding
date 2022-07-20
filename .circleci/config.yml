@@ -1,7 +1,40 @@
 version: 2.1
 
 jobs:
-  target: 
+  target:
+    docker:
+      - image: cimg/node:16.14.2
+    working_directory: ~/onboarding/koa-crud
+    steps:
+      - checkout:
+          path: ~/onboarding
+      - restore_cache:
+          key: npm-{{ checksum "package-lock.json" }}
+      - run:
+          command: npm install
+          name: Install dependencies
+      - save_cache:
+          key: npm-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+
+  test:
+    docker:
+      - image: cimg/node:16.14.2
+    working_directory: ~/onboarding/koa-crud
+    steps:
+      - checkout:
+          path: ~/onboarding
+      - restore_cache:
+          key: npm-{{ checksum "package-lock.json" }}
+      - run:
+          command: npm run test:integration
+          name: Run integration test
+      - run:
+          command: npm run test:unit
+          name: Run unit test
+
+  build:
     docker:
       - image: cimg/node:16.14.2
     working_directory: ~/onboarding/koa-crud
@@ -9,23 +42,75 @@ jobs:
       - checkout:
           path: ~/onboarding
       - run:
-          command: npm install
-          name: Install dependencies
-      - run:
-          command: npm run test:integration
-          name: Run integration test
-      - run:
-          command: npm run test:unit
-          name: Run unit test
+          command: |
+            echo ${CIRCLE_BRANCH:-br4nch} > .current-branch
+            echo $CIRCLE_SHA1 > .commit-sha
+          name: Save ENV variables to files for caching
+      - restore_cache:
+          key: npm-{{ checksum "package-lock.json" }}
       - run:
           command: npm run build
           name: Run build
+      - save_cache:
+          key: build-{{ checksum ".commit-sha" }}-{{ checksum ".current-branch" }}
+          paths:
+            - build
+
+  build_image:
+    environment:
+      IMAGE_NAME: luisangelobelmonte/test
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~/onboarding/koa-crud
+    steps:
+      - checkout:
+          path: ~/onboarding
+      - run:
+          command: |
+            echo ${CIRCLE_BRANCH:-br4nch} > .current-branch
+            echo $CIRCLE_SHA1 > .commit-sha
+          name: Save ENV variables to files for caching
+      - restore_cache:
+          key: npm-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: build-{{ checksum ".commit-sha" }}-{{ checksum ".current-branch" }}
+      - setup_remote_docker
+      - run:
+          name: Build image
+          command: docker build -t $IMAGE_NAME:latest .
 
 workflows:
-  feature:
+  CICD:
     jobs:
       - target:
           filters:
             branches:
               only:
                 - /^feature\/.+$/
+                - master
+
+      - test:
+          requires:
+            - target
+          filters:
+            branches:
+              only:
+                - /^feature\/.+$/
+                - master
+
+      - build:
+          requires:
+            - target
+          filters:
+            branches:
+              only:
+                - /^feature\/.+$/
+                - master
+      - build_image:
+          requires:
+            - test
+            - build
+          filters:
+            branches:
+              only:
+                - master
