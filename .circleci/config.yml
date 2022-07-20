@@ -1,11 +1,22 @@
 version: 2.1
+orbs:
+  node: circleci/node@5.0.2
 jobs:
-  build:
-    docker:
-      - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+  build_and_test: 
+    working_directory: ~/koa-crud
+    executor: node/default 
     steps:
-      - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run test:integration
+          name: Run tests
+      - run:
+          command: npm run build
+          name: Build app
+
+workflows:
+  test_my_app:
+    jobs:
+      - build_and_test
