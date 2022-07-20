@@ -27,28 +27,32 @@ jobs:
       #     command: npm run build
       #     name: Run build
 
-  # test: 
-  #   docker:
-  #     - image: cimg/node:16.14.2
-  #   working_directory: ~/onboarding/koa-crud
-  #   steps:
-  #     - checkout:
-  #         path: ~/onboarding
-  #     - restore_cache:
-  #         key: npm-{{ checksum "package-lock.json" }}
-  #     - run:
-  #         command: npm run test:integration
-  #         name: Run integration test
-  #     - run:
-  #         command: npm run test:unit
-  #         name: Run unit test
+  test: 
+    docker:
+      - image: cimg/node:16.14.2
+    working_directory: ~/onboarding/koa-crud
+    steps:
+      - checkout:
+          path: ~/onboarding
+      - restore_cache:
+          key: npm-{{ checksum "package-lock.json" }}
+      - run:
+          command: npm run test:integration
+          name: Run integration test
+      - run:
+          command: npm run test:unit
+          name: Run unit test
         
-   
-
 workflows:
   feature:
     jobs:
       - target:
+          filters:
+            branches:
+              only:
+                - /^feature\/.+$/
+                - master
+      - test:
           filters:
             branches:
               only:
