@@ -24,4 +24,8 @@ jobs:
 workflows:
   feature:
     jobs:
-      - target
+      - target:
+          filters:
+            branches:
+              only:
+                - /^feature\/.+$/
