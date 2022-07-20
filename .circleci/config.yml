@@ -3,10 +3,11 @@ orbs:
   node: circleci/node@5.0.2
 jobs:
   build_and_test: 
-    working_directory: ~/koa-crud
+    working_directory: ~/onboarding/koa-crud
     executor: node/default 
     steps:
-      - checkout
+      - checkout:
+          path: ~/onboarding
       - node/install-packages:
           pkg-manager: npm
       - run:
